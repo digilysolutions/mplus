@@ -77,10 +77,10 @@ Route::get('/notaccess', function () {
     return view('not-access'); // Asegúrate de tener este view creado
 });
 //Registro (register):
-Route::get('register', function () {
+/*Route::get('register', function () {
     return view('register');
 })->name('register');
-
+*/
 //Recuperación de contraseña (forgot-password):
 Route::get('forgot-password', function () {
     return view('auth.forgot-password');
@@ -204,7 +204,7 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     //---------nuevas rutas
-    Route::resource('people', PersonController::class);
+   // Route::resource('people', PersonController::class);
 });
 
 Route::get('/user/dashboard', function () {
