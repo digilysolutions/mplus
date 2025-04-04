@@ -92,10 +92,10 @@ Route::get('reset-password/{token}', function () {
 })->name('password.reset');
 
 // Rutas de inicio de sesión
-Route::get('/admin/login', [AuthenticatedSessionController::class, 'create'])
-    ->name('login');
+/*Route::get('/admin/login', [AuthenticatedSessionController::class, 'create'])
+    ->name('login');*/
 //Route::get('/', [AuthenticatedSessionController::class, 'create']);
-Route::post('/admin/login', [AuthenticatedSessionController::class, 'store']);
+//Route::post('/admin/login', [AuthenticatedSessionController::class, 'store']);
 
 // Rutas de registro
 Route::get('/register', [RegisteredUserController::class, 'create'])
