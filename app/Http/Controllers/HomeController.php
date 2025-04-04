@@ -33,7 +33,7 @@ class HomeController extends Controller
     public function index()
     {
         $currency = $this->getCurrency();
-        $products = Product::all();
+        $products = Product::allActivated();
 
 
         $randomProducts = $products->shuffle()->toArray();
