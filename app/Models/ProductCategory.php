@@ -26,7 +26,7 @@ use Illuminate\Database\Eloquent\Model;
  */
 class ProductCategory extends Model
 {
-    
+
     protected $perPage = 20;
 
     /**
@@ -42,11 +42,11 @@ class ProductCategory extends Model
      */
     public function productProductCategories()
     {
-        return $this->hasMany(\App\Models\ProductProductCategory::class, 'id', 'product_category_id');
+        return $this->hasMany(\App\Models\ProductProductCategory::class,  'product_category_id');
     }
     public function products()
     {
-        return $this->belongsToMany(Product::class, 'product_product_category'); // Nombre de la tabla pivot aquí
+        return $this->belongsToMany(Product::class); // Nombre de la tabla pivot aquí
     }
-    
+
 }

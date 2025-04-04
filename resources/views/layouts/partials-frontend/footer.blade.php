@@ -89,6 +89,16 @@
 <script type="module" src="{{ asset('includes/main.js') }}"></script>
 <script src="{{ asset('includes/app/cart.js') }}"></script>
 <script>
+
+$(document).ready(function() {
+        // Manejador para mostrar y ocultar el carrito en móvil
+        $('.top-cart-info').click(function() {
+            $('#cart-content-phone').toggle(); // Muestra/oculta el carrito en móvil
+        });
+    });
+
+
+
     $(document).ready(function() {
         $.ajax({
             url: '/cart/productExchangeRate', // Cambia esta URL según corresponda a tu caso
@@ -174,7 +184,6 @@
 
         $(document).on('click', '.remove-item', function() {
             const id = $(this).data('id');
-            alert(id);
             cartItems = cartItems.filter(item => item.id !== id);
             removeProductCart(null, id, 0);
 
@@ -185,13 +194,12 @@
 
             const item = cartItems.find(item => item.id === id);
 
-
             if (item && item.quantity > 1) {
                 item.quantity--;
                 console.log( cartItems);
             } else {
                 cartItems = cartItems.filter(item => item.id !== id)
-                alert("Entre");
+
                 console.log( cartItems);
             }
             removeProductCart(null, id, 1);

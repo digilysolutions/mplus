@@ -20,106 +20,57 @@
             <!-- Shop Sidebar Start -->
             <div class="col-lg-3 col-md-4">
 
-
+                <form id="filterForm">
                 <!-- Categoria Start -->
                 <h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3">Filtrar por
                         Categoría</span></h5>
                 <div class="bg-light p-4 mb-30">
-                    <form>
-                        @foreach ($categories as $category)
-                            <div
-                                class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
-                                <input type="checkbox" value="{{ $category['id'] }}" class="custom-control-input" id="category_{{ $category['id'] }}"
-                                    name="category_ids[]">
-                                <label class="custom-control-label" for="color-1">{{ $category['name'] }}</label>
-                                <span class="badge border font-weight-normal">{{ count($category['products']) }}</span>
-                            </div>
-                        @endforeach
-
-
-                    </form>
+                  
+                    @foreach ($categories as $category)
+                    <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
+                        <input type="checkbox" value="{{ $category['id'] }}" class="custom-control-input category-checkbox"
+                            id="category_{{ $category['id'] }}" name="category_ids[]"
+                            @if(is_array(request('category_ids')) && in_array($category['id'], request('category_ids'))) checked @endif>
+                        <label class="custom-control-label" for="category_{{ $category['id'] }}">{{ $category['name'] }}</label>
+                        <span class="badge border font-weight-normal">{{ count($category['products']) }}</span>
+                    </div>
+                @endforeach
+                    
                 </div>
                 <!-- Categoria End -->
 
+                <!-- Categoria Start -->
+                <h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3">Filtrar por
+                        Marcas</span></h5>
+                <div class="bg-light p-4 mb-30">
+                    
+                        @foreach ($brands as $brand)
+                            <div
+                                class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
+                                <input type="checkbox" value="{{ $brand->id }}"
+                                    class="custom-control-input brand-checkbox" id="brand_{{ $brand->id }}"
+                                    name="brand_ids[]" @if (is_array(request('brand_ids')) && in_array($brand->id, request('brand_ids'))) checked @endif>
+                                <label class="custom-control-label"
+                                    for="brand_{{ $brand->id }}">{{ $brand->name }}</label>
+                                <span class="badge border font-weight-normal">{{ $brand->products->count() }}</span>
+                            </div>
+                        @endforeach
+                   
+
+                </div>
+                <!-- Categoria End -->
+            </form>
 
             </div>
             <!-- Shop Sidebar End -->
 
 
             <!-- Shop Product Start -->
+
             <div class="col-lg-9 col-md-8 container-fluid pt-5 pb-3 ">
-                <div class="row px-xl-5">
+                <div class="row px-xl-5" id="productsContainer">
 
-                    @foreach ($productsPaginator as $product)
-                        <div class="col-lg-6 col-md-6 col-sm-6 pb-1">
-                            <div class="product-item bg-light mb-4">
-                                <div class="product-image position-relative overflow-hidden">
-                                    <a  href="{{ route('product.detailsproduct', ['id' => $product['id']]) }}">
-                                    <img class="img-fluid w-100" src="{{ $product['outstanding_image'] }}" alt="" />
-                                    </a>
-                                </div>
-                                <div class="text-center py-4">
-                                    <a class="h6 text-decoration-none text-truncate"
-                                        href="{{ route('product.detailsproduct', ['id' => $product['id']]) }}">{{ $product['name'] }}
-                                    </a>
-                                    <div class="d-flex align-items-center justify-content-center mt-2">
-                                        @if ($product['discounted_price'] != null && $product['discounted_price'] > 0)
-                                            <h5 class="product_{{ $product['id'] }}">${{ $product['discounted_price'] }}
-                                            </h5>
-                                            <h6 id=""
-                                                class="text-muted ml-2 product_{{ $product['id'] }}  sale-price"
-                                                data-product-id={{ $product['id'] }}>
-                                                <del>${{ $product['sale_price'] ?? 0 }}</del>
-                                            </h6>
-                                        @else
-                                            <h5 class="product_{{ $product['id'] }}">${{ $product['sale_price'] ?? 0 }}
-                                            </h5>
-                                        @endif
-                                    </div>
-                                    <div class="estrellas align-items-center justify-content-center " id="estrellas"
-                                        data-calificacion="{{ $product['averageRating'] }}">
-                                        <span class="estrella" data-valor="1">&#9734;</span>
-                                        <span class="estrella" data-valor="2">&#9734;</span>
-                                        <span class="estrella" data-valor="3">&#9734;</span>
-                                        <span class="estrella" data-valor="4">&#9734;</span>
-                                        <span class="estrella" data-valor="5">&#9734;</span>
-                                    </div>
-                                    <div class="d-flex align-items-center justify-content-center mb-">
-                                        <div class="btn-group mx-2">
-                                            <div class="btn-group mx-2">
-                                                <button type="button" class="btn btn-sm btn-light dropdown-toggle"
-                                                    data-toggle="dropdown">
-                                                    <i class="fas fa-money-bill icon-header"></i>
-                                                    <strong class="selectedCurrency"
-                                                        data-product-id="{{ $product['id'] }}">{{ isset($product['categories']) && count($product['categories']) > 0 ? $product['categories'][0]['code_currency_default'] : '' }}</strong>
-                                                </button>
-                                                <div class="dropdown-menu dropdown-menu-right">
-                                                    @foreach ($countryCurrencies as $countryCurrency)
-                                                        <button class="dropdown-item" type="button"
-                                                            onclick="changeCurrency('{{ $countryCurrency['currency']['code'] }}', {{ $product['id'] }})">
-                                                            <strong>{{ $countryCurrency['currency']['code'] }}</strong>
-                                                        </button>
-                                                    @endforeach
-                                                </div>
-                                            </div>
-                                            <button type="button" class="btn btn-outline-dark addcart"
-                                                data-id={{ $product['id'] }} data-toggle="tooltip" data-placement="bottom"
-                                                data-original-title="Añadir al Carrito"><i class="fa fa-shopping-cart"></i>
-                                            </button>
-                                            <a href="{{ route('product.detailsproduct', ['id' => $product['id']]) }}"
-                                                id="more_details" class="btn btn-outline-dark ml-2" data-toggle="tooltip"
-                                                data-placement="bottom" data-original-title="Ver Detalles"><i
-                                                    class="fa fa-info-circle"></i></a>
-                                            <button class="btn btn-outline-dark btn-square ml-2" data-toggle="tooltip"
-                                                data-placement="bottom" data-original-title="Añadir Lista de Deseos "><i
-                                                    class="far fa-heart"></i></button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                        </div>
-                    @endforeach
+                 @include('app.partials.products')
 
                 </div>
             </div>
@@ -138,4 +89,40 @@
     </div>
 
     <!-- Shop End -->
+@endsection
+@section('js')
+<script>
+    $(document).ready(function() {
+    $('#filterForm input[type="checkbox"]').change(function() {
+        let selectedBrands = [];
+        let selectedCategories = [];
+
+        // Obtener todos los checkboxes de marcas seleccionados
+        $('.brand-checkbox:checked').each(function() {
+            selectedBrands.push($(this).val());
+        });
+
+        // Obtener todos los checkboxes de categorías seleccionados
+        $('.category-checkbox:checked').each(function() {
+            selectedCategories.push($(this).val());
+        });
+
+        $.ajax({
+            url: "{{ route('filterProducts') }}", // Cambia esto a la ruta que maneja la lógica del filtrado
+            method: "GET",
+            data: { 
+                brand_ids: selectedBrands,
+                category_ids: selectedCategories // Aquí agregas las categorías seleccionadas
+            },
+            success: function(response) {
+                $('#productsContainer').html(response);
+            },
+            error: function(xhr, status, error) {
+                console.error(xhr.responseText);
+            }
+        });
+    });
+});
+    </script>
+
 @endsection

@@ -33,8 +33,9 @@
                                 productos</a>
                             <a href="javascript:void(0);" class="top-cart-info-value" id="total-price-phone">$0.00</a>
                         </div>
+                         <i class="fa fa-shopping-cart mt-3 icono-shopping-cart"></i>
                         <div class="top-cart-content-wrapper" id="cart-content-phone" style="display: none;">
-                            <div class="top-cart-content-phone">
+                            <div class="top-cart-content">
                                 <div class="slimScrollDiv" style="position: relative; overflow: hidden; height: 100%;">
                                     <ul class="scroller" id="cart-items-list-phone" style="height: 100%; overflow: auto;">
                                         <!-- Los items del carrito se añadirán aquí desde jQuery -->

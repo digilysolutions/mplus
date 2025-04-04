@@ -311,8 +311,51 @@
 @endsection
 
 @section('js')
+    <script>
+        $(document).ready(function() {
+            $('.container-fluid.pb-5').each(function() {
+                // 'this' se refiere al elemento actual dentro del bucle
+                productIdDetails = $(this).attr('id'); // Obtener el valor del atributo 'id'
+            });
+            //let productInCart = false; // Cambia a false si el producto no está en el carrito
+            // $("#add-to-cart").hide();
+            //  $(".input-group").hide();
+
+            $.ajax({
+                url: '/cart/existProduct/' + productIdDetails,
+                method: 'GET',
+                success: function(response) {
+
+                    var exists = response['exists'];
+                    var quantity = response['quantity'];
+                    existsProduct(exists, quantity);
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error:', error);
+                }
+
+            });
+        });
+        $('#add-to-cart').click(function() {
+
+            const productId = $(this).data('id');
+            addProductCart(productId, 1);
+
+        });
 
 
+
+        function removeProductToCart(button, idProduct) {
+            console.log('Entre al remove product del cart');
+            removeProductCart(button, idProduct, 1);
+
+        }
+
+        function addProductToCart(idProduct) {
+            addProductCart(idProduct, 1);
+
+        }
+    </script>
 
     <script src="{{ asset('includes/app/commnet.js') }}"></script>
 @endsection

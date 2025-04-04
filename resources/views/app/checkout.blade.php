@@ -15,6 +15,20 @@
             </div>
         </div>
     </div>
+    @if ($message = Session::get('success'))
+                    <div class="alert alert-success m-4">
+                        <p>{{ $message }}</p>
+                    </div>
+                @endif
+                @if ($errors->any())
+                    <div class="alert alert-danger">
+                        <ul>
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
     <!-- Checkout Start -->
     <div class="container-fluid">
         <form method="POST" action="{{ route('products.orderpurchase') }}" id="orderpurchase"

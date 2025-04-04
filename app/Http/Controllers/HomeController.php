@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Brand;
 use App\Models\CountryCurrency;
 use App\Models\DeliveryZone;
 use App\Models\Order;
@@ -44,7 +45,8 @@ class HomeController extends Controller
         $featuredProducts = $featuredProducts->sortByDesc('views')->take(9);
 
         $countryCurrencies = CountryCurrency::allActivated();
-        $categories = ProductCategory::allActivated();
+        $categories = ProductCategory::has('products')->get();
+
 
         return view('index', compact('latestProducts', 'categories', 'randomProducts', 'countryCurrencies', 'currency', 'featuredProducts'));
     }
@@ -293,8 +295,207 @@ class HomeController extends Controller
         return view('app.checkout', compact('deliveryZone', 'deliveryZones', 'cart', 'currency', 'countryCurrencies'));
     }
 
+
+
+
+
     public function orderPurchase(Request $request)
     {
+        // Validar los datos del request
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'phone' => 'required|string|max:15',
+            'address' => 'required|string|max:255',
+            'deliveryzona_id' => 'required|exists:delivery_zones,id',
+            // Añadir otras validaciones según sea necesario
+        ]);
+
+        $cart = Session::get('cart');
+
+        if (!is_array($cart) || empty($cart)) {
+            return redirect()->back()->withErrors('El carrito está vacío.');
+        }
+
+        DB::beginTransaction();
+
+        try {
+
+            //Busca una persona por su teléfono, y si no se encuentra, la crea.
+            $buyer = $this->findOrCreatePerson($request->name, $request->phone);
+            $purchasePerson = $this->findOrCreatePerson($request->name_other_person, $request->phone_other_person);
+            $deliveryPerson = $this->findOrCreatePerson($request->name_receives_purchase, $request->phone_receives_purchase);
+
+            //Maneja la lógica de entrega, guardando los datos relevantes.
+            $deliveryData = $this->handleDelivery($request);
+
+            //Prepara los datos para la orden antes de guardarla en la base de datos.
+            $orderData = $this->prepareOrderData($request, $cart, $buyer, $purchasePerson, $deliveryPerson, $deliveryData);
+
+            // Crear la orden
+            $order = Order::create($orderData);
+
+            // Enviar vía WhatsApp
+
+
+            DB::commit();
+            Session::forget('cart');
+
+            $this->sendWhatsapp(
+                $buyer,
+                $purchasePerson,
+                $deliveryPerson,
+                $cart,
+                $orderData['home_delivery'],
+                $deliveryData['delivery_name'],
+                $deliveryData['delivery_fee'],
+                $deliveryData['delivery_time'],
+                $deliveryData['time_unit'],
+                $orderData['subtotal_amount'],
+                $orderData['total_amount']
+            );
+
+            return redirect()->route('home')->with('success', 'Orden realizada con éxito.');
+        } catch (\Exception $ex) {
+            DB::rollback();
+            Log::error('Error al realizar la compra: ' . $ex->getMessage());
+            return redirect()->back()->withErrors('Ocurrió un error: ' . $ex->getMessage());
+        }
+    }
+
+    //findOrCreatePerson: Busca una persona por su teléfono, y si no se encuentra, la crea.
+    private function findOrCreatePerson($name, $phone)
+    {
+        // Busca la persona por teléfono.
+        $person = Person::where('phone', $phone)->first();
+
+        if ($person) {
+            // Comprobar si el nombre coincide
+            if ($person->first_name !== $name) {
+                Log::info("El nombre no coincide para el teléfono: $phone. Nombre registrado: {$person->first_name}, nuevo nombre: $name");
+            }
+            return $person;
+        }
+
+        // Crear nueva persona si no existe
+        return Person::create(['first_name' => $name, 'phone' => $phone]);
+    }
+
+    //handleDelivery: Maneja la lógica de entrega, guardando los datos relevantes.
+    private function handleDelivery(Request $request)
+    {
+        $data = [];
+        if ($request->is_delivery) {
+            // Cargar la zona de entrega
+            $deliveryZone = DeliveryZone::find($request->deliveryzona_id);
+
+            if ($deliveryZone) {
+                $data['delivery_name'] = $deliveryZone->location->name;
+                $data['delivery_fee'] = $deliveryZone->price;
+                $data['delivery_time'] = $deliveryZone->delivery_time;
+                $data['time_unit'] = $deliveryZone->time_unit;
+            }
+        }
+
+        return $data;
+    }
+
+    //prepareOrderData: Prepara los datos para la orden antes de guardarla en la base de datos.
+    private function prepareOrderData(Request $request, $cart, $buyer, $purchasePerson, $deliveryPerson, $deliveryData)
+    {
+        $subtotal_amount = 0;
+        $delivery_fee = $deliveryData['delivery_fee'] ?? 0;
+        $nonExistentProducts = [];
+        $inventoryIssues = [];
+
+        foreach ($cart as $product) {
+            // Obtener la información del producto y su stock actual
+            $productModel = Product::with('stock')->find($product['id']);
+
+            // Si el producto no existe, lo registramos para su revisión
+            if (!$productModel) {
+                $nonExistentProducts[] = [
+                    'product_id' => $product['id'],
+                    'product_name' => 'Desconocido',
+                    'requested_quantity' => $product['quantity'],
+                ];
+                continue; // Pasar al siguiente producto
+            }
+
+            // Verificar si el control de inventario está habilitado para este producto
+            if ($productModel->enable_stock) {
+                $currentStock = $productModel->stock ? $productModel->stock->quantity_available : 0;
+
+                if ($currentStock < $product['quantity']) {
+                    // Si la cantidad en stock es menor que la cantidad solicitada
+                    // Se guarda la cantidad disponible en lugar de la solicitada
+                    $inventoryIssues[] = [
+                        'product_id' => $productModel->id,
+                        'product_name' => $productModel->name,
+                        'requested_quantity' => $product['quantity'],
+                        'available_quantity' => $currentStock,
+                    ];
+                    $quantityToCharge = $currentStock; // Solo cargar lo que hay en stock
+
+                    // Aquí podrías registrar un aviso indicando que se tomó menos de lo solicitado
+                    Log::warning("Cantidad solicitada {$product['quantity']} mayor que cantidad disponible ({$currentStock}) para el producto: {$productModel->name}");
+                } else {
+                    $quantityToCharge = $product['quantity'];
+                }
+
+                // Actualiza el inventario.
+                if ($quantityToCharge > 0) {
+                    $stockQuantity = $currentStock - $quantityToCharge;
+                    $productModel->stock->update(['quantity_available' => $stockQuantity]);
+                    $updatedCart[] = [
+                        'id' => $productModel->id,
+                        'quantity' => $quantityToCharge, // Cargar la cantidad real
+                        'sale_price' => $productModel->sale_price,
+                        // Puedes agregar otros campos que necesites aquí
+                    ];
+                }
+            } else {
+                // Si no está habilitado, simplemente facturamos
+                Log::info("Control de inventario no habilitado para el producto: {$productModel->name}");
+                $quantityToCharge = $product['quantity'];
+            }
+
+            // Calcular el subtotal por producto
+            $subtotal_amount += $productModel->sale_price * $quantityToCharge;
+        }
+
+        // Actualizar el carrito original
+        $cart = $updatedCart;
+        // Guardar detalles de productos que no existen o que tenían problemas de inventario.
+        if (!empty($nonExistentProducts) || !empty($inventoryIssues)) {
+            // Aquí almacenas la información en una sesión, base de datos o log conforme a tu necesidad.
+            Session::flash('non_existent_products', $nonExistentProducts);
+            Session::flash('inventory_issues', $inventoryIssues);
+        }
+
+        $total_amount = $subtotal_amount + $delivery_fee;
+
+        return [
+            'home_delivery' => $request->is_delivery ? 1 : 0,
+            'address' => $request->address,
+            'deliveryzona_id' => $request->deliveryzona_id,
+            'status_id' => 1,
+            'time_unit' => $deliveryData['time_unit'] ?? 0,
+            'delivery_time' => $deliveryData['delivery_time'] ?? "",
+            'purchase_date' => Carbon::now()->format('d/m/Y'),
+            'currency' => Session::get('currency'),
+            'subtotal_amount' => $subtotal_amount,
+            'total_amount' => $total_amount,
+            'delivery_fee' => $delivery_fee,
+            'person_id' => $buyer->id,
+            'purchase_person_id' => $purchasePerson->id,
+            'delivery_person_id' => $deliveryPerson->id,
+        ];
+    }
+
+    //primer codigo eliminarlo cuando termine...
+    public function orderPurchase1(Request $request)
+    {
+        dd($request->all());
         $cart = Session::get('cart');
         DB::beginTransaction();
         try {
@@ -319,8 +520,12 @@ class HomeController extends Controller
                     'first_name' => $request->name,
                     'phone' => $request->phone,
                 ];
+
                 $person =  Person::create($detailsPersonBuyer);
+
+
                 $purchasePerson = $person;
+
 
                 $detailsPersonPurchase = [
                     'first_name' => $request->name_other_person,
@@ -395,6 +600,8 @@ class HomeController extends Controller
                 );
             }
         } catch (\Exception $ex) {
+            DB::rollback();
+            return redirect()->back()->withErrors('Ocurrió un error: ' . $ex->getMessage());
             Log::info($ex);
         }
         Session::forget('cart');
@@ -516,9 +723,31 @@ class HomeController extends Controller
         $whatsappUrl = "https://wa.me/$whatsappNumber?text=" . $whatsappMessage;
         return  $whatsappUrl;
     }
+    public function filterProducts(Request $request)
+    {
+        $data = $this->getProducts($request);
+        $countryCurrencies = $data['countryCurrencies'];
+        $currency = $data['currency'];
+        $productsPaginator = $data['productsPaginator'];
+        $categories = $data['categories'];
+        $brands = $data['brands'];
+
+        // Renderiza la vista parcial con los productos filtrados
+        return view('app.partials.products',  compact('countryCurrencies', 'currency', 'productsPaginator', 'categories', 'brands'));
+    }
     public function shop(Request $request)
     {
 
+        $data = $this->getProducts($request);
+        $countryCurrencies = $data['countryCurrencies'];
+        $currency = $data['currency'];
+        $productsPaginator = $data['productsPaginator'];
+        $categories = $data['categories'];
+        $brands = $data['brands'];
+        return view('app.shop', compact('countryCurrencies', 'currency', 'productsPaginator', 'categories', 'brands'));
+    }
+    private function getProducts(Request $request)
+    {
         $countryCurrencies = CountryCurrency::allActivated();
         $currency = $this->getCurrency();
 
@@ -529,30 +758,33 @@ class HomeController extends Controller
             return count($category['products']) > 1; // Suponiendo que tienes una relación "products"
         });
 
-        /*  $products = $this->productsService->getProducts();
-        $this->filterProducts = collect($products['data']);
-        $productsCollection = collect($products['data']);*/
+        $brands = Brand::with('products')
+            ->whereHas('products')
+            ->get();
 
-
+        // Obtener productos filtrados
         $productsCollection = $this->getFilteredProducts($request);
 
-
         // Definir la cantidad de productos por página
-        $perPage = 6; // Cambia esto al número que quieras por página
-        // Paginación
-        $currentPage = $request->input('page', 1); // Obtener el número de la página actual desde la URL
+        $perPage = 6;
+        $currentPage = $request->input('page', 1);
         $paginatedProducts = $productsCollection->slice(($currentPage - 1) * $perPage, $perPage)->values();
 
-        // Crear una instancia de LengthAwarePaginator
-        $productsPaginator = new \Illuminate\Pagination\LengthAwarePaginator(
-            $paginatedProducts,
-            $productsCollection->count(),
-            $perPage,
-            $currentPage,
-            ['path' => $request->url(), 'query' => $request->query()]
-        );
-        return view('app.shop', compact('countryCurrencies', 'currency', 'productsPaginator', 'categories'));
+        return [
+            'countryCurrencies' => $countryCurrencies,
+            'currency' => $currency,
+            'productsPaginator' => new \Illuminate\Pagination\LengthAwarePaginator(
+                $paginatedProducts,
+                $productsCollection->count(),
+                $perPage,
+                $currentPage,
+                ['path' => $request->url(), 'query' => $request->query()]
+            ),
+            'categories' => $categories,
+            'brands' => $brands,
+        ];
     }
+
     public function productToCategory(Request $request)
     {
         if ($request->has('category_ids')) {
@@ -563,20 +795,20 @@ class HomeController extends Controller
     public function getFilteredProducts(Request $request)
     {
         if (count($this->filterProducts) == 0 || empty($this->filterProducts)) {
-            $products = Product::allActivated();
+            $products = Product::allActivated(); // Asegúrate de que este método devuelve una colección de productos.
             $this->filterProducts = collect($products);
         }
 
         // Filtrar productos según los criterios
         if ($request->has('color')) {
             $this->filterProducts = $this->filterProducts->filter(function ($product) use ($request) {
-                return in_array($product['color'], $request->input('color'));
+                return in_array($product->color, (array)$request->input('color'));
             });
         }
 
         if ($request->has('size')) {
             $this->filterProducts = $this->filterProducts->filter(function ($product) use ($request) {
-                return in_array($product['size'], $request->input('size'));
+                return in_array($product->size, (array)$request->input('size'));
             });
         }
 
@@ -590,77 +822,76 @@ class HomeController extends Controller
 
         if ($request->has('name')) {
             $this->filterProducts = $this->filterProducts->filter(function ($product) use ($request) {
-                return str_contains(strtolower($product['name']), strtolower($request->input('name')));
+                return str_contains(strtolower($product->name), strtolower($request->input('name')));
             });
         }
 
-        if ($request->has('brand')) {
-            $this->filterProducts = $this->filterProducts->filter(function ($product) use ($request) {
-                return in_array($product['brand'], $request->input('brand'));
+        // Filtrado por ID de marcas
+        if ($request->has('brand_ids')) {
+            $brandIds = (array)$request->input('brand_ids');
+            $this->filterProducts = $this->filterProducts->filter(function ($product) use ($brandIds) {
+                return in_array($product->brand_id, $brandIds);
             });
         }
 
         // Filtrado por categoría
         if ($request->has('category_ids')) {
-            $categoryIds = $request->input('category_ids');
+            $categoryIds = (array)$request->input('category_ids');
             $this->filterProducts = $this->filterProducts->filter(function ($product) use ($categoryIds) {
-                return array_intersect($categoryIds, array_column($product['categories'], 'id')) !== [];
+                return $product->categories()->whereIn('product_categories.id', $categoryIds)->exists();
             });
         }
 
         // Retornar los productos filtrados
-        //return response()->json($this->filterProducts);
-
         return $this->filterProducts;
     }
 
 
-
     public function productExchangeRateCart()
-{
-    // Obtener el carrito de la sesión
-    $cart = Session::get('cart', []); // Devuelve un array vacío si el carrito no existe
+    {
+        // Obtener el carrito de la sesión
+        $cart = Session::get('cart', []); // Devuelve un array vacío si el carrito no existe
 
-    // Verificar si el carrito no está vacío
-    if (!empty($cart)) {
-        // Obtener la moneda desde la sesión
-        $currency = Session::get('currency');
+        // Verificar si el carrito no está vacío
+        if (!empty($cart)) {
+            // Obtener la moneda desde la sesión
+            $currency = Session::get('currency');
 
-        // Recorrer el carrito y actualizar cada producto
-        foreach ($cart as &$product) {
-            // Obtener el producto basado en su ID
-            $productModel = Product::find($product['id']);
+            // Recorrer el carrito y actualizar cada producto
+            foreach ($cart as &$product) {
+                // Obtener el producto basado en su ID
+                $productModel = Product::find($product['id']);
 
-            // Verificar si el producto existe
-            if ($productModel) {
-                // Obtener el producto con la tasa de cambio
-                $productWithExchangeRate = $this->productExchangeRate($currency, $productModel);
+                // Verificar si el producto existe
+                if ($productModel) {
+                    // Obtener el producto con la tasa de cambio
+                    $productWithExchangeRate = $this->productExchangeRate($currency, $productModel);
 
-                // Actualizar el producto en el carrito
-                $product = [
-                    'id' => $productWithExchangeRate['id'],
-                    'name' => $productWithExchangeRate['name'],
-                    'outstanding_image' => $productWithExchangeRate['outstanding_image'],
-                    'sale_price' => !empty($productWithExchangeRate['discounted_price'])
-                        ? $productWithExchangeRate['discounted_price']
-                        : $productWithExchangeRate['sale_price'],
-                    'quantity' => $product['quantity'] // Se mantiene la cantidad original
-                ];
-            } else {
-                // Opcional: Registra un aviso que indique que el producto no fue encontrado
-                Log::warning("Product with ID {$product['id']} not found.");
+                    // Actualizar el producto en el carrito
+                    $product = [
+                        'id' => $productWithExchangeRate['id'],
+                        'name' => $productWithExchangeRate['name'],
+                        'outstanding_image' => $productWithExchangeRate['outstanding_image'],
+                        'sale_price' => !empty($productWithExchangeRate['discounted_price'])
+                            ? $productWithExchangeRate['discounted_price']
+                            : $productWithExchangeRate['sale_price'],
+                        'quantity' => $product['quantity'] // Se mantiene la cantidad original
+                    ];
+                } else {
+                    // Opcional: Registra un aviso que indique que el producto no fue encontrado
+                    Log::warning("Product with ID {$product['id']} not found.");
+                }
             }
+
+            // Actualizar el carrito en la sesión
+            Session::put('cart', $cart);
+
+            return $cart; // Devolver el carrito actualizado
+        } else {
+            // Si el carrito está vacío, se devuelve un array vacío
+            return [];
         }
-
-        // Actualizar el carrito en la sesión
-        Session::put('cart', $cart);
-
-        return $cart; // Devolver el carrito actualizado
-    } else {
-        // Si el carrito está vacío, se devuelve un array vacío
-        return [];
     }
-}
 
     private function productExchangeRate($currency, $product)
     {

@@ -79,59 +79,59 @@ class CartController extends Controller
     }
 
     public function addProduct(Request $request)
-{
-    // Validar los datos entrantes
-    $request->validate([
-        'product_id' => 'required|integer|exists:products,id', // Asegurando que el producto exista
-        'quantity' => 'required|integer|min:1',
-    ]);
+    {
+        // Validar los datos entrantes
+        $request->validate([
+            'product_id' => 'required|integer|exists:products,id', // Asegurando que el producto exista
+            'quantity' => 'required|integer|min:1',
+        ]);
 
-    $currency = Session::get('currency');
-    $cart = Session::get('cart', []); // Obtener el carrito o inicializarlo como vacío si no existe
-    $product = $this->productsService->findById($request->product_id);
+        $currency = Session::get('currency');
+        $cart = Session::get('cart', []); // Obtener el carrito o inicializarlo como vacío si no existe
+        $product = $this->productsService->findById($request->product_id);
 
-    // Retornar un error si el producto no se encuentra
-    if (!$product) {
-        return response()->json(['error' => 'Product not found'], 404);
-    }
-
-    // Aplicar la tasa de cambio al producto
-    $productWithExchangeRate = $this->productExchangeRate($currency, $product);
-    $salePrice = empty($productWithExchangeRate['discounted_price'])
-        ? $productWithExchangeRate['sale_price']
-        : $productWithExchangeRate['discounted_price'];
-
-    $existProduct = false;
-
-    foreach ($cart as $key => $item) {
-        // Si el 'id' del producto en el carrito coincide con el 'product_id' en la solicitud
-        if ($item['id'] == $request->product_id) {
-            // Calcular la nueva cantidad
-            $newQuantity = $item['quantity'] + $request->quantity;
-            $cart[$key]['quantity'] = $newQuantity;
-            $existProduct = true; // Marcar que el producto existe
-            break; // Salir del bucle una vez encontrado y actualizado el producto
+        // Retornar un error si el producto no se encuentra
+        if (!$product) {
+            return response()->json(['error' => 'Product not found'], 404);
         }
+
+        // Aplicar la tasa de cambio al producto
+        $productWithExchangeRate = $this->productExchangeRate($currency, $product);
+        $salePrice = empty($productWithExchangeRate['discounted_price'])
+            ? $productWithExchangeRate['sale_price']
+            : $productWithExchangeRate['discounted_price'];
+
+        $existProduct = false;
+
+        foreach ($cart as $key => $item) {
+            // Si el 'id' del producto en el carrito coincide con el 'product_id' en la solicitud
+            if ($item['id'] == $request->product_id) {
+                // Calcular la nueva cantidad
+                $newQuantity = $item['quantity'] + $request->quantity;
+                $cart[$key]['quantity'] = $newQuantity;
+                $existProduct = true; // Marcar que el producto existe
+                break; // Salir del bucle una vez encontrado y actualizado el producto
+            }
+        }
+
+        // Si no existe, añadirlo al carrito
+        if (!$existProduct) {
+            $cart[$request->product_id] = [
+                'id' => $productWithExchangeRate['id'],
+                'outstanding_image' => $productWithExchangeRate['outstanding_image'],
+                'name' => $productWithExchangeRate['name'],
+                'sale_price' => $salePrice,
+                'quantity' => $request->quantity,
+                'category' => $productWithExchangeRate['categories'][0] ?? null,
+            ];
+        }
+
+        // Actualizar el carrito en la sesión
+        Session::put('cart', $cart);
+
+        // Retornar el carrito actualizado
+        return response()->json($cart);
     }
-
-    // Si no existe, añadirlo al carrito
-    if (!$existProduct) {
-        $cart[$request->product_id] = [
-            'id' => $productWithExchangeRate['id'],
-            'outstanding_image' => $productWithExchangeRate['outstanding_image'],
-            'name' => $productWithExchangeRate['name'],
-            'sale_price' => $salePrice,
-            'quantity' => $request->quantity,
-            'category' => $productWithExchangeRate['categories'][0] ?? null,
-        ];
-    }
-
-    // Actualizar el carrito en la sesión
-    Session::put('cart', $cart);
-
-    // Retornar el carrito actualizado
-    return response()->json($cart);
-}
 
     private function productExchangeRate($currency, $product)
     {
@@ -145,29 +145,32 @@ class CartController extends Controller
     //Elimina la cantidad de productos del carrito de uno en uno y si esta en cero lo borra del carrito
     public function removeProduct(Request $request)
     {
+
         $request->validate([
             'product_id' => 'required|integer',
-            'quantity' => 'required|integer|min:1'
+            'quantity' => 'required|integer|min:0'
         ]);
 
         $cart = Session::get('cart');
 
         // Verificar si el carrito no está vacío
         if ($cart) {
-            foreach ($cart as $key => $item) {
+
+            foreach ($cart as $key => &$item) { // Aquí agregamos $key para obtener la clave del elemento actual.
                 // Si el 'id' del producto en el carrito coincide con el 'product_id' en la solicitud
                 if ($item['id'] == $request->product_id) {
+
+                    if ($request->quantity == 0) {
+                        unset($cart[$key]);
+                        break;
+                    }
                     // Calcular la nueva cantidad
-                    $newQuantity = $item['quantity'] - $request->quantity;
+                    $item['quantity'] = $item['quantity'] - $request->quantity;
 
                     // Si la nueva cantidad es menor a 1, eliminar el producto del carrito
-                    if ($newQuantity <= 0) {
-                        unset($cart[$key]);
-                    } else {
-                        // De lo contrario, actualizar la cantidad del producto en el carrito
-                        $cart[$key]['quantity'] = $newQuantity;
+                    if ($item['quantity'] <= 0) {
+                        unset($cart[$key]); // Usamos $key para eliminar el elemento correcto del carrito.
                     }
-
                     // Salir del bucle una vez encontrado y actualizado/eliminado el producto
                     break;
                 }

@@ -49,16 +49,16 @@
                     @endphp
                     @foreach ($products as $product)
                         <tr class="text-dark-mobile product-row">
-                            <td class="text-left product-name"><img src="{{ $product['outstanding_image'] }}" alt=""
+                            <td class="text-left product-name"> <a href="{{ route('product.detailsproduct', $product['id']) }}"><img src="{{ $product['outstanding_image'] }}" alt=""
                                     style="width: 50px;">
-                                {{ $product['name'] }}</td>
+                                {{ $product['name'] }}</a></td>
                             <td class="align-middle product-sale-price sale-price-{{ $product['id'] }} ">$
                                 {{ $product['sale_price'] }}</td>
                             <td class="align-middle">
                                 <div class="button-group quantity mr-3" style="width: 130px; ">
                                     <div class="input-group-btn">
                                         <button
-                                            onclick="minusProductToCart(this,{{ $product['id'] }},{{ $product['quantity'] }})"
+                                            onclick="minusProductToCart(this,{{ $product['id'] }},1)"
                                             data-id="{{ $product['id'] }}" class="btn btn-primary btn-minus">
                                             <i class="fa fa-minus"></i>
                                         </button>
@@ -144,7 +144,13 @@
     <script>
 
         function minusProductToCart(button, productId, quantity) {
-            removeProductToCart(button, productId);
+            removeProductCart(button, productId, quantity);
+            $('total-price-row').text();
+
+        }
+         function addProductToCart(productId) {
+            console.log(productId);
+            addProductCart(productId, 1);
 
             $('total-price-row').text();
 
