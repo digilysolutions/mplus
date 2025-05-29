@@ -243,7 +243,7 @@ Route::post('/cart/checkout', [CartController::class, 'checkout'])->name('cart.c
 Route::get('/cart', [CartController::class, 'showCart'])->name('cart.show');
 //Route::get('/cart/productExchangeRate', [CartController::class, 'productExchangeRate']);
 Route::get('/cart/productExchangeRate', [HomeController::class, 'productExchangeRateCart']);
-Route::get('/cart/show/info', [CartController::class, 'showInfoCart'])->name('cart.showCart');
+//Route::get('/cart/show/info', [CartController::class, 'showInfoCart'])->name('cart.showCart');
 Route::get('/cart/infoCart', [CartController::class, 'infoCart']);
 Route::get('/cart/existProduct/{id}', [CartController::class, 'existProduct']);
 

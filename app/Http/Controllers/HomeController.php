@@ -305,7 +305,7 @@ class HomeController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'phone' => 'required|string|max:15',
-            'address' => 'required|string|max:255',
+            'address' => 'string|max:255',
             'deliveryzona_id' => 'required|exists:delivery_zones,id',
             // Añadir otras validaciones según sea necesario
         ]);

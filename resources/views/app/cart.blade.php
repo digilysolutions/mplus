@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.app-front-rpg')
 @section('header-title')
     Isla de la Juventud
 @endsection

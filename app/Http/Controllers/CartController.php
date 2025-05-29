@@ -80,6 +80,7 @@ class CartController extends Controller
 
     public function addProduct(Request $request)
     {
+
         // Validar los datos entrantes
         $request->validate([
             'product_id' => 'required|integer|exists:products,id', // Asegurando que el producto exista
@@ -204,7 +205,6 @@ class CartController extends Controller
     }
     public function existProduct(Request $request)
     {
-
         $cart = Session::get('cart');
         if (isset($cart[$request->id]['id'])) {
             return [
