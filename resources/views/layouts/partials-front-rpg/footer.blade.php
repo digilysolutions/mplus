@@ -6,7 +6,7 @@
                 <a href="" class="text-decoration-none">
                     <h1 class="mb-4 display-5 font-weight-semi-bold"><span class="text-primary font-weight-bold border border-white px-3 mr-1">RPG</span>Solutions</h1>
                 </a>
-                <p>Dolore erat dolor sit lorem vero amet. Sed sit lorem magna, ipsum no sit erat lorem et magna ipsum dolore amet erat.</p>
+                <p>Nuestra misión es ofrecer una amplia variedad de productos de calidad, brindando a nuestros clientes en La Habana soluciones confiables y accesibles para sus necesidades diarias. Nos comprometemos a proporcionar un excelente servicio, innovación y satisfacción, convirtiéndonos en su aliado de confianza en cada compra.</p>
                 <p class="mb-2"><i class="fa fa-map-marker-alt text-primary mr-3"></i>Calle 25 #26 entre Marina y Hospital</p>
                 <p class="mb-2"><i class="fa fa-envelope text-primary mr-3"></i><a href="mail:commercialsolutions70@gmail.com"> commercialsolutions70@gmail.com</a></p>
                 <p class="mb-0"><i class="fa fa-phone-alt text-primary mr-3"></i><a href="tel:5359294241"> 5 9294241</a> /<a href="tel:5353285232"> 53285232</a></p>
