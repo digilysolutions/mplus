@@ -19,10 +19,10 @@
                  </button>
                  <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
                      <div class="navbar-nav mr-auto py-0">
-                         <a href="index.html" class="nav-item nav-link active">Inicio</a>
-                         <a href="shop.html" class="nav-item nav-link">Tienda</a>
-                         <a href="detail.html" class="nav-item nav-link">Carrito de compras</a>
-                         <a href="contact.html" class="nav-item nav-link">Contacto</a>
+                         <a href="/" class="nav-item nav-link">Inicio</a>
+                         <a href="{{route('product.shop')}}" class="nav-item nav-link">Tienda</a>
+                         <a href="/cart/show/info" class="nav-item nav-link">Carrito de compras</a>
+                         <a href="/contact" class="nav-item nav-link">Contacto</a>
                      </div>
                  </div>
              </nav>
