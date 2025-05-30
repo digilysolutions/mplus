@@ -4,7 +4,7 @@
             <div class="d-inline-flex align-items-center">
                 <a class="text-dark" href="">Llámanos</a>
                 <span class="text-muted px-2">:</span>
-                <a class="text-dark" href="">58205054</a>
+                <a class="text-dark" href="tel:5353285232">+53 53285232</a>
             </div>
         </div>
         <div class="col-lg-6 text-center text-lg-right">
