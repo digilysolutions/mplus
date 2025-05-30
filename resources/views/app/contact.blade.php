@@ -3,17 +3,17 @@
     Isla de la Juventud - Servicio al Cliente
 @endsection
 @section('content')
- <!-- Breadcrumb Start -->
- <div class="container-fluid">
-    <div class="row px-xl-5">
-        <div class="col-12">
-            <nav class="breadcrumb bg-light mb-30">
-                <a class="breadcrumb-item text-orange-mobile" href="/">Inicio</a>
-                <span class="breadcrumb-item text-dark-mobile active ">Contáctanos</span>
-            </nav>
+    <!-- Breadcrumb Start -->
+    <div class="container-fluid">
+        <div class="row px-xl-5">
+            <div class="col-12">
+                <nav class="breadcrumb bg-light mb-30">
+                    <a class="breadcrumb-item text-orange-mobile" href="/">Inicio</a>
+                    <span class="breadcrumb-item text-dark-mobile active ">Contáctanos</span>
+                </nav>
+            </div>
         </div>
     </div>
-</div>
     <div class="container-fluid">
         <h2 class="section-title position-relative text-uppercase mx-xl-5 mb-4"><span
                 class="bg-secondary pr-3">Contáctanos</span></h2>
@@ -51,16 +51,19 @@
                 </div>
             </div>
             <div class="col-lg-5 mb-5">
-                <div class="bg-light p-30 mb-30">
+                <div class="bg-light p-30 mb-30" style="width: 100%; max-width: 600px;">
                     <iframe
-                        src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d2938.257649907824!2d-82.81040597223311!3d21.897159843756082!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1ses!2scu!4v1732352163023!5m2!1ses!2scu"
-                        width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy"
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3481.595091704119!2d-82.3869167!3d23.1360762!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x88acfc7217e4d9a1%3A0x6fdbf107e3e8f7a7!2sCalle%2025%2C%20La%20Habana!5e0!3m2!1ses!2s cu!4v1708559591234!5m2!1ses!2s cu"
+                        width="100%" height="450" style="border:0;" allowfullscreen="" loading="lazy"
                         referrerpolicy="no-referrer-when-downgrade"></iframe>
                 </div>
                 <div class="bg-light p-30 mb-3">
-                    <p class="mb-2"><i class="fa fa-map-marker-alt text-primary mr-3"></i>Calle 25 #26 entre Marina y Hospital</p>
-                    <p class="mb-2"><i class="fa fa-envelope text-primary mr-3"></i><a href="mail:commercialsolutions70@gmail.com">commercialsolutions70@gmail.com</a></p>
-                    <p class="mb-2"><i class="fa fa-phone-alt text-primary mr-3"></i><a href="tel:5353285232">+53 53285232</a></p>
+                    <p class="mb-2"><i class="fa fa-map-marker-alt text-primary mr-3"></i>Calle 25 #26 entre Marina y
+                        Hospital</p>
+                    <p class="mb-2"><i class="fa fa-envelope text-primary mr-3"></i><a
+                            href="mail:commercialsolutions70@gmail.com">commercialsolutions70@gmail.com</a></p>
+                    <p class="mb-2"><i class="fa fa-phone-alt text-primary mr-3"></i><a href="tel:5353285232">+53
+                            53285232</a></p>
                 </div>
             </div>
         </div>
@@ -68,7 +71,6 @@
 @endsection
 @section('js')
     <script>
-
         $(document).ready(function() {
 
             $('#sendMessage').on('submit', function(event) {
@@ -90,7 +92,7 @@
                         // Asumiendo que `response` incluye `whatsappUrl`
                         if (response) {
                             // Redirige a la URL de WhatsApp
-                           // window.location.href = response;
+                            // window.location.href = response;
                             window.open(response, '_blank'); // _blank abre en nueva pestaña
                         } else {
                             $('#success').html(
