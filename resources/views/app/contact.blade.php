@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.app-front-rpg')
 @section('header-title')
     Isla de la Juventud - Servicio al Cliente
 @endsection
@@ -58,10 +58,9 @@
                         referrerpolicy="no-referrer-when-downgrade"></iframe>
                 </div>
                 <div class="bg-light p-30 mb-3">
-                    <p class="mb-2"><i class="fa fa-map-marker-alt text-primary mr-3"></i>Micro 70, Nueva Gerona, Isla de
-                        la Juventud</p>
-                    <p class="mb-2"><i class="fa fa-envelope text-primary mr-3"></i>mercadoplus@digilysolutions.com</p>
-                    <p class="mb-2"><i class="fa fa-phone-alt text-primary mr-3"></i>+53 50987370</p>
+                    <p class="mb-2"><i class="fa fa-map-marker-alt text-primary mr-3"></i>Calle 25 #26 entre Marina y Hospital</p>
+                    <p class="mb-2"><i class="fa fa-envelope text-primary mr-3"></i><a href="mail:commercialsolutions70@gmail.com">commercialsolutions70@gmail.com</a></p>
+                    <p class="mb-2"><i class="fa fa-phone-alt text-primary mr-3"></i><a href="tel:5353285232">+53 53285232</a></p>
                 </div>
             </div>
         </div>
