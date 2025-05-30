@@ -1,6 +1,6 @@
 @extends('layouts.app-front-rpg')
 @section('header-title')
-    RPG Solutions
+    Tienda ONLINE
 @endsection
 
 @section('css')
