@@ -1,56 +1,62 @@
  <!-- Navbar Start -->
-    <div class="container-fluid mb-5">
-        <div class="row border-top px-xl-5">
+ <div class="container-fluid mb-5">
+     <div class="row border-top px-xl-5">
 
-            <div class="col-lg-12">
-                <nav class="navbar navbar-expand-lg bg-light navbar-light py-3 py-lg-0 px-0">
-                    <a href="/" class="text-decoration-none d-block d-lg-none">
-                        <h1 class="m-0 display-5 font-weight-semi-bold"><span
-                                class="text-primary font-weight-bold border px-3 mr-1">RPG</span>Solutions</h1>
-                    </a>
-                    <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
-                        <span class="navbar-toggler-icon"></span>
-                    </button>
-                    <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
-                        <div class="navbar-nav mr-auto py-0">
-                            <a href="index.html" class="nav-item nav-link active">Inicio</a>
-                            <a href="shop.html" class="nav-item nav-link">Tienda</a>
-                            <a href="detail.html" class="nav-item nav-link">Carrito de compras</a>
-                            <a href="contact.html" class="nav-item nav-link">Contacto</a>
-                        </div>
-                    </div>
-                </nav>
-
-            </div>
-        </div>
-    </div>
-    <!-- Navbar End -->
+         <div class="col-lg-12">
+             <nav class="navbar navbar-expand-lg bg-light navbar-light py-3 py-lg-0 px-0">
 
 
-    <!-- Vendor Start -->
-    <div class="container-fluid ">
-        <div class="row">
-            <div class="col">
-                <div class="owl-carousel vendor-carousel">
+                 <div class="col-lg-3 d-block d-lg-none mb-3">
+                     <a href="/" class="text-decoration-none">
+                         <span> <img class="img-fluid" height="10px" width="80px"
+                                 src="{{ asset('img/logo-rpg-solutions.png') }}" /></span>
+                         <img class="img-fluid " height="10px" width="150px" src="{{ asset('img/logo-solutions.png') }}" />
+                     </a>
 
-                    <button class="categoria active" data-categoria="todos">Todas</button>
+                 </div>
+                 <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
+                     <span class="navbar-toggler-icon"></span>
+                 </button>
+                 <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
+                     <div class="navbar-nav mr-auto py-0">
+                         <a href="index.html" class="nav-item nav-link active">Inicio</a>
+                         <a href="shop.html" class="nav-item nav-link">Tienda</a>
+                         <a href="detail.html" class="nav-item nav-link">Carrito de compras</a>
+                         <a href="contact.html" class="nav-item nav-link">Contacto</a>
+                     </div>
+                 </div>
+             </nav>
 
-                    <button class="categoria" data-categoria="electronica">Electrónica</button>
+         </div>
+     </div>
+ </div>
+ <!-- Navbar End -->
 
-                    <button class="categoria" data-categoria="ropa">Ropa</button>
 
-                    <button class="categoria" data-categoria="hogar">Hogar</button>
+ <!-- Vendor Start -->
+ <div class="container-fluid ">
+     <div class="row">
+         <div class="col">
+             <div class="owl-carousel vendor-carousel">
 
-                    <button class="categoria" data-categoria="deportes">Deportes</button>
+                 <button class="categoria active" data-categoria="todos">Todas</button>
 
-                    <button class="categoria" data-categoria="juegos">Juegos</button>
+                 <button class="categoria" data-categoria="electronica">Electrónica</button>
 
-                    <button class="categoria" data-categoria="libros">Libros</button>
+                 <button class="categoria" data-categoria="ropa">Ropa</button>
 
-                    <button class="categoria" data-categoria="otros">Otros</button>
+                 <button class="categoria" data-categoria="hogar">Hogar</button>
 
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- Vendor End -->
+                 <button class="categoria" data-categoria="deportes">Deportes</button>
+
+                 <button class="categoria" data-categoria="juegos">Juegos</button>
+
+                 <button class="categoria" data-categoria="libros">Libros</button>
+
+                 <button class="categoria" data-categoria="otros">Otros</button>
+
+             </div>
+         </div>
+     </div>
+ </div>
+ <!-- Vendor End -->

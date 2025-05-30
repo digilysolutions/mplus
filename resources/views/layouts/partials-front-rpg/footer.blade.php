@@ -3,9 +3,13 @@
     <div class="container-fluid bg-secondary text-dark mt-5 pt-5">
         <div class="row px-xl-5 pt-5">
             <div class="col-lg-6 col-md-12 mb-5 pr-3 pr-xl-5">
-                <a href="" class="text-decoration-none">
-                    <h1 class="mb-4 display-5 font-weight-semi-bold"><span class="text-primary font-weight-bold border border-white px-3 mr-1">RPG</span>Solutions</h1>
-                </a>
+               <div class="col-lg-3  mb-3">
+            <a href="/" class="text-decoration-none">
+               <span> <img class="img-fluid" height="10px" width="100px" src="{{asset('img/RPGsolutions.png')}}"/></span>
+
+            </a>
+
+        </div>
                 <p>Nuestra misión es ofrecer una amplia variedad de productos de calidad, brindando a nuestros clientes en La Habana soluciones confiables y accesibles para sus necesidades diarias. Nos comprometemos a proporcionar un excelente servicio, innovación y satisfacción, convirtiéndonos en su aliado de confianza en cada compra.</p>
                 <p class="mb-2"><i class="fa fa-map-marker-alt text-primary mr-3"></i>Calle 25 #26 entre Marina y Hospital</p>
                 <p class="mb-2"><i class="fa fa-envelope text-primary mr-3"></i><a href="mail:commercialsolutions70@gmail.com"> commercialsolutions70@gmail.com</a></p>

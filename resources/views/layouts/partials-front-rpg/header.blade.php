@@ -1,12 +1,13 @@
 <meta charset="utf-8" />
 <title>RPG Solutions - @yield('header-title')</title>
  <meta content="width=device-width, initial-scale=1.0" name="viewport">
-    <meta content="Free HTML Templates" name="keywords">
-    <meta content="Free HTML Templates" name="description">
+    <meta content="RPG Solutions" name="keywords">
+    <meta content="RPG Solutions" name="description">
+
 
 <meta name="csrf-token" content="{{ csrf_token() }}">
 <!-- Favicon -->
-<link href="" rel="icon" />
+<link href="{{asset('img/logo-rpg.png')}}" rel="icon" />
 
 <!-- Google Web Fonts -->
 <link rel="preconnect" href="https://fonts.gstatic.com" />
@@ -29,18 +30,18 @@
     margin: 0 15px;
     padding: 8px 20px;
     border-radius: 20px;
-    border: 1px solid #007bff;
+    border: 1px solid #575756;
     background: #fff;
     font-weight: 600;
     transition: 0.3s;
   }
   .categoria:hover {
-    background-color: #007bff;
+    background-color: #575756;
     color: #fff;
     transform: scale(1.05);
   }
   .categoria.active {
-    background-color: #0056b3;
+    background-color: #575756;
     color: #fff;
   }
 </style>
