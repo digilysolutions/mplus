@@ -10,7 +10,7 @@
                 <nav class="breadcrumb bg-light mb-30">
                     <a class="breadcrumb-item text-orange-mobile" href="/">Inicio</a>
                     <a class="breadcrumb-item text-orange-mobile" href="/shop">Tienda</a>
-                    <span class="breadcrumb-item text-dark-mobile active ">Enviar Pedido</span>
+                    <span class="breadcrumb-item text-dark-mobile active ">Enviar Pedido1</span>
                 </nav>
             </div>
         </div>
