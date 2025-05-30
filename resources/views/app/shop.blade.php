@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.app-front-rpg')
 @section('header-title')
     Isla de la Juventud - Tienda
 @endsection
@@ -25,7 +25,7 @@
                 <h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3">Filtrar por
                         Categoría</span></h5>
                 <div class="bg-light p-4 mb-30">
-                  
+
                     @foreach ($categories as $category)
                     <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
                         <input type="checkbox" value="{{ $category['id'] }}" class="custom-control-input category-checkbox"
@@ -35,7 +35,7 @@
                         <span class="badge border font-weight-normal">{{ count($category['products']) }}</span>
                     </div>
                 @endforeach
-                    
+
                 </div>
                 <!-- Categoria End -->
 
@@ -43,7 +43,7 @@
                 <h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3">Filtrar por
                         Marcas</span></h5>
                 <div class="bg-light p-4 mb-30">
-                    
+
                         @foreach ($brands as $brand)
                             <div
                                 class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
@@ -55,7 +55,7 @@
                                 <span class="badge border font-weight-normal">{{ $brand->products->count() }}</span>
                             </div>
                         @endforeach
-                   
+
 
                 </div>
                 <!-- Categoria End -->
@@ -110,7 +110,7 @@
         $.ajax({
             url: "{{ route('filterProducts') }}", // Cambia esto a la ruta que maneja la lógica del filtrado
             method: "GET",
-            data: { 
+            data: {
                 brand_ids: selectedBrands,
                 category_ids: selectedCategories // Aquí agregas las categorías seleccionadas
             },
