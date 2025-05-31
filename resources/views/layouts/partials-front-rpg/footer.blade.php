@@ -125,10 +125,12 @@ $(document).ready(function() {
                 // Alternar visibilidad
                 if (cartContent.is(':visible')) {
                     cartContent.hide(); // Si ya está visible, entonces oculta
+
                 } else {
                     cartContent.show(); // Si no, mostrarlo
                     // Actualiza el carrito al mostrar
                     cartContent.stop(true, true).fadeIn(100); // Mostrar el contenido del carrito
+
                 }
             }
         });
@@ -153,7 +155,8 @@ $(document).ready(function() {
         // Cierra el carrito si se hace clic en cualquier parte de la página fuera del carrito
         $(document).click(function() {
             if (cartContent.is(':visible')) {
-                cartContent.fadeOut(200); // Oculta el carrito al hacer clic fuera
+               $('#cart-content').hide();// Oculta el carrito al hacer clic fuera
+
             }
         });
         //adicionar producto
