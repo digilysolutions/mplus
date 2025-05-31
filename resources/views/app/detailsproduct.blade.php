@@ -28,7 +28,7 @@
 
 
     <!-- Page Header Start -->
-    <div class="container-fluid bg-secondary mb-5 mt-5">
+    <div class="container-fluid bg-secondary mb-5 mt-5" >
         <div class="d-flex flex-column align-items-center justify-content-center" style="min-height: 300px">
             <h1 class="font-weight-semi-bold text-uppercase mb-3">Detalles del Producto</h1>
             <div class="d-inline-flex">
@@ -44,7 +44,7 @@
     <!-- Page Header End -->
 
     <!-- Shop Detail Start -->
-    <div class="container-fluid py-5 " id="{{ $product['id'] }}">
+    <div class="container-fluid pb-5 " id="{{ $product['id'] }}">
         <div class="row px-xl-5 mb-5">
 
             <div class="col-lg-5 mb-30">
