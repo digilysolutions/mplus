@@ -1,4 +1,3 @@
-
 <!-- JavaScript Libraries -->
 <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
@@ -17,8 +16,7 @@
 <script type="module" src="{{ asset('includes/main.js') }}"></script>
 <script src="{{ asset('includes/app/cart.js') }}"></script>
 <script>
-
-$(document).ready(function() {
+    $(document).ready(function() {
         // Manejador para mostrar y ocultar el carrito en móvil
         $('.top-cart-info').click(function() {
             $('#cart-content-phone').toggle(); // Muestra/oculta el carrito en móvil
@@ -44,19 +42,20 @@ $(document).ready(function() {
 
         const cartContent = $('.top-cart-content');
         // Asegurarse de que el carrito no se muestre al abrir la página
-        cartContent.hide(); // Asegura que el carrito esté oculto al cargar la página.
+       // $('#cart-content').removeClass('hide'); // Asegura que el carrito esté oculto al cargar la página.
+$('#cart-content').removeClass('hide');
 
         // Muestra el carrito al pasar el cursor
         $('#cart-info, .icono-shopping-cart, .top-cart-content, .top-cart-block').hover(function(e) {
             if (cartItems.length != 0) {
                 e.stopPropagation();
-                cartContent.show();
+                $('#cart-content').addClass('hide');
             }
         });
         $('#cart-info-phone, .top-cart-content-phone').hover(function(e) {
             if (cartItems.length != 0) {
                 e.stopPropagation();
-                cartContent.show();
+               $('#cart-content').addClass('hide');
             }
         });
 
@@ -67,24 +66,24 @@ $(document).ready(function() {
             if (cartItems.length != 0) {
                 // Alternar visibilidad
                 if (cartContent.is(':visible')) {
-                    cartContent.hide(); // Si ya está visible, entonces oculta
+                    $('#cart-content').removeClass('hide'); // Si ya está visible, entonces oculta
                 } else {
-                    cartContent.show(); // Si no, mostrarlo
+                    $('#cart-content').addClass('hide'); // Si no, mostrarlo
                     // Actualiza el carrito al mostrar
                     cartContent.stop(true, true).fadeIn(100); // Mostrar el contenido del carrito
                 }
             }
         });
-         // Manejo del clic para mantener el carrito visible
-         $('#cart-info-phone, .fa-shopping-cart-phone').click(function(e) {
+        // Manejo del clic para mantener el carrito visible
+        $('#cart-info-phone, .fa-shopping-cart-phone').click(function(e) {
             e.stopPropagation(); // Evitar que el clic cierre el carrito
             const cartContent = $('#cart-content-phone');
             if (cartItems.length != 0) {
                 // Alternar visibilidad
                 if (cartContent.is(':visible')) {
-                    cartContent.hide(); // Si ya está visible, entonces oculta
+                    $('#cart-content').removeClass('hide'); // Si ya está visible, entonces oculta
                 } else {
-                    cartContent.show(); // Si no, mostrarlo
+                   $('#cart-content').addClass('hide'); // Si no, mostrarlo
                     // Actualiza el carrito al mostrar
                     cartContent.stop(true, true).fadeIn(100); // Mostrar el contenido del carrito
                 }
@@ -97,6 +96,7 @@ $(document).ready(function() {
         $(document).click(function() {
             if (cartContent.is(':visible')) {
                 cartContent.fadeOut(200); // Oculta el carrito al hacer clic fuera
+
             }
         });
         //adicionar producto
@@ -124,11 +124,11 @@ $(document).ready(function() {
 
             if (item && item.quantity > 1) {
                 item.quantity--;
-                console.log( cartItems);
+                console.log(cartItems);
             } else {
                 cartItems = cartItems.filter(item => item.id !== id)
 
-                console.log( cartItems);
+                console.log(cartItems);
             }
             removeProductCart(null, id, 1);
         });
