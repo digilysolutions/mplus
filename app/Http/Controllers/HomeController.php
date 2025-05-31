@@ -247,7 +247,7 @@ class HomeController extends Controller
                     // Comprobar el stock disponible
 
                     $stock = Stock::where('product_id', $product->id)->first();
-
+//TODO: Mejorar este xodigo con la disponibilidad de la almacen
                     if ($stock && $stock->quantity_available >= $item['quantity']) {
 
                         // Si hay suficiente stock, agregar el producto al carrito válido
