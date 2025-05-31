@@ -221,7 +221,7 @@ class HomeController extends Controller
     public function checkout($idDomicilio)
     {
         $cart = Session::get('cart', []); // Devuelve un array vacío si no hay carrito en la sesión
-dd("Entre");
+dd($cart );
         // Verificar si el carrito está vacío
         if (empty($cart)) {
             return redirect('/')->with('message', 'Tu carrito está vacío.');
