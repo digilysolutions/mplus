@@ -236,7 +236,7 @@ class HomeController extends Controller
         foreach ($cart as $item) {
             // Encontrar el producto en la base de datos
             $product = Product::find($item['id']);
-dd($product );
+
             // Comprobar si el producto existe y si está activado
             if ($product && $product->is_activated) {
                 // Si el control de stock está habilitado
@@ -258,7 +258,7 @@ dd($product );
                 }
             }
         }
-
+dd($validCart);
         // Actualizar el carrito en la sesión
         Session::put('cart', $validCart);
 
