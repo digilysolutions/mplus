@@ -234,17 +234,22 @@ class HomeController extends Controller
 
         // Iterar sobre los productos en el carrito
         foreach ($cart as $item) {
+
             // Encontrar el producto en la base de datos
             $product = Product::find($item['id']);
 
             // Comprobar si el producto existe y si está activado
+
             if ($product && $product->is_activated) {
                 // Si el control de stock está habilitado
+
                 if ($product->enable_stock) {
                     // Comprobar el stock disponible
+
                     $stock = Stock::where('product_id', $product->id)->first();
 
                     if ($stock && $stock->quantity_available >= $item['quantity']) {
+
                         // Si hay suficiente stock, agregar el producto al carrito válido
                         $validCart[] = $item;
                         $productsToUpdateStock[] = [
@@ -252,13 +257,16 @@ class HomeController extends Controller
                             'quantity' => $item['quantity']
                         ];
                     }
+                    else
+                    { $validCart[] = $item;}
                 } else {
                     // Si no se controla el stock, agregarlo directamente
                     $validCart[] = $item;
+
                 }
             }
         }
-dd($validCart);
+
         // Actualizar el carrito en la sesión
         Session::put('cart', $validCart);
 
