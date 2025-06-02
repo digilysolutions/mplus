@@ -12,6 +12,23 @@
             object-fit: cover;
             display: block;
         }
+
+        @keyframes fadeOutSlow {
+            0% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+
+            100% {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+        }
+
+        .fade-out-slow {
+            animation: fadeOutSlow 1.5s forwards;
+            /* duración de 1.5 segundos */
+        }
     </style>
 @endsection
 @section('content')
@@ -70,7 +87,8 @@
 
 
                             <button type="button" class="btn btn-sm text-dark p-0  addcart" data-id={{ $product->id }}
-                                data-toggle="tooltip" data-placement="bottom" data-original-title="Añadir al Carrito"><i
+                                data-name={{ $product->name }} data-toggle="tooltip" data-placement="bottom"
+                                data-original-title="Añadir al Carrito"><i
                                     class="fas fa-shopping-cart text-primary mr-1 "></i>Adicionar Carrito
                             </button>
                         </div>
@@ -81,6 +99,53 @@
         </div>
     </div>
     <!-- Products End -->
+
+    <!-- Modal de notificación -->
+    <div class="modal fade" id="productAddedModal" tabindex="-1" aria-labelledby="productAddedLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content" style="background-color: #f0f8ff;">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="productAddedLabel">Producto añadido al carrito</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                </div>
+                <div class="modal-body">
+                    <p><strong id="productName"></strong> ha sido añadido a tu carrito.</p>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
 @endsection
 @section('js')
+    <script>
+        $(document).ready(function() {
+            $('.addcart').on('click', function() {
+                // Obtener datos del botón
+                var productName = $(this).data('name');
+
+                // Rellenar los datos en el modal
+                $('#productName').text(productName);
+
+                // Mostrar el modal usando Bootstrap 5 con jQuery
+                var myModal = new bootstrap.Modal(document.getElementById('productAddedModal'));
+                myModal.show();
+
+                // Después de mostrar, configurar la animación de cierre lento
+                setTimeout(function() {
+                    // Agregar clase para animar la salida
+                    $('#productAddedModal .modal-dialog').addClass('fade-out-slow');
+
+                    // Cuando termine la animación, cerrar el modal
+                    $('#productAddedModal .modal-dialog').on('animationend', function() {
+                        myModal.hide();
+                        // Remover la clase para futuras veces
+                        $('#productAddedModal .modal-dialog').removeClass('fade-out-slow');
+                    });
+                }, 1500); // espera que la animación lenta termine, ajusta si quieres más o menos tiempo
+            });
+        });
+    </script>
 @endsection
