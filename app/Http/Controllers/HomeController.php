@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Brand;
+use App\Models\Contact;
 use App\Models\CountryCurrency;
 use App\Models\DeliveryZone;
 use App\Models\Order;
@@ -11,6 +12,7 @@ use App\Models\Product;
 use App\Models\ProductCategory;
 use App\Models\Review;
 use App\Models\Stock;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Http\Request;
@@ -247,7 +249,7 @@ class HomeController extends Controller
                     // Comprobar el stock disponible
 
                     $stock = Stock::where('product_id', $product->id)->first();
-//TODO: Mejorar este xodigo con la disponibilidad de la almacen
+                    //TODO: Mejorar este xodigo con la disponibilidad de la almacen
                     if ($stock && $stock->quantity_available >= $item['quantity']) {
 
                         // Si hay suficiente stock, agregar el producto al carrito válido
@@ -256,13 +258,12 @@ class HomeController extends Controller
                             'product_id' => $product->id,
                             'quantity' => $item['quantity']
                         ];
+                    } else {
+                        $validCart[] = $item;
                     }
-                    else
-                    { $validCart[] = $item;}
                 } else {
                     // Si no se controla el stock, agregarlo directamente
                     $validCart[] = $item;
-
                 }
             }
         }
@@ -318,6 +319,8 @@ class HomeController extends Controller
             // Añadir otras validaciones según sea necesario
         ]);
 
+
+
         $cart = Session::get('cart');
 
         if (!is_array($cart) || empty($cart)) {
@@ -329,9 +332,9 @@ class HomeController extends Controller
         try {
 
             //Busca una persona por su teléfono, y si no se encuentra, la crea.
-            $buyer = $this->findOrCreatePerson($request->name, $request->phone);
-            $purchasePerson = $this->findOrCreatePerson($request->name_other_person, $request->phone_other_person);
-            $deliveryPerson = $this->findOrCreatePerson($request->name_receives_purchase, $request->phone_receives_purchase);
+            $buyer = $this->findOrCreatePersonAndContact($request->name, $request->phone);
+            $purchasePerson = $this->findOrCreatePersonAndContact($request->name_other_person, $request->phone_other_person);
+            $deliveryPerson = $this->findOrCreatePersonAndContact($request->name_receives_purchase, $request->phone_receives_purchase);
 
             //Maneja la lógica de entrega, guardando los datos relevantes.
             $deliveryData = $this->handleDelivery($request);
@@ -371,22 +374,39 @@ class HomeController extends Controller
     }
 
     //findOrCreatePerson: Busca una persona por su teléfono, y si no se encuentra, la crea.
-    private function findOrCreatePerson($name, $phone)
+    private function findOrCreatePersonAndContact($name, $phone)
     {
-        // Busca la persona por teléfono.
-$contact =
-        $person = Person::where('phone', $phone)->first();
 
-        if ($person) {
-            // Comprobar si el nombre coincide
-            if ($person->first_name !== $name) {
-                Log::info("El nombre no coincide para el teléfono: $phone. Nombre registrado: {$person->first_name}, nuevo nombre: $name");
-            }
-            return $person;
+        // Buscar contacto
+        $contact = Contact::where('phone', $phone)->first();
+
+        if (!$contact) {
+
+            $detailsUser = [
+                'name' => $name,
+                'roleid' => 2
+            ];
+            $user = User::create($detailsUser);
+            // Crear contacto si no existe
+            $contact = Contact::create([
+                'phone' => $phone,
+                'mobile' => $phone,
+
+                // otros campos si necesitas
+            ]);
         }
 
-        // Crear nueva persona si no existe
-        return Person::create(['first_name' => $name, 'phone' => $phone]);
+        $detailsPerson['contact_id'] = $contact->id;
+        $detailsPerson['user_id'] = $user->id;
+        $detailsPerson['first_name'] = $name;
+        $detailsPerson['person_statuses_id'] = 13;
+
+        // Buscar persona relacionada con ese contacto
+        $person = Person::create([
+            $detailsPerson
+        ]);
+
+        return $person;
     }
 
     //handleDelivery: Maneja la lógica de entrega, guardando los datos relevantes.
@@ -504,7 +524,7 @@ $contact =
     //primer codigo eliminarlo cuando termine...
     public function orderPurchase1(Request $request)
     {
-        dd($request->all());
+
         $cart = Session::get('cart');
         DB::beginTransaction();
         try {
