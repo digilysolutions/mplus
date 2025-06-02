@@ -68,7 +68,7 @@ $('#cart-content').removeClass('hide');
                 if (cartContent.is(':visible')) {
                     $('#cart-content').removeClass('hide'); // Si ya está visible, entonces oculta
                 } else {
-                    $('#cart-content').addClass('hide'); // Si no, mostrarlo
+                    $('#cart-content').addClass('oculto'); // Si no, mostrarlo
                     // Actualiza el carrito al mostrar
                     cartContent.stop(true, true).fadeIn(100); // Mostrar el contenido del carrito
                 }
@@ -96,7 +96,6 @@ $('#cart-content').removeClass('hide');
         $(document).click(function() {
             if (cartContent.is(':visible')) {
                 cartContent.fadeOut(200); // Oculta el carrito al hacer clic fuera
-
             }
         });
         //adicionar producto
