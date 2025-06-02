@@ -374,6 +374,7 @@ class HomeController extends Controller
     private function findOrCreatePerson($name, $phone)
     {
         // Busca la persona por teléfono.
+$contact =
         $person = Person::where('phone', $phone)->first();
 
         if ($person) {
