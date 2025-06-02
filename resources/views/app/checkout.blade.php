@@ -16,19 +16,19 @@
         </div>
     </div>
     @if ($message = Session::get('success'))
-                    <div class="alert alert-success m-4">
-                        <p>{{ $message }}</p>
-                    </div>
-                @endif
-                @if ($errors->any())
-                    <div class="alert alert-danger">
-                        <ul>
-                            @foreach ($errors->all() as $error)
-                                <li>{{ $error }}</li>
-                            @endforeach
-                        </ul>
-                    </div>
-                @endif
+        <div class="alert alert-success m-4">
+            <p>{{ $message }}</p>
+        </div>
+    @endif
+    @if ($errors->any())
+        <div class="alert alert-danger">
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
     <!-- Checkout Start -->
     <div class="container-fluid">
         <form method="POST" action="{{ route('products.orderpurchase') }}" id="orderpurchase"
@@ -58,7 +58,7 @@
                             <input type="checkbox" id="pagoCheckbox"> <label> ¿Otra persona realiza el pago?</label>
                         </div>
 
-                        <div id="extraInputs" class="inputs-ocultos col-md-12 form-group">
+                        <div id="extraInputs" class="inputs-ocultos col-md-12 form-group" style="display: :none">
                             <input name="name_other_person" id="name_other_person" type="text" class="form-control"
                                 placeholder="Nombre de la persona que realiza el pago" />
                             </br>
@@ -144,8 +144,8 @@
                             Compra</span></h5>
                     <div class="bg-light p-30 mb-5">
                         <div class="border-bottom">
-                            <h5 class="section-title text-orange-mobile position-relative text-uppercase mb-3">Moneda: <span
-                                    id="currency-checkout" class=" pr-3">{{ $currency }}</span></h5>
+                            <h5 class="section-title text-orange-mobile position-relative text-uppercase mb-3">Moneda:
+                                <span id="currency-checkout" class=" pr-3">{{ $currency }}</span></h5>
                             <div class="d-flex justify-content-between">
                                 <h6 class="mb-3">Cantidad</h6>
                                 <h6 class="mb-3">Productos</h6>
@@ -225,44 +225,60 @@
     <script src="{{ asset('js/main.js') }}"></script>
 
     <script>
-        var checkout =true;
+        var checkout = true;
+
         function updateOrder() {
-    console.log('entre');
+            console.log('entre');
 
-    $.ajax({
-        url: '/cart/infoCart',
-        method: 'GET',
-        headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        },
-        success: function(data) {
-            $('#currency-checkout').text(data.currency);
-            var subtotal_checkout = 0;
+            $('#pagoCheckbox').prop('checked', false);
+            $('#extraInputs').hide();
 
-            if (data.products.length === 0) {
-                // Redirección solo si no hay productos
-                window.location.href = '/';
-                return;
-            }
-
-            $.each(data.products, function(index, item) {
-                var subtotal_product_incheckout = item.sale_price * item.quantity;
-                subtotal_checkout += subtotal_product_incheckout;
-
-                $('#product-checkout-' + item.id).text('$' + subtotal_product_incheckout.toFixed(2));
-                $('#product-quantity-' + item.id).text(item.quantity);
+            $('#pagoCheckbox').change(function() {
+                if ($(this).is(':checked')) {
+                    $('#extraInputs').fadeIn();
+                } else {
+                    $('#extraInputs').fadeOut();
+                    $('#extraInputs input[type="text"]').val('');
+                }
             });
 
-            var totalValue = subtotal_checkout + parseFloat($('#deliveryValue').text().replace(/[$,]/g, '').trim());
-            $('#subtotalValue').text('$' + subtotal_checkout.toFixed(2));
-            $('#totalValue').text('$' + totalValue.toFixed(2));
-        },
-        error: function(jqXHR, textStatus, errorThrown) {
-            console.error('Error al actualizar el carrito:', textStatus, errorThrown);
-            alert('Error al actualizar el carrito. Por favor, inténtalo de nuevo.'); // Mensaje de error
+
+            $.ajax({
+                url: '/cart/infoCart',
+                method: 'GET',
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                success: function(data) {
+                    $('#currency-checkout').text(data.currency);
+                    var subtotal_checkout = 0;
+
+                    if (data.products.length === 0) {
+                        // Redirección solo si no hay productos
+                        window.location.href = '/';
+                        return;
+                    }
+
+                    $.each(data.products, function(index, item) {
+                        var subtotal_product_incheckout = item.sale_price * item.quantity;
+                        subtotal_checkout += subtotal_product_incheckout;
+
+                        $('#product-checkout-' + item.id).text('$' + subtotal_product_incheckout
+                            .toFixed(2));
+                        $('#product-quantity-' + item.id).text(item.quantity);
+                    });
+
+                    var totalValue = subtotal_checkout + parseFloat($('#deliveryValue').text().replace(/[$,]/g,
+                        '').trim());
+                    $('#subtotalValue').text('$' + subtotal_checkout.toFixed(2));
+                    $('#totalValue').text('$' + totalValue.toFixed(2));
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    console.error('Error al actualizar el carrito:', textStatus, errorThrown);
+                    alert('Error al actualizar el carrito. Por favor, inténtalo de nuevo.'); // Mensaje de error
+                }
+            });
         }
-    });
-}
 
         $(document).ready(function() {
             // Establecer el estado inicial de la sección de entrega
@@ -344,7 +360,4 @@ https://mercadoplus.digilysolutions.com/
             window.open(url, '_blank');
         }
     </script>
-
-
-
 @endsection
