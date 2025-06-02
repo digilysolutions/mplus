@@ -51,7 +51,7 @@
 
 
         <div class="col-lg-3 col-6 text-right top-cart-block cart-container">
-            <div class="btn border icono-shopping-cart" >
+            <div class="btn  icono-shopping-cart" >
                 <span class="text-secundary top-cart-info-count" id="item-count">0
                     productos</span>
                 <strong  class="top-cart-info-value" id="total-price">$0.00</strong>
