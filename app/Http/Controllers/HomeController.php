@@ -310,6 +310,7 @@ class HomeController extends Controller
 
     public function orderPurchase(Request $request)
     {
+
         // Validar los datos del request
         $request->validate([
             'name' => 'required|string|max:255',
@@ -333,14 +334,14 @@ class HomeController extends Controller
 
             //Busca una persona por su teléfono, y si no se encuentra, la crea.
             $buyer = $this->findOrCreatePersonAndContact($request->name, $request->phone);
+
             $purchasePerson = $this->findOrCreatePersonAndContact($request->name_other_person, $request->phone_other_person);
             $deliveryPerson = $this->findOrCreatePersonAndContact($request->name_receives_purchase, $request->phone_receives_purchase);
-
             //Maneja la lógica de entrega, guardando los datos relevantes.
             $deliveryData = $this->handleDelivery($request);
-
             //Prepara los datos para la orden antes de guardarla en la base de datos.
             $orderData = $this->prepareOrderData($request, $cart, $buyer, $purchasePerson, $deliveryPerson, $deliveryData);
+
 
             // Crear la orden
             $order = Order::create($orderData);
@@ -349,9 +350,9 @@ class HomeController extends Controller
 
 
             DB::commit();
-            Session::forget('cart');
 
-            $this->sendWhatsapp(
+
+           return  $this->sendWhatsapp(
                 $buyer,
                 $purchasePerson,
                 $deliveryPerson,
@@ -364,7 +365,7 @@ class HomeController extends Controller
                 $orderData['subtotal_amount'],
                 $orderData['total_amount']
             );
-
+            Session::forget('cart');
             return redirect()->route('home')->with('success', 'Orden realizada con éxito.');
         } catch (\Exception $ex) {
             DB::rollback();
@@ -377,36 +378,50 @@ class HomeController extends Controller
     private function findOrCreatePersonAndContact($name, $phone)
     {
 
-        // Buscar contacto
-        $contact = Contact::where('phone', $phone)->first();
+        try {
+            // Buscar contacto por teléfono
+            $contact = Contact::where('phone', $phone)->first();
 
-        if (!$contact) {
+            // Crear usuario si no existe
 
-            $detailsUser = [
-                'name' => $name,
-                'roleid' => 2
-            ];
-            $user = User::create($detailsUser);
-            // Crear contacto si no existe
-            $contact = Contact::create([
-                'phone' => $phone,
-                'mobile' => $phone,
+            if (!$contact) {
+                DB::beginTransaction();
+                $user = null;
+                // Crear usuario
+                $user = User::create([
+                    'name' => $name,
+                    'roleid' => 2,
+                    'role' => 'Usuario',
+                    // aquí puedes agregar otros campos si quieres
+                ]);
 
-                // otros campos si necesitas
-            ]);
+                // Crear contacto
+                $contact = Contact::create([
+                    'phone' => $phone,
+                    'mobile' => $phone,
+                    // Puedes agregar más campos desde $requestData si deseas
+                ]);
+                // Preparar datos para crear la persona
+                $detailsPerson = [
+                    'first_name' => $name,
+                    'contact_id' => $contact->id,
+                    'user_id' =>  $user->id,
+                    'person_statuses_id' => 13, // Asumiendo que 13 es un estado válido
+
+                ];
+
+                // Crear persona
+                $person = Person::create($detailsPerson);
+                DB::commit();
+                return $person;
+            }
+            return Person::where('contact_id', $contact->id)->first();
+        } catch (\Exception $ex) {
+            DB::rollback();
+            Log::error('Error al crear la persona y contacto: ' . $ex->getMessage());
+            // Dependiendo de tu flujo, puedes devolver null, throw, o manejar diferente
+            throw $ex; // o puedes retornar null y manejar fuera
         }
-
-        $detailsPerson['contact_id'] = $contact->id;
-        $detailsPerson['user_id'] = $user->id;
-        $detailsPerson['first_name'] = $name;
-        $detailsPerson['person_statuses_id'] = 13;
-
-        // Buscar persona relacionada con ese contacto
-        $person = Person::create([
-            $detailsPerson
-        ]);
-
-        return $person;
     }
 
     //handleDelivery: Maneja la lógica de entrega, guardando los datos relevantes.
@@ -431,93 +446,113 @@ class HomeController extends Controller
     //prepareOrderData: Prepara los datos para la orden antes de guardarla en la base de datos.
     private function prepareOrderData(Request $request, $cart, $buyer, $purchasePerson, $deliveryPerson, $deliveryData)
     {
+
         $subtotal_amount = 0;
         $delivery_fee = $deliveryData['delivery_fee'] ?? 0;
+
         $nonExistentProducts = [];
         $inventoryIssues = [];
+        $updatedCart = []; // Para guardar los productos ajustados
 
         foreach ($cart as $product) {
-            // Obtener la información del producto y su stock actual
-            $productModel = Product::with('stock')->find($product['id']);
+            // Obtener el modelo de producto desde la relación
+            $productModel = Product::find($product['id']);
 
-            // Si el producto no existe, lo registramos para su revisión
             if (!$productModel) {
+                // Producto no encontrado
                 $nonExistentProducts[] = [
                     'product_id' => $product['id'],
                     'product_name' => 'Desconocido',
                     'requested_quantity' => $product['quantity'],
                 ];
-                continue; // Pasar al siguiente producto
+                continue;
             }
 
-            // Verificar si el control de inventario está habilitado para este producto
+            // Obtener stock asociado
+            $stock = $productModel->stocks()->first(); // asumiendo relación hasOne o similar
+
+            /*  if (!$stock) {
+                // No hay stock registrado
+                $nonExistentProducts[] = [
+                    'product_id' => $productModel->id,
+                    'product_name' => $productModel->name,
+                    'requested_quantity' => $product['quantity'],
+                ];
+                continue;
+            }*/
+
+            // Verificar si el control de inventario está habilitado
             if ($productModel->enable_stock) {
-                $currentStock = $productModel->stock ? $productModel->stock->quantity_available : 0;
+                $currentStock = $stock->quantity_available ?? 0;
 
                 if ($currentStock < $product['quantity']) {
-                    // Si la cantidad en stock es menor que la cantidad solicitada
-                    // Se guarda la cantidad disponible en lugar de la solicitada
+                    // Stock insuficiente
                     $inventoryIssues[] = [
                         'product_id' => $productModel->id,
                         'product_name' => $productModel->name,
                         'requested_quantity' => $product['quantity'],
                         'available_quantity' => $currentStock,
                     ];
-                    $quantityToCharge = $currentStock; // Solo cargar lo que hay en stock
-
-                    // Aquí podrías registrar un aviso indicando que se tomó menos de lo solicitado
-                    Log::warning("Cantidad solicitada {$product['quantity']} mayor que cantidad disponible ({$currentStock}) para el producto: {$productModel->name}");
+                    $quantityToCharge = $currentStock; // Solo cargar lo que hay
+                    Log::warning("Stock insuficiente para {$productModel->name}, pedido: {$product['quantity']}, disponible: {$currentStock}");
                 } else {
                     $quantityToCharge = $product['quantity'];
                 }
 
-                // Actualiza el inventario.
+                // Actualizar el stock si hay suficiente cantidad
                 if ($quantityToCharge > 0) {
-                    $stockQuantity = $currentStock - $quantityToCharge;
-                    $productModel->stock->update(['quantity_available' => $stockQuantity]);
-                    $updatedCart[] = [
-                        'id' => $productModel->id,
-                        'quantity' => $quantityToCharge, // Cargar la cantidad real
-                        'sale_price' => $productModel->sale_price,
-                        // Puedes agregar otros campos que necesites aquí
-                    ];
+                    $stock->update([
+                        'quantity_available' => $currentStock - $quantityToCharge
+                    ]);
                 }
             } else {
-                // Si no está habilitado, simplemente facturamos
-                Log::info("Control de inventario no habilitado para el producto: {$productModel->name}");
+                // Si el control de stock no está habilitado, cargar la cantidad solicitada
                 $quantityToCharge = $product['quantity'];
+                Log::info("Control de stock desactivado para {$productModel->name}");
             }
 
-            // Calcular el subtotal por producto
+            // Agregar al subtotal
             $subtotal_amount += $productModel->sale_price * $quantityToCharge;
+
+            // Guardar en el carrito actualizado
+            $updatedCart[] = [
+                'id' => $productModel->id,
+                'quantity' => $quantityToCharge,
+                'sale_price' => $productModel->sale_price,
+                // Otros datos que puedas necesitar
+            ];
         }
 
-        // Actualizar el carrito original
+        // Actualizar el carrito original con los productos ajustados
         $cart = $updatedCart;
-        // Guardar detalles de productos que no existen o que tenían problemas de inventario.
-        if (!empty($nonExistentProducts) || !empty($inventoryIssues)) {
-            // Aquí almacenas la información en una sesión, base de datos o log conforme a tu necesidad.
+
+        // Guardar en sesión o logs los problemas
+        if (!empty($nonExistentProducts)) {
             Session::flash('non_existent_products', $nonExistentProducts);
+        }
+        if (!empty($inventoryIssues)) {
             Session::flash('inventory_issues', $inventoryIssues);
         }
 
         $total_amount = $subtotal_amount + $delivery_fee;
 
+        // Preparar datos para la orden
         return [
             'home_delivery' => $request->is_delivery ? 1 : 0,
             'address' => $request->address,
             'deliveryzona_id' => $request->deliveryzona_id,
             'status_id' => 1,
             'time_unit' => $deliveryData['time_unit'] ?? 0,
-            'delivery_time' => $deliveryData['delivery_time'] ?? "",
-            'purchase_date' => Carbon::now()->format('d/m/Y'),
+            'delivery_time' => $deliveryData['delivery_time'] ?? 0,
+            'purchase_date' => Carbon::now()->toDateString(),
             'currency' => Session::get('currency'),
-            'subtotal_amount' => $subtotal_amount,
-            'total_amount' => $total_amount,
+            'subtotal_amount' => $request->subtotal_amount,
+            'total_amount' => $request->total_amount,
             'delivery_fee' => $delivery_fee,
             'person_id' => $buyer->id,
             'purchase_person_id' => $purchasePerson->id,
             'delivery_person_id' => $deliveryPerson->id,
+            // Puedes agregar más campos si es necesario
         ];
     }
 
@@ -636,7 +671,7 @@ class HomeController extends Controller
         Session::forget('cart');
         return view('/');
     }
-    public function   sendWhatsapp(
+    public function sendWhatsapp(
         $detailsPersonBuyer,
         $detailsPersonPurchase,
         $detailsPersonDelivery,
@@ -650,48 +685,49 @@ class HomeController extends Controller
         $total_amount
     ) {
         $whatsapp = 5358205054;
+
         if ($home_delivery) {
             $delivery = "
-             Domicilio: Si
-             Zona: {$delivery_name}
-             Tiempo de entrega: {$delivery_time} {$time_unit}
-            ";
+         Domicilio: Si
+         Zona: {$delivery_name}
+         Tiempo de entrega: {$delivery_time} {$time_unit}
+        ";
+        } else {
+            $delivery = "Domicilio: No";
         }
 
-
-        $message = "🛒 *Orden de Compra*\n"; // Icono de carrito y título
-        $message .= "Número de Orden: *m525pl7w33*\n\n"; // Número de orden, importante para seguimiento
-        $message .= "📝 *Detalle del Pedido*:\n"; // Detalle del pedido
-        $message .= "Cantidad | Producto | Precio\n"; // Encabezado de la tabla
-        $message .= "-----------------------------------\n"; // Carácter de separación para la tabla
+        $message = "🛒 *Orden de Compra*\n";
+        $message .= "Número de Orden: *m525pl7w33*\n\n";
+        $message .= "📝 *Detalle del Pedido*:\n";
+        $message .= "Cantidad | Producto | Precio\n";
+        $message .= "-----------------------------------\n";
 
         foreach ($products as $product) {
             $message .= sprintf(
                 "%8s | %-30s | $%s\n",
-                $product['quantity'], // Cantidad
-                substr($product['name'], 0, 30), // Nombre del producto (truncate si es muy largo)
-                number_format($product['sale_price'], 2) // Precio con dos decimales
+                $product['quantity'],
+                substr($product['name'], 0, 30),
+                number_format($product['sale_price'], 2)
             );
         }
 
-        $message .= "\n" . "💰 *Resumen de la Orden*:\n"; // Resumen de la orden
-        $message .= "*Subtotal*: $" . number_format($subtotal_amount, 2) . "\n"; // Subtotal
-        $message .= "*Descuento*: -$" . number_format(0, 2) . "\n"; // Descuento
-        $message .= "*Domicilio*: $" . number_format($delivery_fee, 2) . "\n"; // Domicilio
-        $message .= "*Total*: $" . number_format($total_amount, 2) . "\n\n"; // Total y salto de línea
+        $message .= "\n" . "💰 *Resumen de la Orden*:\n";
+        $message .= "*Subtotal*: $" . number_format($subtotal_amount, 2) . "\n";
+        $message .= "*Descuento*: -$" . number_format(0, 2) . "\n";
+        $message .= "*Domicilio*: $" . number_format($delivery_fee, 2) . "\n";
+        $message .= "*Total*: $" . number_format($total_amount, 2) . "\n\n";
 
-        $message .= "📦 *Información del Pedido*:\n"; // Información del pedido
-        $message .= "*Creador de la Ordende la compra*: " . $detailsPersonBuyer['first_name'] . "\n"; // Nombre del comprador
-        $message .= "*NOmbre del comprador*: " . $detailsPersonPurchase['first_name'] . "\n"; // Nombre del comprador
-        $message .= "*Nombre del Receptor*: " . $detailsPersonDelivery['first_name'] . "\n\n"; // Nombre del receptor
+        $message .= "\n📦 *Información del Pedido*:\n";
+        $message .= "*Creador de la Orden de la compra*: " . $detailsPersonBuyer['first_name'] . "\n";
+        $message .= "*Nombre del comprador*: " . $detailsPersonPurchase['first_name'] . "\n";
+        $message .= "*Nombre del Receptor*: " . $detailsPersonDelivery['first_name'] . "\n\n";
 
-        $message .= "\nNúmero de WhatsApp: " . $whatsapp . "\n"; // Agrega el número de WhatsApp
-
+        $message .= "\nNúmero de WhatsApp: " . $whatsapp . "\n";
 
         $url = "https://wa.me/{$whatsapp}?text=" . urlencode($message);
-        Session::forget('cart');
-        // Redirigir al enlace de WhatsApp
-        return redirect($url);
+
+        // Redirecciona a la URL externa
+        return redirect()->away($url);
     }
     public function customerservice()
     {
