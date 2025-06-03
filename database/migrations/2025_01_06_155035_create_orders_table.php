@@ -14,22 +14,22 @@ return new class extends Migration
         Schema::create('orders', function (Blueprint $table) {
           $table->increments('id');
             $table->string('temporary_id')->nullable(); // Para usuarios no registrados
-          
-              // persona que realizo la orden de compra 
+
+              // persona que realizo la orden de compra
             $table->integer('person_id')->nullable()->unsigned()->default();
             $table->foreign('person_id')->references('id')->on('people')->onDelete('cascade');
-           
+
             //persona que paga la orden de compra
             $table->integer('purchase_person_id')->nullable()->unsigned()->default();
             $table->foreign('purchase_person_id')->references('id')->on('people')->onDelete('cascade');
 
-          // ID de la persona que recibe la orden (si es diferente)          
+          // ID de la persona que recibe la orden (si es diferente)
             $table->integer('delivery_person_id')->nullable()->unsigned()->default();
             $table->foreign('delivery_person_id')->references('id')->on('people')->onDelete('cascade');
-          
+
             $table->integer('status_id')->nullable()->nullable()->unsigned()->default();
-            $table->foreign('status_id')->references('id')->on('status_orders')->onDelete('cascade');         
-           
+            $table->foreign('status_id')->references('id')->on('status_orders')->onDelete('cascade');
+
             $table->decimal('subtotal_amount', 10, 2); // Total de la orden
             $table->decimal('total_amount', 10, 2); // Total de la orden
             $table->string('currency')->default('MN'); // moneda de pago
