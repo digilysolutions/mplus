@@ -697,8 +697,8 @@ class HomeController extends Controller
         $message = "*RPG Solutions*\n\n";
         $message .= "¡Gracias por confiar en RPG Solutions! Su pedido ha sido recibido y aquí le enviamos su número de orden para que pueda verificar el estado de su solicitud.\n\n";
         $message .= "🛒 *Orden de Compra*\n";
-        $message .= "Número de Orden: *m525pl7w33*\n\n";
-        $message .= "*Moneda:*" . $currency . "\n";
+        $message .= "Número de Orden: *m525pl7w33*\n";
+        $message .= "*Moneda:*" . $currency . "\n\n";
 
         $message .= "📝 *Detalle del Pedido:*\n";
         $message .= "Cantidad | Producto | Precio\n";
