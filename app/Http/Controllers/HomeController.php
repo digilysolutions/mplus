@@ -311,6 +311,7 @@ class HomeController extends Controller
     public function orderPurchase(Request $request)
     {
 
+
         // Validar los datos del request
         $request->validate([
             'name' => 'required|string|max:255',
@@ -351,8 +352,9 @@ class HomeController extends Controller
 
             DB::commit();
 
-
-           return  $this->sendWhatsapp(
+            Session::forget('cart');
+            return  $this->sendWhatsapp(
+                "58205054",
                 $buyer,
                 $purchasePerson,
                 $deliveryPerson,
@@ -363,9 +365,12 @@ class HomeController extends Controller
                 $deliveryData['delivery_time'],
                 $deliveryData['time_unit'],
                 $orderData['subtotal_amount'],
-                $orderData['total_amount']
+                $orderData['total_amount'],
+                $request['address'],
+                $request['additional_information'],
+                $request['currency']
             );
-            Session::forget('cart');
+
             return redirect()->route('home')->with('success', 'Orden realizada con éxito.');
         } catch (\Exception $ex) {
             DB::rollback();
@@ -648,20 +653,6 @@ class HomeController extends Controller
 
                 $order = Order::create($data);
                 DB::commit();
-
-                $this->sendWhatsapp(
-                    $detailsPersonBuyer,
-                    $detailsPersonPurchase,
-                    $detailsPersonDelivery,
-                    $cart,
-                    $data['home_delivery'],
-                    $delivery_name,
-                    $delivery_fee,
-                    $delivery_time,
-                    $time_unit,
-                    $subtotal_amount,
-                    $total_amount
-                );
             }
         } catch (\Exception $ex) {
             DB::rollback();
@@ -672,6 +663,7 @@ class HomeController extends Controller
         return view('/');
     }
     public function sendWhatsapp(
+        $whatsapp,
         $detailsPersonBuyer,
         $detailsPersonPurchase,
         $detailsPersonDelivery,
@@ -682,9 +674,14 @@ class HomeController extends Controller
         $delivery_time,
         $time_unit,
         $subtotal_amount,
-        $total_amount
+        $total_amount,
+        $address,
+        $additional_information,
+        $currency
     ) {
-        $whatsapp = 5358205054;
+
+
+
 
         if ($home_delivery) {
             $delivery = "
@@ -696,9 +693,14 @@ class HomeController extends Controller
             $delivery = "Domicilio: No";
         }
 
-        $message = "🛒 *Orden de Compra*\n";
+
+        $message = "*RPG Solutions*\n\n";
+        $message .= "¡Gracias por confiar en RPG Solutions! Su pedido ha sido recibido y aquí le enviamos su número de orden para que pueda verificar el estado de su solicitud.\n\n";
+        $message .= "🛒 *Orden de Compra*\n";
         $message .= "Número de Orden: *m525pl7w33*\n\n";
-        $message .= "📝 *Detalle del Pedido*:\n";
+        $message .= "*Moneda:*" . $currency . "\n";
+
+        $message .= "📝 *Detalle del Pedido:*\n";
         $message .= "Cantidad | Producto | Precio\n";
         $message .= "-----------------------------------\n";
 
@@ -711,19 +713,33 @@ class HomeController extends Controller
             );
         }
 
-        $message .= "\n" . "💰 *Resumen de la Orden*:\n";
-        $message .= "*Subtotal*: $" . number_format($subtotal_amount, 2) . "\n";
-        $message .= "*Descuento*: -$" . number_format(0, 2) . "\n";
-        $message .= "*Domicilio*: $" . number_format($delivery_fee, 2) . "\n";
-        $message .= "*Total*: $" . number_format($total_amount, 2) . "\n\n";
+        $message .= "\n💰 *Resumen de la Orden:*\n";
+        $message .= "*Subtotal:* $" . number_format($subtotal_amount, 2) . "\n";
+        $message .= "*Descuento:* -$" . number_format(0, 2) . "\n";
+        $message .= "*Domicilio:* $" . number_format($delivery_fee, 2) . "\n";
+        $message .= "*Total:* $" . number_format($total_amount, 2) . "\n\n";
 
-        $message .= "\n📦 *Información del Pedido*:\n";
-        $message .= "*Creador de la Orden de la compra*: " . $detailsPersonBuyer['first_name'] . "\n";
-        $message .= "*Nombre del comprador*: " . $detailsPersonPurchase['first_name'] . "\n";
-        $message .= "*Nombre del Receptor*: " . $detailsPersonDelivery['first_name'] . "\n\n";
+        $message .= "📦 *Información del Pedido:*\n";
+        $message .= "*Creador de la Orden:* " . $detailsPersonBuyer['first_name'] . "\n";
+        $message .= "*Nombre del Comprador:* " . $detailsPersonPurchase['first_name'] . "\n";
+        $message .= "*Nombre del Receptor:* " . $detailsPersonDelivery['first_name'] . "\n\n";
+        // Domicilio y punto de referencia
+        if ($home_delivery) {
+            $message .= "🏠 *Domicilio:* Sí\n";
+            $message .= "📍 Dirección: " . $address . "\n";
+            $message .= "🔖 Punto de referencia: " . $additional_information . "\n\n";
+        } else {
+            $message .= "🏠 *Domicilio:* No\n\n";
+        }
+        // Datos de contacto
+        $message .= "📞 Para dudas o consultas:\n";
+        $message .= "✉️ Email: <mailto:commercialsolutions70@gmail.com>\n";
+        $message .= "📱 Teléfonos: +53 59294241 | +53 53285232\n\n";
+        // Dirección
+        $message .= "📍 Dirección: Calle 25 #26, entre Marina y Hospital.\n\n";
 
-        $message .= "\nNúmero de WhatsApp: " . $whatsapp . "\n";
-
+        // Agradecimiento final
+        $message .= "✨ ¡Gracias por su preferencia! ✨\n\n";
         $url = "https://wa.me/{$whatsapp}?text=" . urlencode($message);
 
         // Redirecciona a la URL externa
