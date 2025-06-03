@@ -146,6 +146,7 @@
                         <div class="border-bottom">
                             <h5 class=" text-orange-mobile position-relative text-uppercase mb-3">Moneda:
                                 <span id="currency-checkout" class=" pr-3">{{ $currency }}</span>
+                                <input name="currency" id="currency" hidden value="{{ $currency }}">
                             </h5>
                             <div class="d-flex justify-content-between">
                                 <h6 class="mb-3">Cantidad</h6>
