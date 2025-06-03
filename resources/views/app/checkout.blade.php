@@ -145,7 +145,8 @@
                     <div class="bg-light p-30 mb-5">
                         <div class="border-bottom">
                             <h5 class=" text-orange-mobile position-relative text-uppercase mb-3">Moneda:
-                                <span id="currency-checkout" class=" pr-3">{{ $currency }}</span></h5>
+                                <span id="currency-checkout" class=" pr-3">{{ $currency }}</span>
+                            </h5>
                             <div class="d-flex justify-content-between">
                                 <h6 class="mb-3">Cantidad</h6>
                                 <h6 class="mb-3">Productos</h6>
@@ -172,6 +173,7 @@
                             <div class="d-flex justify-content-between mb-3">
                                 <h6>Subtotal</h6>
                                 <h6 id="subtotalValue">${{ $subtotal }}</h6>
+                                 <input id="subtotal_amount" type="text" hidden name="subtotal_amount" value="{{ $subtotal }}">
                             </div>
                             <div class="d-flex justify-content-between">
                                 <h6 class="font-weight-medium">Descuento</h6>
@@ -199,7 +201,8 @@
                         <div class="pt-2">
                             <div class="d-flex justify-content-between mt-2">
                                 <h5>Total</h5>
-                                <h5 id="totalValue">${{ $total }}</h5>
+                                <h5 id="totalValue" name="totalValue">${{ $total }}</h5>
+                                <input id="total_amount" type="text" hidden name="total_amount" value="{{ $total }}">
                             </div>
                         </div>
                     </div>
@@ -272,6 +275,9 @@
                         '').trim());
                     $('#subtotalValue').text('$' + subtotal_checkout.toFixed(2));
                     $('#totalValue').text('$' + totalValue.toFixed(2));
+
+                    $('#subtotal_amount').val(subtotal_checkout.toFixed(2));
+                    $('#total_amount').val(totalValue.toFixed(2));
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
                     console.error('Error al actualizar el carrito:', textStatus, errorThrown);
@@ -315,6 +321,9 @@
             // Actualizar los valores en el HTML
             $('#deliveryPrice').text(deliveryPrice.toFixed(2));
             $('#totalValue').text('$' + total.toFixed(2));
+
+             $('#subtotal_amount').val(subtotal.toFixed(2));
+            $('#total_amount').val(total.toFixed(2));
         }
         $('#deliverySelect').change(function() {
             // Obtener el precio de entrega de la opción seleccionada
