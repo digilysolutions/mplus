@@ -1,10 +1,8 @@
 <div class="iq-sidebar  sidebar-default ">
     <div class="iq-sidebar-logo d-flex align-items-center justify-content-between">
-        <a href="/" class="header-logo">
-            <img src="{{ asset('img/logo-mplus.png') }}" class="img-fluid rounded-normal light-logo"
-                alt="logo">
-            <h5 class="logo-title light-logo ml-3"></h5>
-
+        <a href="/" class="text-decoration-none">
+            <span> <img class="" src="{{ asset('img/logo-rpg-solutions.png') }}" /></span>
+            <img class="img-fluid mt-2 " src="{{ asset('img/logo-solutions.png') }}" />
         </a>
 
         <div class="iq-menu-bt-sidebar ml-0">
@@ -122,14 +120,14 @@
                 </li>
                 <li class="{{ request()->is('admin/orders*') ? 'active' : '' }}">
                     <a href="#" class="collapsed" data-toggle="collapse" aria-expanded="false">
-                    <svg class="svg-icon" id="p-dash2" width="20" height="20"
-                        xmlns="http://www.w3.org/2000/svg" viewBox="0 0 30 24" fill="none" stroke="currentColor"
-                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <circle cx="9" cy="21" r="1"></circle>
-                        <circle cx="20" cy="21" r="1"></circle>
-                        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
-                    </svg>
-                    <span class="ml-4">Ventas</span>
+                        <svg class="svg-icon" id="p-dash2" width="20" height="20"
+                            xmlns="http://www.w3.org/2000/svg" viewBox="0 0 30 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="9" cy="21" r="1"></circle>
+                            <circle cx="20" cy="21" r="1"></circle>
+                            <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                        </svg>
+                        <span class="ml-4">Ventas</span>
                     </a>
                 </li>
 
@@ -257,24 +255,25 @@
                     <ul id="sale" class="iq-submenu collapse" data-parent="#iq-sidebar-toggle">
                         <li class="">
                             <a href="backend/page-list-sale.html">
-                                <i class="las la-minus"></i><span>List Sale</span>
+                                <i class="las la-minus"></i><span>Productos</span>
                             </a>
                         </li>
                         <li class="">
                             <a href="backend/page-add-sale.html">
-                                <i class="las la-minus"></i><span>Add Sale</span>
+                                <i class="las la-minus"></i><span>Tienda</span>
                             </a>
                         </li>
                     </ul>
                 </li>
                 <li class=" ">
 
-                        <form method="POST" action="/logout">
-                            @csrf
-                            <button class="btn btn-outline-link rounded-pill mt-2" type="submit"><i class="ri-lock-fill"></i>Cerrar
-                                Sesión</button>
+                    <form method="POST" action="/logout">
+                        @csrf
+                        <button class="btn btn-outline-link rounded-pill mt-2" type="submit"><i
+                                class="ri-lock-fill"></i>Cerrar
+                            Sesión</button>
 
-                        </form>
+                    </form>
 
 
                 </li>
