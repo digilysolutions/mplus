@@ -4,15 +4,15 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>Fundación Magistral | login</title>
+    <title>RPG Solutions| login</title>
 
     <!-- Favicon -->
-    <link rel="shortcut icon" href="{{ asset('mplus/img/icono/fm-plataforma.jpg') }}" />
-    <link rel="stylesheet" href="{{ asset('mplus/css/backend-plugin.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('mplus/css/backend.css?v=1.0.0') }}">
-    <link rel="stylesheet" href="{{ asset('mplus/css/all.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('mplus/css/line-awesome.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('mplus/fonts/remixicon.css') }}">
+    <link rel="shortcut icon" href="{{ asset('admin/img/icono/fm-plataforma.jpg') }}" />
+    <link rel="stylesheet" href="{{ asset('admin/css/backend-plugin.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('admin/css/backend.css?v=1.0.0') }}">
+    <link rel="stylesheet" href="{{ asset('admin/css/all.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('admin/css/line-awesome.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('admin/fonts/remixicon.css') }}">
 
 </head>
 
@@ -140,15 +140,15 @@
     </div>
 
     <!-- Backend Bundle JavaScript -->
-    <script src="{{ asset('mplus/js/backend-bundle.min.js') }}"></script>
+    <script src="{{ asset('admin/js/backend-bundle.min.js') }}"></script>
     <!-- Table Treeview JavaScript -->
-    <script src="{{ asset('mplus/admin/js/table-treeview.js') }}"></script>
+    <script src="{{ asset('admin/admin/js/table-treeview.js') }}"></script>
     <!-- Chart Custom JavaScript -->
-    <script src="{{ asset('mplus/admin/js/customizer.js') }}"></script>
+    <script src="{{ asset('admin/admin/js/customizer.js') }}"></script>
     <!-- Chart Custom JavaScript -->
-    <script async src="{{ asset('mplus/admin/js/chart-custom.js') }}"></script>
+    <script async src="{{ asset('admin/admin/js/chart-custom.js') }}"></script>
     <!-- app JavaScript -->
-    <script src="{{ asset('mplus/js/app.js') }}"></script>
+    <script src="{{ asset('admin/js/app.js') }}"></script>
 
     <!-- JavaScript para el botón de mostrar/ocultar contraseña -->
     <script>
