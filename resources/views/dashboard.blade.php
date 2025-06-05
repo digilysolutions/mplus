@@ -25,7 +25,7 @@
                                             <img src="{{ asset('img/47.jpg') }}" class="img-fluid" alt="image">
                                         </div>
                                         <div>
-                                            <p class="mb-2">Centros Educativos Registrados</p>
+                                            <p class="mb-2">Ventas Realizadas</p>
                                             <h4>0</h4>
                                         </div>
                                     </div>
@@ -44,7 +44,7 @@
                                             <img src="{{ asset('img/a4.png') }}" class="img-fluid" alt="image">
                                         </div>
                                         <div>
-                                            <p class="mb-2">Estudiantes Registrados</p>
+                                            <p class="mb-2">Productos</p>
                                             <h4>0</h4>
                                         </div>
                                     </div>
@@ -63,7 +63,7 @@
                                             <img src="{{ asset('img/3.png') }}" class="img-fluid" alt="image">
                                         </div>
                                         <div>
-                                            <p class="mb-2">Items Resueltos</p>
+                                            <p class="mb-2">Usuarios</p>
                                             <h4>25</h4>
                                         </div>
                                     </div>
@@ -87,7 +87,7 @@
                                             <img src="{{ asset('img/3.png') }}" class="img-fluid" alt="image">
                                         </div>
                                         <div>
-                                            <p class="mb-2">Items No Resueltos</p>
+                                            <p class="mb-2">Ventas no Completadas</p>
                                             <h4>10</h4>
                                         </div>
                                     </div>
@@ -107,7 +107,7 @@
                                             <img src="{{ asset('img/02.png') }}" class="img-fluid" alt="image">
                                         </div>
                                         <div>
-                                            <p class="mb-2">Exámenes Resueltos</p>
+                                            <p class="mb-2">Inventario</p>
                                             <h4>12</h4>
                                         </div>
                                     </div>
@@ -127,7 +127,7 @@
                                             <img src="{{ asset('img/02.png') }}" class="img-fluid" alt="image">
                                         </div>
                                         <div>
-                                            <p class="mb-2">Exámenes No Resueltos</p>
+                                            <p class="mb-2">Domicilio</p>
                                             <h4>3</h4>
                                         </div>
                                     </div>
@@ -144,11 +144,11 @@
         </div>
 
 
-        <div class="col-lg-9">
+        <div class="col-lg-8">
             <div class="card card-block card-stretch card-height">
                 <div class="card-header d-flex align-items-center justify-content-between">
                     <div class="header-title">
-                        <h4 class="card-title">Items Validados</h4>
+                        <h4 class="card-title">Notificaciones</h4>
                     </div>
 
                 </div>
@@ -157,11 +157,11 @@
                 </div>
             </div>
         </div>
-        <div class="col-lg-3">
+        <div class="col-lg-4">
             <div class="card card-transparent card-block card-stretch mb-4">
                 <div class="card-header d-flex align-items-center justify-content-between p-0">
                     <div class="header-title">
-                        <h4 class="card-title mb-0">Estudiantes Conectados</h4>
+                        <h4 class="card-title mb-0">Conectados</h4>
                     </div>
                     <div class="card-header-toolbar d-flex align-items-center">
                         <div><a href="#" class="btn btn-primary view-btn font-size-14">Ver todos</a></div>
@@ -174,9 +174,9 @@
 
                         <div class="media-body ml-3">
                             <h4 class="mb-2">Yasniel Reyes</h4>
-                            <div                               class="d-flex align-items-center justify-content-between style-text">
+                            <div                              class="d-flex align-items-center justify-content-between style-text">
 
-                                <h6 class="mb-2">Centro Educativo: Centro 2</h6>
+
                                 <small class="text-dark mr-5"><b>11 : 30 pm</b></small>
 
                             </div>
@@ -196,7 +196,7 @@
                             <h4 class="mb-2">Jorge Barrameda</h4>
                             <div
                                 class="d-flex align-items-center justify-content-between style-text">
-                                <h6 class="mb-2">Centro Educativo: Ceentro 1</h6>
+
                                 <small class="text-dark mr-5"><b>2:45 am</b></small>
                             </div>
                             <small class="mb-0"> Tiempo: 60 min </small>
