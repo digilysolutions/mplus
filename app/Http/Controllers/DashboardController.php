@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\District;
+use App\Models\Order;
 use App\Models\Regional;
 use App\Models\Specialty;
 use App\Models\Student;
@@ -14,20 +15,23 @@ use Illuminate\Support\Facades\Auth;
 
 class DashboardController extends Controller
 {
-        public function index()
-        {
-            $activeUsersCount = DB::table('sessions')
-                ->where('last_activity', '>=', now()->subMinutes(5)->timestamp)
-                ->count();
+    public function index()
+    {
+        $activeUsersCount = DB::table('sessions')
+            ->where('last_activity', '>=', now()->subMinutes(5)->timestamp)
+            ->count();
 
-            return view('dashboard', ['activeUsersCount' => $activeUsersCount]);
-        }
+
+        return view('dashboard', compact('activeUsersCount'));
+    }
     public function dashboardAmdin()
     {
-        if (!Auth::check() || Auth::user()->role!="Administrador") {
+        if (!Auth::check() || Auth::user()->role != "Administrador") {
 
             return redirect('/'); // Redirigir a la página de inicio u otra página si no tiene acceso
+
         }
-        return view('dashboard');
+ $oreder_notComplete = Order::where('status_id', '!=', 7)->count();
+        return view('dashboard', compact('oreder_notComplete'));
     }
 }
