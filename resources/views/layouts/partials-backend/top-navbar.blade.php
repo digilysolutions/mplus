@@ -4,7 +4,7 @@
             <div class="iq-navbar-logo d-flex align-items-center justify-content-between">
                 <i class="ri-menu-line wrapper-menu"></i>
                 <a href="" class="header-logo">
-                    <img src="{{ asset('img/login/logo-mplus.png') }}" class="img-fluid rounded-normal" alt="logo">
+                    <img src="{{ asset('img/logo-rpg.png') }}" class="img-fluid rounded-normal" alt="logo">
 
 
 
