@@ -360,10 +360,7 @@ class HomeController extends Controller
                 $deliveryPerson,
                 $cart,
                 $orderData['home_delivery'],
-                $deliveryData['delivery_name'],
-                $deliveryData['delivery_fee'],
-                $deliveryData['delivery_time'],
-                $deliveryData['time_unit'],
+                $deliveryData,
                 $orderData['subtotal_amount'],
                 $orderData['total_amount'],
                 $request['address'],
@@ -669,10 +666,7 @@ class HomeController extends Controller
         $detailsPersonDelivery,
         $products,
         $home_delivery,
-        $delivery_name,
-        $delivery_fee,
-        $delivery_time,
-        $time_unit,
+         $deliveryData,
         $subtotal_amount,
         $total_amount,
         $address,
@@ -682,12 +676,18 @@ class HomeController extends Controller
 
 
 
-
+/**
+ *
+ *  $deliveryData['delivery_name']??'',
+                $deliveryData['delivery_fee'],
+                $deliveryData['delivery_time'],
+                $deliveryData['time_unit'],
+ */
         if ($home_delivery) {
             $delivery = "
          Domicilio: Si
-         Zona: {$delivery_name}
-         Tiempo de entrega: {$delivery_time} {$time_unit}
+         Zona: {$deliveryData['delivery_name']}
+         Tiempo de entrega: {$deliveryData['delivery_time']} {$deliveryData['time_unit']}
         ";
         } else {
             $delivery = "Domicilio: No";
@@ -716,7 +716,7 @@ class HomeController extends Controller
         $message .= "\n💰 *Resumen de la Orden:*\n";
         $message .= "*Subtotal:* $" . number_format($subtotal_amount, 2) . "\n";
         $message .= "*Descuento:* -$" . number_format(0, 2) . "\n";
-        $message .= "*Domicilio:* $" . number_format($delivery_fee, 2) . "\n";
+        $message .= "*Domicilio:* $" . number_format( $deliveryData['delivery_fee'] ?? 0, 2) . "\n";
         $message .= "*Total:* $" . number_format($total_amount, 2) . "\n\n";
 
         $message .= "📦 *Información del Pedido:*\n";
@@ -741,6 +741,7 @@ class HomeController extends Controller
         // Agradecimiento final
         $message .= "✨ ¡Gracias por su preferencia! ✨\n\n";
         $url = "https://wa.me/{$whatsapp}?text=" . urlencode($message);
+
 
         // Redirecciona a la URL externa
         return redirect()->away($url);
