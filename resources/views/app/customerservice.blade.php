@@ -16,7 +16,7 @@
 </div>
     <div class="col-lg-12 h-auto mb-30">
         <div class="h-100 bg-light p-30">
-            <h3>Te damos la bienvenida al Servicio al Cliente de Mercado PLUS</h3>
+            <h3>Te damos la bienvenida al Servicio al Cliente de RPG Solutions</h3>
             <h5>Queremos que tengas la mejor experiencia de compra posible. Si tienes preguntas, inquietudes o necesitas
                 ayuda, aquí encontrarás la información necesaria para resolver tus problemas rápidamente.
 

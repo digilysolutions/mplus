@@ -347,7 +347,7 @@
                                     alt="side-bkg"></a></div>
                         <h6 class="mt-4 px-4 body-title">Educación de calidad para un futuro brillante</h6>
                         <a href="https://fundacionmagistral.org/" type="button"
-                            class="btn sidebar-bottom-btn mt-4">Mercado PLUS</a>
+                            class="btn sidebar-bottom-btn mt-4">RPG Solutions</a>
                     </div>
                 </div>
             </div>

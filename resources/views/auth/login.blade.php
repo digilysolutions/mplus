@@ -7,7 +7,7 @@
     <title>RPG Solutions| login</title>
 
     <!-- Favicon -->
-    <link rel="shortcut icon" href="{{ asset('admin/img/icono/fm-plataforma.jpg') }}" />
+    <link rel="shortcut icon" href="{{ asset('img/logo-rpg.png') }}" />
     <link rel="stylesheet" href="{{ asset('admin/css/backend-plugin.min.css') }}">
     <link rel="stylesheet" href="{{ asset('admin/css/backend.css?v=1.0.0') }}">
     <link rel="stylesheet" href="{{ asset('admin/css/all.min.css') }}">

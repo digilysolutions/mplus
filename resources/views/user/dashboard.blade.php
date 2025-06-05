@@ -1,6 +1,6 @@
 @extends('layouts.app-admin')
 @section('title-header-admin')
-    PLataforma Mercado PLUS
+    PLataforma RPG Solutions
 @endsection
 @section('content-admin')
     <div class="col-lg-12">

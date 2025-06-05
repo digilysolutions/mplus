@@ -1,5 +1,5 @@
 <meta charset="utf-8" />
-<title>Mercado PLUS - @yield('header-title')</title>
+<title>RPG Solutions - @yield('header-title')</title>
 <meta name="csrf-token" content="{{ csrf_token() }}">
 <!-- Favicon -->
 <link href="{{ asset('img/upload/favicon.png') }}" rel="icon" />

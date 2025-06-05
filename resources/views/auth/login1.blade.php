@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>Mercado PLUS | login</title>
+    <title>RPG Solutions | login</title>
 
     <!-- Favicon -->
    <link href="{{ asset('img/logo-rpg.png') }}" rel="icon" />

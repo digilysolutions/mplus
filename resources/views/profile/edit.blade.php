@@ -1,7 +1,7 @@
 @extends('layouts.app-admin')
 
 @section('title-header-admin')
-   Plataforma Mercado PLUS
+   Plataforma RPG Solutions
 @endsection
 
 @section('content-admin')
