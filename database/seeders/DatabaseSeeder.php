@@ -32,13 +32,13 @@ class DatabaseSeeder extends Seeder
         }
         $user = User::factory()->create([
             'name' => 'admin',
-            'email' => 'admin@gmail.com',
+            'email' => 'admin@rpgsolutions.com',
             'role' => 'Administrador',
-            'password' => '1234',
+            'password' => 'admin-rpg',
             'roleid' => 1
         ]);
         $contact =  Contact::create([
-            'phone' => '58205054',
+            'phone' => '53285232',
         ]);
 
 
