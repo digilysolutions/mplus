@@ -53,9 +53,18 @@ class Order extends Model
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function person()
+    public function person_purchase()
     {
         return $this->belongsTo(\App\Models\Person::class, 'purchase_person_id', 'id');
+    }
+
+     public function person()
+    {
+        return $this->belongsTo(\App\Models\Person::class, 'person_id', 'id');
+    }
+     public function person_delivery()
+    {
+        return $this->belongsTo(\App\Models\Person::class, 'delivery_person_id', 'id');
     }
 
     /**

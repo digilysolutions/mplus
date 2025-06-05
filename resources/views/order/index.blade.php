@@ -36,22 +36,16 @@
                                  <tr class="ligth">
                                         <th>No</th>
 
-									<th >Temporary Id</th>
-									<th >Person Id</th>
-									<th >Purchase Person Id</th>
-									<th >Delivery Person Id</th>
-									<th >Status Id</th>
-									<th >Subtotal Amount</th>
-									<th >Total Amount</th>
-									<th >Currency</th>
-									<th >Exchange Rate</th>
-									<th >Address</th>
-									<th >Home Delivery</th>
-									<th >Delivery Fee</th>
-									<th >Purchase Date</th>
-									<th >Delivery Date</th>
-									<th >Delivery Time</th>
-									<th >Time Unit</th>
+
+
+									<th >Comprador</th>
+									<th >Entregar a </th>
+									<th >Estado</th>
+									<th >Subtotal</th>
+									<th >Total</th>
+									<th >Moneda</th>
+
+
 
                                         <th></th>
                                     </tr>
@@ -65,22 +59,26 @@
                                         <tr>
                                             <td>{{ ++$i }}</td>
 
-										<td >{{ $order->temporary_id }}</td>
-										<td >{{ $order->person_id }}</td>
-										<td >{{ $order->purchase_person_id }}</td>
-										<td >{{ $order->delivery_person_id }}</td>
-										<td >{{ $order->status_id }}</td>
-										<td >{{ $order->subtotal_amount }}</td>
-										<td >{{ $order->total_amount }}</td>
+
+
+										<td >{{ $order->person->first_name }}</td>
+										<td >{{ $order->person_delivery->first_name}}</td>
+										<td >
+                                            @if ($order->status_id==1)
+                                                <span class="mt-2 badge   badge-danger  ">
+                                                  {{ $order->statusOrder->status }} </span>
+                                            @endif
+
+
+                                        </td>
+										<td >${{ $order->subtotal_amount }}</td>
+										<td >${{ $order->total_amount }}</td>
 										<td >{{ $order->currency }}</td>
-										<td >{{ $order->exchange_rate }}</td>
-										<td >{{ $order->address }}</td>
-										<td >{{ $order->home_delivery }}</td>
-										<td >{{ $order->delivery_fee }}</td>
-										<td >{{ $order->purchase_date }}</td>
-										<td >{{ $order->delivery_date }}</td>
-										<td >{{ $order->delivery_time }}</td>
-										<td >{{ $order->time_unit }}</td>
+
+
+
+
+
 
                                             <td>
                                                 <form action="{{ route('orders.destroy', $order->id) }}" method="POST">
@@ -98,22 +96,16 @@
                                  <tr>
                                  <th>No</th>
 
-									<th >Temporary Id</th>
-									<th >Person Id</th>
-									<th >Purchase Person Id</th>
-									<th >Delivery Person Id</th>
-									<th >Status Id</th>
-									<th >Subtotal Amount</th>
-									<th >Total Amount</th>
-									<th >Currency</th>
-									<th >Exchange Rate</th>
-									<th >Address</th>
-									<th >Home Delivery</th>
-									<th >Delivery Fee</th>
-									<th >Purchase Date</th>
-									<th >Delivery Date</th>
-									<th >Delivery Time</th>
-									<th >Time Unit</th>
+
+
+									<th >Comprador</th>
+									<th >Entregar a </th>
+									<th >Estado</th>
+									<th >Subtotal</th>
+									<th >Total</th>
+									<th >Moneda</th>
+
+
 
                                    <th></th>
                                  </tr>

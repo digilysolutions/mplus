@@ -674,15 +674,6 @@ class HomeController extends Controller
         $currency
     ) {
 
-
-
-/**
- *
- *  $deliveryData['delivery_name']??'',
-                $deliveryData['delivery_fee'],
-                $deliveryData['delivery_time'],
-                $deliveryData['time_unit'],
- */
         if ($home_delivery) {
             $delivery = "
          Domicilio: Si

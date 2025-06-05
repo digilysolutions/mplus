@@ -119,7 +119,7 @@
                     </a>
                 </li>
                 <li class="{{ request()->is('admin/orders*') ? 'active' : '' }}">
-                    <a href="#" class="collapsed" data-toggle="collapse" aria-expanded="false">
+                    <a href="{{route('orders.index')}}" >
                         <svg class="svg-icon" id="p-dash2" width="20" height="20"
                             xmlns="http://www.w3.org/2000/svg" viewBox="0 0 30 24" fill="none"
                             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
