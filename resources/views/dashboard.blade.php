@@ -88,7 +88,7 @@
                                         </div>
                                         <div>
                                             <p class="mb-2">Ventas no Completadas</p>
-                                            <h4>10</h4>
+                                            <h4>{{$oreder_notComplete}}</h4>
                                         </div>
                                     </div>
                                     <div class="iq-progress-bar mt-2">
