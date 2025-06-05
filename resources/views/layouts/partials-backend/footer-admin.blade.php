@@ -6,7 +6,7 @@
 
                     <div class="col-lg-6 text-right">
                         <p class="mb-md-0 text-center text-md-left text-secondary">
-                            © <a class="text-primary" href="#">Mercado PLUS.</a> Todos los derechos reservados.
+                            © <a class="text-primary" href="#">RPG Solutions.</a> Todos los derechos reservados.
                             <a class="text-primary" href="https://digilysolutions.com">LY Digi-Solutions</a>
                         </p>
 
