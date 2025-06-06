@@ -1,71 +1,55 @@
 @foreach ($productsPaginator as $product)
-<div class="col-lg-6 col-md-6 col-sm-6 pb-1">
-    <div class="product-item bg-light mb-4">
-        <div class="product-image position-relative overflow-hidden">
-            <a href="{{ route('product.detailsproduct', ['id' => $product['id']]) }}">
-                <img class="img-fluid w-100" src="{{ $product['outstanding_image'] }}"
-                    alt="" />
-            </a>
-        </div>
-        <div class="text-center py-4">
-            <a class="h6 text-decoration-none text-truncate"
-                href="{{ route('product.detailsproduct', ['id' => $product['id']]) }}">{{ $product['name'] }}
-            </a>
-            <div class="d-flex align-items-center justify-content-center mt-2">
-                @if ($product['discounted_price'] != null && $product['discounted_price'] > 0)
-                    <h5 class="product_{{ $product['id'] }}">${{ $product['discounted_price'] }}
-                    </h5>
-                    <h6 id=""
-                        class="text-muted ml-2 product_{{ $product['id'] }}  sale-price"
-                        data-product-id={{ $product['id'] }}>
-                        <del>${{ $product['sale_price'] ?? 0 }}</del>
-                    </h6>
-                @else
-                    <h5 class="product_{{ $product['id'] }}">${{ $product['sale_price'] ?? 0 }}
-                    </h5>
-                @endif
-            </div>
-            <div class="estrellas align-items-center justify-content-center " id="estrellas"
-                data-calificacion="{{ $product['averageRating'] }}">
-                <span class="estrella" data-valor="1">&#9734;</span>
-                <span class="estrella" data-valor="2">&#9734;</span>
-                <span class="estrella" data-valor="3">&#9734;</span>
-                <span class="estrella" data-valor="4">&#9734;</span>
-                <span class="estrella" data-valor="5">&#9734;</span>
-            </div>
-            <div class="d-flex align-items-center justify-content-center mb-">
-                <div class="btn-group mx-2">
-                    <div class="btn-group mx-2">
-                        <button type="button" class="btn btn-sm btn-light dropdown-toggle"
-                            data-toggle="dropdown">
-                            <i class="fas fa-money-bill icon-header"></i>
-                            <strong class="selectedCurrency"
-                                data-product-id="{{ $product['id'] }}">{{ isset($product['categories']) && count($product['categories']) > 0 ? $product['categories'][0]['code_currency_default'] : '' }}</strong>
-                        </button>
-                        <div class="dropdown-menu dropdown-menu-right">
-                            @foreach ($countryCurrencies as $countryCurrency)
-                                <button class="dropdown-item" type="button"
-                                    onclick="changeCurrency('{{ $countryCurrency['currency']['code'] }}', {{ $product['id'] }})">
-                                    <strong>{{ $countryCurrency['currency']['code'] }}</strong>
+<div class="col-lg-6 col-md-6 col-sm-12 pb-1">
+                    <div class="card product-item border-0 mb-4">
+                        <div class="card-header product-img position-relative overflow-hidden bg-transparent border p-0">
+
+                            <a href="{{ route('product.detailsproduct', ['id' => $product->id]) }}">
+                                <img class="img-fluid w-100" src="{{ $product->outstanding_image }}" alt="" />
+                            </a>
+                        </div>
+                        <div class="card-body border-left border-right text-center p-0 pt-4 pb-3">
+
+                            <a class="" href="{{ route('product.detailsproduct', ['id' => $product->id]) }}">
+                                <h5 class="text-truncate mb-3">{{ $product->name }}</h5>
+                            </a>
+                            <div class="d-flex justify-content-center">
+                                @if ($product->discounted_price != null && $product->discounted_price > 0)
+                                    <h6 class="product_{{ $product->id }}">${{ $product->discounted_price }}</h6>
+                                    <h6 id="" class="text-muted ml-2 product_{{ $product->id }}  sale-price"
+                                        data-product-id={{ $product->id }}><del>${{ $product->sale_price ?? 0 }}</del>
+                                    </h6>
+                                @else
+                                    <h6 class="product_{{ $product->id }}">${{ $product->sale_price ?? 0 }}</h6>
+                                @endif
+                            </div>
+                        </div>
+                        <div class="card-footer d-flex justify-content-between bg-light border">
+                            <div class="btn-group mx-2">
+                                <button type="button" class="btn btn-sm btn-light dropdown-toggle" data-toggle="dropdown">
+                                    <i class="fas fa-money-bill icon-header text-primary"></i>
+                                    <span class="selectedCurrency"
+                                        data-product-id="{{ $product->id }}">{{ isset($product->categories) && count($product->categories) > 0 ? $product->categories[0]->code_currency_default : '' }}</span>
                                 </button>
-                            @endforeach
+                                <div class="dropdown-menu dropdown-menu-right">
+                                    @foreach ($countryCurrencies as $countryCurrency)
+                                        <button class="dropdown-item" type="button"
+                                            onclick="changeCurrency('{{ $countryCurrency->currency->code }}', {{ $product->id }})">
+                                            <strong class="">{{ $countryCurrency->currency->code }}</strong>
+                                        </button>
+                                    @endforeach
+                                </div>
+                            </div>
+                            <a href="{{ route('product.detailsproduct', ['id' => $product->id]) }}"
+                                class="btn btn-sm text-dark "><i class="fas fa-eye text-primary mr-1"></i>Ver
+                                Detalles</a>
+
+
+                            <button type="button" class="btn btn-sm text-dark p-0  addcart" data-id={{ $product->id }}
+                                data-name={{ $product->name }} data-toggle="tooltip" data-placement="bottom"
+                                data-original-title="Añadir al Carrito"><i
+                                    class="fas fa-shopping-cart text-primary mr-1 "></i>Adicionar Carrito
+                            </button>
                         </div>
                     </div>
-                    <button type="button" class="btn btn-outline-dark addcart"
-                        data-id={{ $product['id'] }} data-toggle="tooltip" data-placement="bottom"
-                        data-original-title="Añadir al Carrito"><i class="fa fa-shopping-cart"></i>
-                    </button>
-                    <a href="{{ route('product.detailsproduct', ['id' => $product['id']]) }}"
-                        id="more_details" class="btn btn-outline-dark ml-2" data-toggle="tooltip"
-                        data-placement="bottom" data-original-title="Ver Detalles"><i
-                            class="fa fa-info-circle"></i></a>
-                    <button class="btn btn-outline-dark btn-square ml-2" data-toggle="tooltip"
-                        data-placement="bottom" data-original-title="Añadir Lista de Deseos "><i
-                            class="far fa-heart"></i></button>
                 </div>
-            </div>
-        </div>
-    </div>
-
-</div>
 @endforeach
