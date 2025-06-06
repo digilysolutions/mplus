@@ -21,28 +21,43 @@
             <div class="col-lg-3 col-md-4">
 
                 <form id="filterForm">
-                <!-- Categoria Start -->
-                <h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3">Filtrar por
-                        Categoría</span></h5>
-                <div class="bg-light p-4 mb-30">
+                    <!-- Categoria Start -->
+                    <h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3">Filtrar
+                            por
+                            Categoría</span></h5>
+                    <div class="bg-light p-4 mb-30">
 
-                    @foreach ($categories as $category)
-                    <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
-                        <input type="checkbox" value="{{ $category['id'] }}" class="custom-control-input category-checkbox"
-                            id="category_{{ $category['id'] }}" name="category_ids[]"
-                            @if(is_array(request('category_ids')) && in_array($category['id'], request('category_ids'))) checked @endif>
-                        <label class="custom-control-label" for="category_{{ $category['id'] }}">{{ $category['name'] }}</label>
-                        <span class="badge border font-weight-normal">{{ count($category['products']) }}</span>
+                        @php
+                            $selectedCategoryIds = request()->input('category_ids');
+                            $categoryIds = is_array($selectedCategoryIds)
+                                ? $selectedCategoryIds
+                                : ($selectedCategoryIds
+                                    ? [$selectedCategoryIds]
+                                    : []);
+                        @endphp
+
+                        @foreach ($categories as $category)
+                            @php
+                                $isChecked = in_array($category['id'], $categoryIds);
+                            @endphp
+                            <div
+                                class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
+                                <input type="checkbox" value="{{ $category['id'] }}"
+                                    class="custom-control-input category-checkbox" id="category_{{ $category['id'] }}"
+                                    name="category_ids[]" @if ($isChecked) checked @endif>
+                                <label class="custom-control-label"
+                                    for="category_{{ $category['id'] }}">{{ $category['name'] }}</label>
+                                <span class="badge border font-weight-normal">{{ count($category['products']) }}</span>
+                            </div>
+                        @endforeach
                     </div>
-                @endforeach
+                    <!-- Categoria End -->
 
-                </div>
-                <!-- Categoria End -->
-
-                <!-- Categoria Start -->
-                <h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3">Filtrar por
-                        Marcas</span></h5>
-                <div class="bg-light p-4 mb-30">
+                    <!-- Categoria Start -->
+                    <h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3">Filtrar
+                            por
+                            Marcas</span></h5>
+                    <div class="bg-light p-4 mb-30">
 
                         @foreach ($brands as $brand)
                             <div
@@ -57,9 +72,9 @@
                         @endforeach
 
 
-                </div>
-                <!-- Categoria End -->
-            </form>
+                    </div>
+                    <!-- Categoria End -->
+                </form>
 
             </div>
             <!-- Shop Sidebar End -->
@@ -70,7 +85,7 @@
             <div class="col-lg-9 col-md-8 container-fluid pt-5 pb-3 ">
                 <div class="row px-xl-5" id="productsContainer">
 
-                 @include('app.partials.products')
+                    @include('app.partials.products')
 
                 </div>
             </div>
@@ -91,38 +106,37 @@
     <!-- Shop End -->
 @endsection
 @section('js')
-<script>
-    $(document).ready(function() {
-    $('#filterForm input[type="checkbox"]').change(function() {
-        let selectedBrands = [];
-        let selectedCategories = [];
+    <script>
+        $(document).ready(function() {
+            $('#filterForm input[type="checkbox"]').change(function() {
+                let selectedBrands = [];
+                let selectedCategories = [];
 
-        // Obtener todos los checkboxes de marcas seleccionados
-        $('.brand-checkbox:checked').each(function() {
-            selectedBrands.push($(this).val());
-        });
+                // Obtener todos los checkboxes de marcas seleccionados
+                $('.brand-checkbox:checked').each(function() {
+                    selectedBrands.push($(this).val());
+                });
 
-        // Obtener todos los checkboxes de categorías seleccionados
-        $('.category-checkbox:checked').each(function() {
-            selectedCategories.push($(this).val());
-        });
+                // Obtener todos los checkboxes de categorías seleccionados
+                $('.category-checkbox:checked').each(function() {
+                    selectedCategories.push($(this).val());
+                });
 
-        $.ajax({
-            url: "{{ route('filterProducts') }}", // Cambia esto a la ruta que maneja la lógica del filtrado
-            method: "GET",
-            data: {
-                brand_ids: selectedBrands,
-                category_ids: selectedCategories // Aquí agregas las categorías seleccionadas
-            },
-            success: function(response) {
-                $('#productsContainer').html(response);
-            },
-            error: function(xhr, status, error) {
-                console.error(xhr.responseText);
-            }
+                $.ajax({
+                    url: "{{ route('filterProducts') }}", // Cambia esto a la ruta que maneja la lógica del filtrado
+                    method: "GET",
+                    data: {
+                        brand_ids: selectedBrands,
+                        category_ids: selectedCategories // Aquí agregas las categorías seleccionadas
+                    },
+                    success: function(response) {
+                        $('#productsContainer').html(response);
+                    },
+                    error: function(xhr, status, error) {
+                        console.error(xhr.responseText);
+                    }
+                });
+            });
         });
-    });
-});
     </script>
-
 @endsection
