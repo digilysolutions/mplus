@@ -51,7 +51,36 @@
     </div>
     <!-- Footer End -->
 
+<!-- Botón flotante -->
+<div id="floatCartBtn" style="position: fixed; bottom: 20px; left: 20px; z-index: 1050; display: block;">
+    <div class="d-flex align-items-center bg-white border rounded p-2 shadow" style="cursor:pointer;">
+        <div class="mr-2">
+            <i class="fas fa-shopping-cart text-primary"></i>
+        </div>
+        <div>
+            <div class="d-flex justify-content-between w-100">
+                <span class="text-dark" id="float-item-count">0 productos</span>
+                <strong class="ml-2" id="float-total-price">$0.00</strong>
+            </div>
+        </div>
+    </div>
+</div>
 
+<!-- Panel del carrito -->
+<div id="cartContent" style="display:none; position: fixed; bottom: 70px; left: 20px; right: 20px; max-height: 400px; overflow-y: auto; z-index: 1050; background: #fff; border: 1px solid #ccc; border-radius: 8px; padding: 10px;">
+    <div class="d-flex justify-content-between align-items-center mb-2">
+       
+        <button id="closeCart" class="btn btn-sm btn-secondary">Cerrar</button>
+    </div>
+    <ul class="list-group mb-3" id="cartItemsList">
+        <!-- Items del carrito aquí -->
+        <!-- Ejemplo: <li class="list-group-item">Producto 1 - $10</li> -->
+    </ul>
+    <div class="d-flex justify-content-between">
+        <a href="{{ route('cart.showCart') }}" class="btn btn-info">Ver Pedido</a>
+        <a href="{{ route('product.checkout', ['iddomicilio' => 0]) }}" class="btn btn-primary">Finalizar compra</a>
+    </div>
+</div>
     <!-- Back to Top -->
     <a href="#" class="btn btn-primary back-to-top"><i class="fa fa-angle-double-up"></i></a>
 
@@ -74,6 +103,30 @@
 <script type="module" src="{{ asset('includes/main.js') }}"></script>
 <script src="{{ asset('includes/app/cart.js') }}"></script>
 <script>
+    $(document).ready(function() {
+    // Mostrar/Ocultar carrito al hacer clic en botón
+    $('#floatCartBtn').on('click', function() {
+        $('#cartContent').toggle();
+    });
+    $('#closeCart').on('click', function() {
+        $('#cartContent').hide();
+    });
+
+    // Controlar visibilidad del botón al hacer scroll
+    $(window).on('scroll', function() {
+        var scrollPos = $(window).scrollTop();
+        if (scrollPos > 100) { // Si está más abajo de 100px, mostrar
+            $('#floatCartBtn').fadeIn();
+        } else {
+            $('#floatCartBtn').fadeOut();
+            $('#cartContent').hide(); // opcional: esconder el panel si está abierto
+        }
+    });
+
+    // Inicialmente, ocultar el botón si quieres que solo aparezca al hacer scroll
+    $('#floatCartBtn').hide(); // Comienza oculto
+});
+    
 
 $(document).ready(function() {
         // Manejador para mostrar y ocultar el carrito en móvil
