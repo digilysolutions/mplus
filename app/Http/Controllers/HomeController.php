@@ -666,7 +666,7 @@ class HomeController extends Controller
         $detailsPersonDelivery,
         $products,
         $home_delivery,
-         $deliveryData,
+        $deliveryData,
         $subtotal_amount,
         $total_amount,
         $address,
@@ -707,7 +707,7 @@ class HomeController extends Controller
         $message .= "\n💰 *Resumen de la Orden:*\n";
         $message .= "*Subtotal:* $" . number_format($subtotal_amount, 2) . "\n";
         $message .= "*Descuento:* -$" . number_format(0, 2) . "\n";
-        $message .= "*Domicilio:* $" . number_format( $deliveryData['delivery_fee'] ?? 0, 2) . "\n";
+        $message .= "*Domicilio:* $" . number_format($deliveryData['delivery_fee'] ?? 0, 2) . "\n";
         $message .= "*Total:* $" . number_format($total_amount, 2) . "\n\n";
 
         $message .= "📦 *Información del Pedido:*\n";
@@ -796,7 +796,7 @@ class HomeController extends Controller
         $whatsappUrl = "https://wa.me/$whatsappNumber?text=" . $whatsappMessage;
         return  $whatsappUrl;
     }
-    public function filterProducts(Request $request)
+        public function filterProducts(Request $request)
     {
         $data = $this->getProducts($request);
         $countryCurrencies = $data['countryCurrencies'];
@@ -816,6 +816,7 @@ class HomeController extends Controller
         $currency = $data['currency'];
         $productsPaginator = $data['productsPaginator'];
         $categories = $data['categories'];
+
         $brands = $data['brands'];
         return view('app.shop', compact('countryCurrencies', 'currency', 'productsPaginator', 'categories', 'brands'));
     }
@@ -828,7 +829,7 @@ class HomeController extends Controller
 
         // Filtrar categorías para quedarte solo con las que tienen más de un producto
         $categories = $categories->filter(function ($category) {
-            return count($category['products']) > 1; // Suponiendo que tienes una relación "products"
+            return count($category['products']) >= 1; // Suponiendo que tienes una relación "products"
         });
 
         $brands = Brand::with('products')
