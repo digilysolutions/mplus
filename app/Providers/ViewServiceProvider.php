@@ -21,10 +21,13 @@ class ViewServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        View::composer('layouts.partials-frontend.navbar', function ($view) {
+        View::composer('layouts.partials-front-rpg.nav', function ($view) {
+
             $categoryController = app(NavbarController::class);
             $menuCategories = $categoryController->getMenuItemsCategories();
+
             $specialOfferProduct = $categoryController->specialOffer();
+
             // Comparte las categorías con la vista
             $view->with('menuCategories', $menuCategories)
              ->with('specialOfferProduct', $specialOfferProduct);
