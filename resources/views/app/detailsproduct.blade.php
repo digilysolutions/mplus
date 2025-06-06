@@ -16,9 +16,11 @@
             object-fit: cover;
             display: block;
         }
+
         .card-footer {
-    align-items: center; /* Centra verticalmente */
-}
+            align-items: center;
+            /* Centra verticalmente */
+        }
     </style>
 @endsection
 
@@ -28,7 +30,7 @@
 
 
     <!-- Page Header Start -->
-    <div class="container-fluid bg-secondary mb-5 mt-5" >
+    <div class="container-fluid bg-secondary mb-5 mt-5">
         <div class="d-flex flex-column align-items-center justify-content-center" style="min-height: 300px">
             <h1 class="font-weight-semi-bold text-uppercase mb-3">Detalles del Producto</h1>
             <div class="d-inline-flex">
@@ -260,14 +262,15 @@
                             </div>
 
 
-<div class="card-footer d-flex justify-content-between bg-light border">
+                            <div class="card-footer d-flex justify-content-between bg-light border">
 
-                            <a href="{{ route('product.detailsproduct', ['id' => $product['id']]) }}" class="btn btn-sm text-dark p-0"><i
-                                    class="fas fa-eye text-primary mr-1"></i>Ver Detalles</a>
+                                <a href="{{ route('product.detailsproduct', ['id' => $product['id']]) }}"
+                                    class="btn btn-sm text-dark p-0"><i class="fas fa-eye text-primary mr-1"></i>Ver
+                                    Detalles</a>
 
-                                    <button  type="button" class="btn btn-sm text-dark p-0 addcart" ><i
-                                    class="fas fa-shopping-cart text-primary mr-1"></i>Adicionar Carrito</button>
-                        </div>
+                                <button type="button" class="btn btn-sm text-dark p-0 addcart"><i
+                                        class="fas fa-shopping-cart text-primary mr-1"></i>Adicionar Carrito</button>
+                            </div>
                         </div>
                     @endforeach
                 </div>
@@ -297,7 +300,7 @@
                     var exists = response['exists'];
                     var quantity = response['quantity'];
 
-                    console.log('Existe:',exists );
+                    console.log('Existe:', exists);
                     console.log('quantity:', quantity);
                     existsProduct(exists, quantity);
                 },
