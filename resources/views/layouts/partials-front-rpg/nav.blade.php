@@ -41,20 +41,11 @@
 
                  <button class="categoria active" data-categoria="todos">Todas</button>
 
-                 <button class="categoria" data-categoria="electronica">Electrónica</button>
+                   @foreach ($menuCategories as $category)
+                     <a class="btn categoria" href="#" >{{ $category['name'] }}</a>
 
-                 <button class="categoria" data-categoria="ropa">Ropa</button>
 
-                 <button class="categoria" data-categoria="hogar">Hogar</button>
-
-                 <button class="categoria" data-categoria="deportes">Deportes</button>
-
-                 <button class="categoria" data-categoria="juegos">Juegos</button>
-
-                 <button class="categoria" data-categoria="libros">Libros</button>
-
-                 <button class="categoria" data-categoria="otros">Otros</button>
-
+                    @endforeach
              </div>
          </div>
      </div>
