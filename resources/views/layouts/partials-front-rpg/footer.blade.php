@@ -84,7 +84,24 @@
     <!-- Back to Top -->
     <a href="#" class="btn btn-primary back-to-top"><i class="fa fa-angle-double-up"></i></a>
 
+<!-- Modal de notificación -->
+    <div class="modal fade" id="productAddedModal" tabindex="-1" aria-labelledby="productAddedLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content" style="background-color: #f0f8ff;">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="productAddedLabel">Producto añadido al carrito</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                </div>
+                <div class="modal-body">
+                    <p><strong id="productName"></strong> ha sido añadido a tu carrito.</p>
 
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
 <!-- JavaScript Libraries -->
 <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
@@ -103,6 +120,33 @@
 <script type="module" src="{{ asset('includes/main.js') }}"></script>
 <script src="{{ asset('includes/app/cart.js') }}"></script>
 <script>
+    $(document).ready(function() {
+            $('.addcart').on('click', function() {
+                // Obtener datos del botón
+                var productName = $(this).data('name');
+
+                // Rellenar los datos en el modal
+                $('#productName').text(productName);
+
+                // Mostrar el modal usando Bootstrap 5 con jQuery
+                var myModal = new bootstrap.Modal(document.getElementById('productAddedModal'));
+                myModal.show();
+
+                // Después de mostrar, configurar la animación de cierre lento
+                setTimeout(function() {
+                    // Agregar clase para animar la salida
+                    $('#productAddedModal .modal-dialog').addClass('fade-out-slow');
+
+                    // Cuando termine la animación, cerrar el modal
+                    $('#productAddedModal .modal-dialog').on('animationend', function() {
+                        myModal.hide();
+                        // Remover la clase para futuras veces
+                        $('#productAddedModal .modal-dialog').removeClass('fade-out-slow');
+                    });
+                }, 1500); // espera que la animación lenta termine, ajusta si quieres más o menos tiempo
+            });
+        });
+        
     $(document).ready(function() {
     // Mostrar/Ocultar carrito al hacer clic en botón
     $('#floatCartBtn').on('click', function() {

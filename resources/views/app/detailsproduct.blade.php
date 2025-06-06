@@ -268,8 +268,11 @@
                                     class="btn btn-sm text-dark p-0"><i class="fas fa-eye text-primary mr-1"></i>Ver
                                     Detalles</a>
 
-                                <button type="button" class="btn btn-sm text-dark p-0 addcart"><i
-                                        class="fas fa-shopping-cart text-primary mr-1"></i>Adicionar Carrito</button>
+                                         <button type="button" class="btn btn-sm text-dark p-0  addcart" data-id={{ $product['id'] }}
+                                data-name={{ $product['name'] }} data-toggle="tooltip" data-placement="bottom"
+                                data-original-title="Añadir al Carrito"><i
+                                    class="fas fa-shopping-cart text-primary mr-1 "></i>Adicionar Carrito
+                            </button>
                             </div>
                         </div>
                     @endforeach

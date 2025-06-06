@@ -49,61 +49,93 @@
 
 
 
-/* Contenedor del carrito, relativo para posicionar la ventana flotante */
-.cart-container {
-  position: relative;
-}
+    /* Contenedor del carrito, relativo para posicionar la ventana flotante */
+    .cart-container {
+        position: relative;
+    }
 
-/* La ventana flotante */
-#cart-content {
-  display: none; /* Oculta por defecto, controla con JS */
-  position: absolute;
-  top: 100%; /* debajo del botón */
-  right: 0;  /* alineado a la derecha del contenedor */
-  min-width: 300px; /* tamaño mínimo */
-  max-width: 90%; /* que no se salga en pantallas pequeñas */
-  background: #fff;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-  z-index: 9999;
-  padding: 10px;
-  overflow: auto; /* para scroll si el contenido es largo */
-  max-height: 400px; /* ajusta según preferencia */
-}
+    /* La ventana flotante */
+    #cart-content {
+        display: none;
+        /* Oculta por defecto, controla con JS */
+        position: absolute;
+        top: 100%;
+        /* debajo del botón */
+        right: 0;
+        /* alineado a la derecha del contenedor */
+        min-width: 300px;
+        /* tamaño mínimo */
+        max-width: 90%;
+        /* que no se salga en pantallas pequeñas */
+        background: #fff;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        z-index: 9999;
+        padding: 10px;
+        overflow: auto;
+        /* para scroll si el contenido es largo */
+        max-height: 400px;
+        /* ajusta según preferencia */
+    }
 
-/* Hacer que el contenido se ajuste y sea grande si hay mucho texto */
-#cart-content .top-cart-content {
-  width: 100%;
-}
+    /* Hacer que el contenido se ajuste y sea grande si hay mucho texto */
+    #cart-content .top-cart-content {
+        width: 100%;
+    }
 
-/* Solo en pantallas pequeñas, esconder el contenido y solo mostrar el icono */
-@media (max-width: 768px) {
-  /* Oculta los textos en dispositivos pequeños, solo icono */
-  #cart-content {
-    display: none; /* asegúrate de que JS controle su visibilidad */
-  }
-  /* Aquí puedes agregar clases o estilos específicos para el icono en móvil si quieres, pero en tu HTML solo muestra el icono en móvil */
-}
+    /* Solo en pantallas pequeñas, esconder el contenido y solo mostrar el icono */
+    @media (max-width: 768px) {
 
-/* Ocultar en pantallas pequeñas los textos y mostrar solo el icono */
-@media (max-width: 768px) {
-  /* Ocultar los textos */
-  #item-count, #total-price {
-    display: none;
-  }
-  /* Mostrar solo el icono del carrito */
-  .icono-shopping-cart {
-    display: inline-block;
-  }
-}
+        /* Oculta los textos en dispositivos pequeños, solo icono */
+        #cart-content {
+            display: none;
+            /* asegúrate de que JS controle su visibilidad */
+        }
 
-/* En pantallas grandes, mostrar todo normalmente */
-@media (min-width: 769px) {
-  #item-count, #total-price {
-    display: inline-block;
-  }
-  .icono-shopping-cart {
-    display: inline-block;
-  }
-}
+        /* Aquí puedes agregar clases o estilos específicos para el icono en móvil si quieres, pero en tu HTML solo muestra el icono en móvil */
+    }
 
+    /* Ocultar en pantallas pequeñas los textos y mostrar solo el icono */
+    @media (max-width: 768px) {
+
+        /* Ocultar los textos */
+        #item-count,
+        #total-price {
+            display: none;
+        }
+
+        /* Mostrar solo el icono del carrito */
+        .icono-shopping-cart {
+            display: inline-block;
+        }
+    }
+
+    /* En pantallas grandes, mostrar todo normalmente */
+    @media (min-width: 769px) {
+
+        #item-count,
+        #total-price {
+            display: inline-block;
+        }
+
+        .icono-shopping-cart {
+            display: inline-block;
+        }
+    }
+
+    @keyframes fadeOutSlow {
+        0% {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        100% {
+            opacity: 0;
+            transform: translateY(-20px);
+        }
+    }
+
+    .fade-out-slow {
+        animation: fadeOutSlow 1.5s forwards;
+        /* duración de 1.5 segundos */
+    }
 </style>
