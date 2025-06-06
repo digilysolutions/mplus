@@ -42,7 +42,7 @@
                  <button class="categoria active" data-categoria="todos">Todas</button>
 
                    @foreach ($menuCategories as $category)
-                     <a class="btn categoria" href="#" >{{ $category['name'] }}</a>
+                     <a class="btn categoria" href="{{ route('product.shop', ['category_ids' => $category['id']]) }}" >{{ $category['name'] }}</a>
 
 
                     @endforeach
