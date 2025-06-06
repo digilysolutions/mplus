@@ -31,19 +31,16 @@
                                 </div>
                             @endif
                             @if (session('error'))
-
                                 <div class="alert alert-danger">
                                     {{ session('error') }}
                                 </div>
                             @endif
                             @if (session('errors'))
-
                                 <div class="alert alert-danger">
                                     <x-input-error :messages="$errors->get('password')" class="mt-2" />
                                 </div>
                             @endif
                             @if ($errors->has('error'))
-
                                 <div class="alert alert-danger mt-2">
                                     {{ $errors->first('error') }} <!-- Cambia "email" por el campo correcto -->
                                 </div>
@@ -56,7 +53,7 @@
                                     <div class="col-lg-7 align-self-center">
 
                                         <div class="p-3">
-                                            <h2 class="mb-5">Iniciar Sesión</h2>
+                                            <h2 class="mb-5">Iniciar Sesión2</h2>
                                             <form method="POST" action="{{ route('login') }}">
                                                 @csrf
 
@@ -64,24 +61,22 @@
                                                     <div class="col-lg-12">
                                                         <div class="floating-label form-group">
                                                             <input class="floating-input form-control" type="text"
-                                                            name="credential" placeholder=" " required autofocus
-                                                            autocomplete="username" />
-                                                        <label>No. Celular o Usuario </label>
-                                                        <x-input-error :messages="$errors->get('credential')" class="mt-2" />
+                                                                name="credential" placeholder=" " required autofocus
+                                                                autocomplete="username" />
+                                                            <label>No. Celular o Usuario </label>
+                                                            <x-input-error :messages="$errors->get('credential')" class="mt-2" />
                                                         </div>
                                                     </div>
                                                     <div class="col-lg-12">
                                                         <div class="floating-label form-group">
-                                                           <input class="floating-input form-control" name="password"
-                                                            type="password" placeholder=" " required
-                                                            autocomplete="current-password" />
-                                                        <label>Contraseña</label>
-                                                        <x-input-error :messages="$errors->get('password')" class="mt-2" />
+                                                            <input class="floating-input form-control" id="password" name="password" type="password" placeholder=" " required autocomplete="current-password" />
+                                                            <label>Contraseña</label>
+                                                            <x-input-error :messages="$errors->get('password')" class="mt-2" />
 
                                                             <!-- Ojo para mostrar/ocultar contraseña -->
                                                             <span toggle="#password" class="toggle-password"
                                                                 style="cursor: pointer; position: absolute; right: 10px; top: 50%; transform: translateY(-50%);">
-                                                                <!-- Ojo Cerrado por defecto -->
+                                                                <!-- SVG por defecto -->
                                                                 <svg class="svg-icon eye-icon" width="20"
                                                                     height="20" xmlns="http://www.w3.org/2000/svg"
                                                                     viewBox="0 0 24 24" fill="none"
@@ -92,9 +87,7 @@
                                                                     </path>
                                                                     <circle cx="12" cy="12" r="3">
                                                                     </circle>
-                                                                    <line x1="1" y1="1" x2="23"
-                                                                        y2="23" stroke="currentColor"
-                                                                        stroke-width="2"></line>
+                                                                    <!-- línea adicional en JS -->
                                                                 </svg>
                                                             </span>
                                                         </div>
@@ -140,43 +133,57 @@
     </div>
 
     <!-- Backend Bundle JavaScript -->
-    <script src="{{ asset('admin/js/backend-bundle.min.js') }}"></script>
+    <script src="{{ asset('js/backend-bundle.min.js') }}"></script>
     <!-- Table Treeview JavaScript -->
-    <script src="{{ asset('admin/admin/js/table-treeview.js') }}"></script>
+    <script src="{{ asset('admin/js/table-treeview.js') }}"></script>
     <!-- Chart Custom JavaScript -->
-    <script src="{{ asset('admin/admin/js/customizer.js') }}"></script>
+    <script src="{{ asset('admin/js/customizer.js') }}"></script>
     <!-- Chart Custom JavaScript -->
-    <script async src="{{ asset('admin/admin/js/chart-custom.js') }}"></script>
+    <script async src="{{ asset('admin/js/chart-custom.js') }}"></script>
     <!-- app JavaScript -->
-    <script src="{{ asset('admin/js/app.js') }}"></script>
+    <script src="{{ asset('js/app.js') }}"></script>
 
     <!-- JavaScript para el botón de mostrar/ocultar contraseña -->
     <script>
-        const togglePassword = document.querySelector('.toggle-password');
-        const passwordInput = document.querySelector('#password');
+    // Selecciona el input del password por id
+    const passwordInput = document.querySelector('#password');
+    // Selecciona el toggle
+    const togglePassword = document.querySelector('.toggle-password');
 
-        togglePassword.addEventListener('click', function(e) {
-            // Alternar el tipo de entrada
-            const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
-            passwordInput.setAttribute('type', type);
+    togglePassword.addEventListener('click', function(e) {
+        // Guarda el valor actual del input
+        const currentValue = passwordInput.value;
 
-            // Cambiar el SVG
-            this.innerHTML = type === 'text' ? `
-            <svg class="svg-icon eye-icon" width="20" height="20"
-                 xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                 stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M1 12c0 0 3.1 7 11 7s11-7 11-7-3.1-7-11-7-11 7-11 7z"></path>
-                <circle cx="12" cy="12" r="3"></circle>
-            </svg>` : `
-            <svg class="svg-icon eye-icon" width="20" height="20"
-                 xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                 stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M1 12c0 0 3.1 7 11 7s11-7 11-7-3.1-7-11-7-11 7-11 7z"></path>
-                <circle cx="12" cy="12" r="3"></circle>
-                <line x1="1" y1="1" x2="23" y2="23" stroke="currentColor" stroke-width="2"></line>
-            </svg>`;
-        });
-    </script>
+        // cambia el tipo
+        const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+        passwordInput.setAttribute('type', type);
+
+        // mantiene el valor
+        passwordInput.value = currentValue;
+
+        // cambia el icono
+        if (type === 'text') {
+            // icono ojo abierto
+            this.innerHTML = `
+                <svg class="svg-icon eye-icon" width="20" height="20"
+                     xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                     stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M1 12c0 0 3.1 7 11 7s11-7 11-7-3.1-7-11-7-11 7-11 7z"></path>
+                    <circle cx="12" cy="12" r="3"></circle>
+                </svg>`;
+        } else {
+            // icono ojo cerrado
+            this.innerHTML = `
+                <svg class="svg-icon eye-icon" width="20" height="20"
+                     xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                     stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M1 12c0 0 3.1 7 11 7s11-7 11-7-3.1-7-11-7-11 7-11 7z"></path>
+                    <circle cx="12" cy="12" r="3"></circle>
+                    <line x1="1" y1="1" x2="23" y2="23" stroke="currentColor" stroke-width="2"></line>
+                </svg>`;
+        }
+    });
+</script>
 </body>
 
 </html>
