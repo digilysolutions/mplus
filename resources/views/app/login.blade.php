@@ -1,4 +1,4 @@
-<!doctype html>
+    <!doctype html>
 <html lang="es">
 
 <head>
@@ -82,7 +82,7 @@
                                 <div class="d-flex align-items-center auth-content">
                                     <div class="col-lg-7 align-self-center">
                                         <div class="p-3">
-                                            <h2 class="mb-2">Iniciar Sesión</h2>
+                                            <h2 class="mb-2">Iniciar Sesión1</h2>
                                             <p>Inicia sesión para mantenerte conectado.
 
                                             </p>
