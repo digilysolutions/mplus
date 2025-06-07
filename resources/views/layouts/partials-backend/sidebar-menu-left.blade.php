@@ -1,8 +1,8 @@
 <div class="iq-sidebar  sidebar-default ">
     <div class="iq-sidebar-logo d-flex align-items-center justify-content-between">
         <a href="/" class="text-decoration-none">
-            <span> <img class="" src="{{ asset('img/logo-rpg-solutions.png') }}" /></span>
-            <img class="img-fluid mt-2 " src="{{ asset('img/logo-solutions.png') }}" />
+            <span> <img class="img-fluid" style="width:40px; height:auto;"  src="{{ asset('img/logo-rpg-solutions.png') }}" /></span>
+            <img class="img-fluid mt-3 " style="width:85px; height:auto;"  src="{{ asset('img/logo-solutions.png') }}" />
         </a>
 
         <div class="iq-menu-bt-sidebar ml-0">
