@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests\ProductRequest;
 use App\Models\AttributesModel;
 use App\Models\Brand;
+use App\Models\CountryCurrency;
 use App\Models\DeliveryZone;
 use App\Models\ProductCategory;
 use App\Models\Stock;
@@ -41,8 +42,9 @@ class ProductController extends Controller
         $brands = Brand::allActivated();
         $deliveryZones = DeliveryZone::allActivated();
         $units = Unit::allActivated();
+          $currencies = CountryCurrency::allActivated();
 
-        return view('product.create', compact('product', 'units', 'categories', 'attributes', 'brands', 'deliveryZones'));
+        return view('product.create', compact('product', 'currencies','units', 'categories', 'attributes', 'brands', 'deliveryZones'));
     }
 
     /**

@@ -11,6 +11,23 @@
                 <div class="help-block with-errors"></div>
             </div>
         </div>
+         <div class="col-md-12">
+
+            <div class="form-group">
+                <label>Categoría Superior:</label>
+                <select id="category_parent_name" name="category_parent_name" class="form-control">
+                    <option value="" >Ninguna</option>
+                    @foreach ($categories as $category)
+                        <option value="{{ $category['name']}}">
+                            {{ $category['name'] }}</option>
+                    @endforeach
+
+                </select>
+   <small style="margin-top:50px;    color: #838689;">Las categorías, a diferencia de las etiquetas, pueden tener jerarquías. Podrías tener una categoría de Alimentos y, por debajo, las categorías Confituras y Cárnicos. Totalmente opcional.</small>
+                <div class="help-block with-errors">
+                </div>
+            </div>
+        </div>
         <div class="col-md-12">
             <div class="form-group">
                 <label>Descripción</label>
@@ -18,25 +35,8 @@
 
             </div>
         </div>
-        <div class="col-md-12">
-            <div class="form-group">
-                <label>Seleccione una moneda:<span style="color: #FF9770 !important;">*</span></label>
-                <select id="baseCurrency" name="code_currency_default" class="form-control">
-                    @foreach ($currencies as $currency)
-                        <option value="{{ $currency['currency']['code'] }}">
-                            {{ $currency['currency']['code'] }}</option>
-                    @endforeach
 
-                </select>
 
-                <div class="help-block with-errors">
-                </div>
-            </div>
-        </div>
-        <div class="col-md-12" id="exchangeRatesContainer" style="display: none;">
-            <label>Tasas de cambio</label>
-            <div id="exchangeRates"></div>
-        </div>
         <div class="col-md-12">
             <div class="form-group">
                 <div class="crm-profile-img-edit position-relative">

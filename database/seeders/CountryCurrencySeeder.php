@@ -19,12 +19,7 @@ class CountryCurrencySeeder extends Seeder
             'exchange_rate' => 1,
             'code_currency_default'=>true
         ]);
-        CountryCurrency::create([
-            'country_id' => 1,
-            'currency_id' => 30,
-            'exchange_rate' => 275,
-            'code_currency_default'=>false
-        ]);
+
         CountryCurrency::create([
             'country_id' => 1,
             'currency_id' => 2,

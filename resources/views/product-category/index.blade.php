@@ -65,10 +65,16 @@
                                             </td>
 
 
-                                            <td>{{ $productCategory->name }}</td>
+                                            <td>
+                                                @if (!empty($productCategory->category_parent_name))
+                                                    -- {{ $productCategory->name }}
+                                                @else
+                                                    {{ $productCategory->name }}
+                                                @endif
+                                            </td>
                                             <td>{{ $productCategory->code_currency_default }}</td>
                                             <td>{{ $productCategory->exchange_rates }}</td>
-                                            <td>{{count($productCategory->products)}}</td>
+                                            <td>{{ count($productCategory->products) }}</td>
 
 
                                             <td>

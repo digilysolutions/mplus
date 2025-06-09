@@ -47,6 +47,7 @@ return new class extends Migration
             $table->foreign('model_id')->references('id')->on('model_products')->onDelete('cascade');
             $table->integer('unit_id')->unsigned()->nullable();
             $table->foreign('unit_id')->references('id')->on('units')->onDelete('cascade');
+            $table->json('supported_currencies')->nullable()->comment('Lista de monedas en las que se puede vender el producto');
 
             $table->boolean('is_activated')->nullable()->default(true);
             $table->timestamps();

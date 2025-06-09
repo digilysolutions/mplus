@@ -2,7 +2,7 @@
     <div class="container-fluid">
         <div class="row">
 
-            <div class="col-xl-8 col-lg-7 bg-color-white">
+            <div class="col-xl-8 col-lg-8 bg-color-white">
 
                 <div class="shadow-lg  shadow-showcase">
                     <div class="card">
@@ -82,9 +82,11 @@
                                                             <div class="form-group col-md-12">
                                                                 <div class="checkbox">
                                                                     <label>
-                                                                        <input id="is_activated" name="is_activated" class="mr-2" type="checkbox"
+                                                                        <input id="is_activated" name="is_activated"
+                                                                            class="mr-2" type="checkbox"
                                                                             class="form-control @error('is_activated') is-invalid @enderror"
-                                                                            value="1" {{ old('is_activated', $product?->is_activated) ? 'checked' : '' }}>
+                                                                            value="1"
+                                                                            {{ old('is_activated', $product?->is_activated) ? 'checked' : '' }}>
                                                                         Activado
                                                                     </label>
                                                                 </div>
@@ -92,10 +94,10 @@
                                                             </div>
                                                             <div class="col-md-12">
 
-                                                                <div class="form-group row">
+                                                                <div class="form-group  row">
                                                                     <label
                                                                         class="control-label col-sm-4 align-self-center"
-                                                                        for="brand">Selecciona una Marca</label>
+                                                                        for="brand">Marca</label>
                                                                     <div class="col-sm-8">
                                                                         <select id="brand" name="brand_id"
                                                                             class="form-control">
@@ -115,7 +117,7 @@
                                                                 <div class="form-group row">
                                                                     <label
                                                                         class="control-label col-sm-4 align-self-center"
-                                                                        for="model">Selecciona un Modelo:</label>
+                                                                        for="model">Modelo:</label>
                                                                     <div class="col-sm-8">
                                                                         <select id="model" name="model_id"
                                                                             class="form-control" name="model">
@@ -190,9 +192,56 @@
                                                                 <div class="form-group row">
                                                                     <label
                                                                         class="control-label col-sm-4 align-self-center"
+                                                                        for="brand">Selccionar Moneda</label>
+                                                                    <div class="col-sm-8">
+                                                                        <select id="brand" name="brand_id"
+                                                                            class="form-control">
+                                                                            <option value="" disabled selected>
+                                                                                Seleccionar la moneda </option>
+                                                                            @foreach ($currencies as $currency)
+                                                                                <option
+                                                                                    value="{{ $currency->currency_id }}"
+                                                                                    @if ($currency->currency->code == $product->code_currency_default) selected @endif>
+                                                                                    {{ $currency->currency->code }}
+                                                                                </option>
+                                                                            @endforeach
+                                                                        </select>
+                                                                        <small style="color: grey;">Moneda por defecto
+                                                                            para la venta del producto</small>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-sm-12">
+                                                                <div class="form-group row">
+                                                                    <label
+                                                                        class="control-label col-sm-4 align-self-center"
+                                                                        for="reservas">Otras Monedas</label>
+                                                                    <div class="col-sm-8">
+                                                                        <select id="multiple"
+                                                                            name="currencies_products[]"
+                                                                            data-placeholder="Seleccione las monedas para la venta del prodcuto"
+                                                                            class="form-control" multiple="multiple"
+                                                                            style="width: 100%">
+                                                                            @foreach ($currencies as $currency)
+                                                                                <option
+                                                                                    value="{{ $currency->currency_id }}"
+                                                                                    @if ($currency->currency->code == $product->code_currency_default) selected @endif>
+                                                                                    {{ $currency->currency->code }}
+                                                                                </option>
+                                                                            @endforeach
+                                                                        </select>
+                                                                        <small style="color: grey;"> Ejemplo: MN, USD,
+                                                                            MLC</small>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-12">
+                                                                <div class="form-group row">
+                                                                    <label
+                                                                        class="control-label col-sm-4 align-self-center"
                                                                         for="normal-price">Precio de compra ($)</label>
                                                                     <div class="col-sm-8">
-                                                                        <input type="text" class="form-control"
+                                                                        <input type="number" class="form-control"
                                                                             id="purchase_price" name="purchase_price"
                                                                             placeholder=""
                                                                             value="{{ old('purchase_price', $product?->purchase_price) }}">
@@ -205,7 +254,7 @@
                                                                         class="control-label col-sm-4 align-self-center"
                                                                         for="normal-price">Precio de venta ($)</label>
                                                                     <div class="col-sm-8">
-                                                                        <input type="text" class="form-control"
+                                                                        <input type="number" class="form-control"
                                                                             id="sale_price" name="sale_price"
                                                                             placeholder=""
                                                                             value="{{ old('sale_price', $product?->sale_price) }}">
@@ -219,7 +268,7 @@
                                                                         for="discount-price">Precio rebajado
                                                                         ($)</label>
                                                                     <div class="col-sm-8">
-                                                                        <input type="text" class="form-control"
+                                                                        <input type="number" class="form-control"
                                                                             id="discounted_price"
                                                                             name="discounted_price" placeholder=""
                                                                             value="{{ old('discounted_price', $product?->discounted_price) }}">
@@ -268,7 +317,50 @@
                                                                             id="cancel-link">Cancelar</a>
                                                                     </div>
                                                                 </div>
+                                                            </div>
+                                                            <div class=" p-3">
+                                                                <h6>Margen de ganancia</h6>
+                                                            </div>
 
+                                                            <div class="col-md-12">
+                                                                <div class="form-group row">
+                                                                    <label
+                                                                        class="control-label col-sm-4 align-self-center"
+                                                                        for="discount-price">Porcentaje</label>
+
+                                                                    <div class="col-sm-8 input-group mb-4">
+                                                                        <input type="number" class="form-control"
+                                                                            id="profit_margin_percentage"
+                                                                            name="profit_margin_percentage"
+                                                                            placeholder="Porcentaje de Ganancia"
+                                                                            aria-label="Recipient's username"
+                                                                            aria-describedby="basic-addon2">
+                                                                        <div class="input-group-append">
+                                                                            <span class="input-group-text"
+                                                                                id="basic-addon2">%</span>
+                                                                        </div>
+                                                                    </div>
+
+                                                                </div>
+                                                            </div>
+
+
+
+                                                            <div class="col-md-12">
+                                                                <div class="form-group row">
+                                                                    <label
+                                                                        class="control-label col-sm-4 align-self-center"
+                                                                        for="discount-price">Cantidad</label>
+
+                                                                    <div class="col-sm-8 input-group mb-4">
+                                                                        <div class="input-group-prepend">
+                                                                            <span class="input-group-text">$</span>
+                                                                        </div>
+                                                                        <input type="number" class="form-control"
+                                                                            id="profit_amount" name="profit_amount"
+                                                                            placeholder="Cantidad de ganancia en dinero">
+                                                                    </div>
+                                                                </div>
                                                             </div>
                                                         </div>
                                                         <div class="tab-pane fade" id="mail-snoozed" role="tabpanel">
@@ -328,7 +420,7 @@
                                                                                 id="quantity_available"
                                                                                 name="quantity_available"
                                                                                 placeholder="" min="0"
-                                                                                value="{{ old('quantity_available', ($product->stocks()->max('quantity_available')) ?: '0') }}">
+                                                                                value="{{ old('quantity_available', $product->stocks()->max('quantity_available') ?: '0') }}">
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -360,7 +452,7 @@
                                                                                 id="minimum-stock"
                                                                                 name="minimum_quantity" placeholder=""
                                                                                 min="0"
-                                                                                value="{{ old('minimum_quantity', ($product->stocks()->max('minimum_quantity')) ?: '0') }}" >
+                                                                                value="{{ old('minimum_quantity', $product->stocks()->max('minimum_quantity') ?: '0') }}">
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -483,11 +575,8 @@
                                                                     <div class="col-sm-8">
                                                                         <input type="number" class="form-control"
                                                                             id="max-stock" placeholder=""
-                                                                            min="0"
-                                                                            name="maximum_quantity"
-                                                                            value="{{ old('maximum_quantity', ($product->stocks()->max('maximum_quantity')) ?: '0') }}"
-
-                                                                          >
+                                                                            min="0" name="maximum_quantity"
+                                                                            value="{{ old('maximum_quantity', $product->stocks()->max('maximum_quantity') ?: '0') }}">
 
                                                                     </div>
                                                                 </div>
@@ -584,7 +673,7 @@
 
             </div>
 
-            <div class="col-xl-4 col-lg-5">
+            <div class="col-xl-4 col-lg-4">
                 <div class="shadow-lg  shadow-showcase">
                     <div class="container-fluid">
                         <div class="row">
@@ -602,11 +691,12 @@
                                             <tr data-id="2" data-parent="1" data-level="1">
                                                 <td>
                                                     <button type="submit" class="btn btn-primary">
-                                                        @if(isset($product) && $product->exists)
-                                                        Actualizar Producto
-                                                    @else
-                                                        Adicionar Producto
-                                                    @endif</button>
+                                                        @if (isset($product) && $product->exists)
+                                                            Actualizar Producto
+                                                        @else
+                                                            Adicionar Producto
+                                                        @endif
+                                                    </button>
                                                 </td>
                                             </tr>
 
@@ -635,7 +725,8 @@
                                                                     alt="profile-pic" id="image-preview">
                                                                 <input id="outstanding_image" name="outstanding_image"
                                                                     class="file-upload" type="file"
-                                                                    accept="image/*" value=" {{ old('outstanding_image', $product?->outstanding_image) }}">
+                                                                    accept="image/*"
+                                                                    value=" {{ old('outstanding_image', $product?->outstanding_image) }}">
 
                                                             </div>
                                                             <div class="img-extension mt-3">
@@ -796,3 +887,121 @@
     </div>
 
 </div>
+
+@section('js')
+    <script>
+        $(document).ready(function() {
+    const $purchase = $('#purchase_price');
+    const $sale = $('#sale_price');
+    const $discounted = $('#discounted_price');
+    const $profitPerc = $('#profit_margin_percentage');
+    const $profitAmt = $('#profit_amount');
+
+    // Función central que calcula según qué campo fue modificado
+    function calcularDesdeCampo(modificado) {
+        // Obtener valores
+        const purchase = parseFloat($purchase.val()) || 0;
+        const sale = parseFloat($sale.val()) || 0;
+        const discount = parseFloat($discounted.val()) || 0;
+        const perc = parseFloat($profitPerc.val()) || 0;
+        const amount = parseFloat($profitAmt.val()) || 0;
+
+        // Si todos en realidad están en cero, solo pone en cero los que corresponda
+        if (purchase > 0 && !sale && !discount && perc === 0 && amount === 0) {
+            // Solo hay precio de compra, dejamos todo en cero menos ese
+            $('#sale_price, #discounted_price, #profit_margin_percentage, #profit_amount').val('');
+            return;
+        }
+
+        // Función para limpiar campos que no corresponden a la acción
+        function limpiarOtros() {
+            if (modificado !== 'sale') $sale.val('');
+            if (modificado !== 'discounted') $discounted.val('');
+            if (modificado !== 'profit_margin_percentage') $profitPerc.val('');
+            if (modificado !== 'profit_amount') $profitAmt.val('');
+        }
+
+        // Prioridad: si hay precio rebajado, usar ese
+        if (discount > 0 && purchase > 0 && (modificado === 'discounted' || modificado === 'purchase')) {
+            // Calcula porcentaje y ganancia
+            const profitPerc = ((discount - purchase) / purchase) * 100;
+            const profitAmt = discount - purchase;
+            $profitPerc.val(profitPerc.toFixed(2));
+            $profitAmt.val(profitAmt.toFixed(2));
+            // Si hay precio de venta, también debe ajustarse
+            if (sale > 0 && modificado !== 'sale') {
+                // Actualizar precio de venta en base al descuento
+                $sale.val(discount.toFixed(2));
+            }
+            return;
+        }
+
+        // Si no, si hay precio de venta y no es cero
+        if (sale > 0 && purchase > 0 && (modificado === 'sale' || modificado === 'purchase')) {
+            // calcular porcentaje y ganancia
+            const profitPerc = ((sale - purchase) / purchase) * 100;
+            const profitAmt = sale - purchase;
+            $profitPerc.val(profitPerc.toFixed(2));
+            $profitAmt.val(profitAmt.toFixed(2));
+            // si hay rebaja, también ajustarla
+            if (discount > 0 && modificado !== 'discounted') {
+                $discounted.val(sale.toFixed(2));
+            }
+            return;
+        }
+
+        // Si modificaron el porcentaje de ganancia y hay precio de compra
+        if (purchase > 0 && perc > 0 && modificado === 'profit_margin_percentage') {
+            const profitAmt = (purchase * perc) / 100;
+            let nuevoPrecioVenta = purchase + profitAmt;
+            $sale.val(nuevoPrecioVenta.toFixed(2));
+            $profitAmt.val(profitAmt.toFixed(2));
+            // Si hay rebaja, también ajustarla
+            if (discount > 0) {
+                $discounted.val(nuevoPrecioVenta.toFixed(2));
+            }
+            return;
+        }
+
+        // Si modifican el valor en dinero y hay precio de compra
+        if (purchase > 0 && amount > 0 && modificado === 'profit_amount') {
+            const nuevoPrecioVenta = purchase + amount;
+            const nuevoPerc = (amount / purchase) * 100;
+            $sale.val(nuevoPrecioVenta.toFixed(2));
+            $profitPerc.val(nuevoPerc.toFixed(2));
+            $profitAmt.val(amount.toFixed(2));
+            // Si hay rebaja, también ajustarla
+            if (discount > 0) {
+                $discounted.val(nuevoPrecioVenta.toFixed(2));
+            }
+            return;
+        }
+
+        // Caso: si no hay precio rebajado, pero hay precio de venta
+        if (sale > 0 && !discount && purchase > 0 && (modificado === 'sale' || modificado === 'purchase')) {
+            const profitPerc = ((sale - purchase) / purchase) * 100;
+            const profitAmt = sale - purchase;
+            $profitPerc.val(profitPerc.toFixed(2));
+            $profitAmt.val(profitAmt.toFixed(2));
+            return;
+        }
+
+        // Caso: si borraste todo y nada más, limpiar todo menos precio de compra
+        if (purchase > 0 && sale === 0 && discount === 0 && perc === 0 && amount === 0) {
+            $('#sale_price, #discounted_price, #profit_margin_percentage, #profit_amount').val('');
+            return;
+        }
+    }
+
+    // Eventos
+    $purchase.on('input', () => { calcularDesdeCampo('purchase'); });
+    $sale.on('input', () => { calcularDesdeCampo('sale'); });
+    $discounted.on('input', () => { calcularDesdeCampo('discounted'); });
+    $profitPerc.on('input', () => { calcularDesdeCampo('profit_margin_percentage'); });
+    $profitAmt.on('input', () => { calcularDesdeCampo('profit_amount'); });
+
+    // Cálculos iniciales
+    calcularDesdeCampo('purchase');
+});
+    </script>
+@endsection

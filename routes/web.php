@@ -40,6 +40,7 @@ use App\Http\Controllers\PersonController;
 use App\Http\Controllers\PersonStatusController;
 use App\Http\Controllers\ProductCategoryController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\ProductCurrencyPriceController;
 use App\Http\Controllers\ProductDeliveryZoneController;
 use App\Http\Controllers\ProductImageController;
 use App\Http\Controllers\ProductProductCategoryController;
@@ -121,10 +122,6 @@ Route::get('/user/register', [RegisteredUserController::class, 'thankYou'])->nam
 Route::post('/verify-email', [RegisteredUserController::class, 'verifyEmail'])->name('verifyEmail');
 Route::middleware('auth')->group(function () {
 
-
-    //------------------generado por el crud -----
-    Route::middleware('auth')->group(function () {
-
         Route::resource('admin/countries', CountryController::class);
         Route::resource('admin/contacts', ContactController::class);
         Route::resource('admin/provinces', ProvinceController::class);
@@ -140,7 +137,7 @@ Route::middleware('auth')->group(function () {
         Route::resource('admin/business-certifications', BusinessCertificationController::class);
         Route::resource('admin/tags', TagController::class);
         Route::post('/admin/tags/add', [TagController::class, 'addTags'])->name('tags.add');
-
+        Route::resource('product-currency-prices', ProductCurrencyPriceController::class);
 
         Route::resource('admin/product-categories', ProductCategoryController::class);
         Route::resource('admin/warehouses', WarehouseController::class);
@@ -182,7 +179,7 @@ Route::middleware('auth')->group(function () {
         Route::resource('admin/orders', OrderController::class);
         Route::resource('admin/order-products', OrderProductController::class);
         Route::resource('admin/municipalities', MunicipalityController::class);
-    });
+
 
 
 
@@ -204,7 +201,7 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     //---------nuevas rutas
-   // Route::resource('people', PersonController::class);
+    // Route::resource('people', PersonController::class);
 });
 
 Route::get('/user/dashboard', function () {
@@ -224,8 +221,8 @@ Route::get('/app/menu/categories', [NavbarController::class, 'getMenuItemsCatego
 Route::get('/cart/show/info', [CartController::class, 'showInfoCart'])->name('cart.showCart');
 Route::get('/products/checkout/{iddomicilio}', [HomeController::class,  'checkout'])->name('product.checkout');
 Route::get('/products/detailsproduct/{id}', [HomeController::class,  'detailsProduct'])->name('product.detailsproduct');
-Route::get('/products/exchangeRates/{currency}',[HomeController::class, 'productsExchangeRates']);
-Route::post('/products/exchangeRates',[ProductController::class, 'getProductExchangeRate']);
+Route::get('/products/exchangeRates/{currency}', [HomeController::class, 'productsExchangeRates']);
+Route::post('/products/exchangeRates', [ProductController::class, 'getProductExchangeRate']);
 Route::post('/products/exchangeRateProduct', [HomeController::class,  'exchangeRateProduct'])->name('product.exchangeRateProduct');
 Route::get('/contact', [HomeController::class, 'contact']);
 Route::get('/customer-service', [HomeController::class, 'customerservice']);

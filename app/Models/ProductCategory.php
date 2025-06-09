@@ -34,7 +34,7 @@ class ProductCategory extends Model
      *
      * @var array<int, string>
      */
-    protected $fillable = ['name', 'short_code', 'description', 'category_parent', 'path_image', 'is_activated', 'exchange_rates', 'code_currency_default'];
+    protected $fillable = ['name', 'short_code', 'description', 'category_parent_name', 'path_image', 'is_activated', 'exchange_rates', 'code_currency_default'];
 
 
     /**

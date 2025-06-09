@@ -39,6 +39,7 @@ class ProductCategoryController extends Controller
      */
     public function store(ProductCategoryRequest $request): RedirectResponse
     {
+
         // Obtener datos validados
         $data = $request->validated();
         $data['is_activated'] = $request->has('is_activated') ? 1 : 0;
@@ -52,20 +53,6 @@ class ProductCategoryController extends Controller
         if ($request->hasFile('path_image')) {
             $data['path_image'] = upload_image($request->file('path_image'));
         }
-
-        // Capturar el arreglo de monedas y la moneda por defecto
-        $currencyArray = json_decode($request->input('currencyArray'), true);
-        $codeCurrencyDefault = $request->input('code_currency_default');
-
-        // Inicializar el arreglo exchangeRates
-        $exchangeRates = [];
-        foreach ($currencyArray as $currency) {
-            $exchangeRates[$currency] = $request->input($currency);
-        }
-
-        // Almacenar las tasas de cambio en el arreglo de datos
-        $data['exchange_rates'] = json_encode([$codeCurrencyDefault => $exchangeRates]); // Convierte a JSON
-
         // Crear el ProductCategory
         ProductCategory::create($data);
 

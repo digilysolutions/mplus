@@ -1022,6 +1022,25 @@ class HomeController extends Controller
             'currency' => $currency,
         ];
     }
+    //convertir el precio para cuando la tasa de cmabio la tenga las categorias
+    public function convertPrice_Categories(Product $product, $currency)
+    {
+        $exchangeRates = json_decode($product->categories[0]->exchange_rates, true);
+        if (isset($exchangeRates[$product->categories[0]->code_currency_default]) && isset($exchangeRates[$product->categories[0]->code_currency_default][$currency])) {
+            $conversionRate = $exchangeRates[$product->categories[0]->code_currency_default][$currency];
+            $convertedPrice = round($product->sale_price * $conversionRate, 2);
+            $convertedDiscountPrice = round($product->discounted_price * $conversionRate, 2);
+        } else {
+            $convertedPrice = $product->sale_price;
+            $convertedDiscountPrice = $product->discounted_price;
+        }
+
+        return [
+            'converted_price' => $convertedPrice,
+            'converted_discount_price' => $convertedDiscountPrice,
+            'currency' => $currency,
+        ];
+    }
 
 
     public function productsExchangeRatesCurrency($currency)

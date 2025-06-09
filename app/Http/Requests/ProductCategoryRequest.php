@@ -23,10 +23,9 @@ class ProductCategoryRequest extends FormRequest
     {
         return [
 			'name' => 'required|string',
+            'category_parent_name'=>'string',
 			'short_code' => 'string',
-			'description' => 'string',
-            'currencyArray'=>'required',
-			'code_currency_default' => 'string',
+			'description' => 'string'
         ];
     }
     public function messages()
