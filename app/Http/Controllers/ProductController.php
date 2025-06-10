@@ -109,6 +109,11 @@ class ProductController extends Controller
             $imagePath = upload_image($request->file('outstanding_image'));
             $data['outstanding_image'] =  $imagePath;
 
+
+
+
+
+
             // Convertir is_activated a un valor entero (1 o 0)
             $data['is_activated'] = $request->has('is_activated') ? 1 : 0;
             $data['enable_stock'] = isset($data['enable_stock']) && $data['enable_stock'] == 'on' ? 1 : 0;
@@ -176,8 +181,6 @@ class ProductController extends Controller
             } else {
                 $data['enable_delivery'] = false; // No hay delivery zones, deshabilitamos la entrega
             }
-
-
 
             // Manejo de categorías
             $product->categories()->attach($data['category_id']);
@@ -369,8 +372,9 @@ class ProductController extends Controller
         $brands = Brand::allActivated();
         $deliveryZones = DeliveryZone::allActivated();
         $units = Unit::allActivated();
+        $currencies = CountryCurrency::allActivated();
 
-        return view('product.edit', compact('product', 'units', 'categories', 'attributes', 'brands', 'deliveryZones'));
+        return view('product.edit', compact('currencies','product', 'units', 'categories', 'attributes', 'brands', 'deliveryZones'));
     }
 
     /**
