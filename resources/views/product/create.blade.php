@@ -791,8 +791,9 @@
         $(document).ready(function() {
 
             const addModelEndpoint = '/admin/model/add '; // Cambia por la URL correcta para agregar un modelo
+            const addBrandEndpoint = '/admin/brand/add ';
 
-            $('#brand').change(function() {
+           function ShowModel() {
                 $('#add-model-container').show();
                 // Obtiene los modelos de la opción seleccionada
                 const models = $(this).find(':selected').data('models');
@@ -810,10 +811,14 @@
                     // Si no hay modelos, puedes optar por dejar solo el valor por defecto
                     $('#model').append('<option value="" disabled>No hay modelos disponibles</option>');
                 }
+            }
+            $('#brand').change(function() {
+                this.ShowModel();
             });
 
+
             // Manejo de la acción de agregar un nuevo modelo
-            $('#addModelBand').on('click', function(e) {
+            $('#addModel').on('click', function(e) {
                 e.preventDefault(); // Detiene el envío del formulario
 
                 const newModelName = $('#newModel').val();
@@ -847,6 +852,44 @@
                     },
                     error: function(xhr, status, error) {
                         console.error('Error al agregar el modelo:', error);
+                    }
+                });
+            });
+            // Manejo de la acción de agregar una nueva  Marca
+            $('#addModelBrand').on('click', function(e) {
+                e.preventDefault(); // Detiene el envío del formulario
+
+                const newBrandName = $('#newBrand').val();
+
+
+
+                // Realiza una solicitud AJAX para agregar el nuevo modelo
+                $.ajax({
+                    url: addBrandEndpoint, // asegúrate de que esta URL sea igual a la ruta definida
+                    type: 'POST',
+                    data: {
+                        name: newBrandName,
+                        _token: $('meta[name="csrf-token"]').attr(
+                            'content') // Asegúrate de tener el token CSRF
+                    },
+                    success: function(data) {
+
+                        // Cierra el modal
+                        $('#addBrandModal').modal('hide');
+
+                        // Añade la nueva marca al select
+                        const brandSelect = $('#brand');
+                        brandSelect.append(
+                            `<option value="${data.brand.data.id}">${data.brand.data.name}</option>`
+                        );
+                        brandSelect.val(data.brand.data.id); // Selecciona el nuevo modelo
+
+                        // Limpia el campo de nuevo modelo
+                        $('#newBrand').val('');
+                        ShowModel();
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Error al agregar la marca:', error);
                     }
                 });
             });
