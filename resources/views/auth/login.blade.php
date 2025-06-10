@@ -53,7 +53,7 @@
                                     <div class="col-lg-7 align-self-center">
 
                                         <div class="p-3">
-                                            <h2 class="mb-5">Iniciar Sesión2</h2>
+                                            <h2 class="mb-5">Iniciar Sesión</h2>
                                             <form method="POST" action="{{ route('login') }}">
                                                 @csrf
 
