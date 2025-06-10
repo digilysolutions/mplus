@@ -289,7 +289,7 @@
                                                                         class="control-label col-sm-4 align-self-center"
                                                                         for="normal-price">Precio de compra ($)</label>
                                                                     <div class="col-sm-8">
-                                                                        <input type="number" class="form-control"
+                                                                        <input type="text" class="form-control"
                                                                             id="purchase_price" name="purchase_price"
                                                                             placeholder=""
                                                                             value="{{ old('purchase_price', $product?->purchase_price) }}">
