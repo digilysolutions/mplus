@@ -22,7 +22,7 @@ return new class extends Migration
             $table->double('exchange_rate')->nullable()->default(0);//Tasa de cambio
             $table->boolean('code_currency_default')->nullable()->default(false); //codigo de la moneda por defecto para la tasa de cambio
             $table->boolean('is_activated')->nullable()->default(true);
-
+            $table->char('code',3); // nombre corto de la moneda (EUR, USD, MN, MLC, )
             $table->timestamps();
         });
     }

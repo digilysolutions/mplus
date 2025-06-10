@@ -11,6 +11,7 @@ use App\Models\Brand;
 use App\Models\CountryCurrency;
 use App\Models\DeliveryZone;
 use App\Models\ProductCategory;
+use App\Models\ProductCurrencyPrice;
 use App\Models\Stock;
 use App\Models\Tag;
 use App\Models\Unit;
@@ -42,9 +43,9 @@ class ProductController extends Controller
         $brands = Brand::allActivated();
         $deliveryZones = DeliveryZone::allActivated();
         $units = Unit::allActivated();
-          $currencies = CountryCurrency::allActivated();
+        $currencies = CountryCurrency::allActivated();
 
-        return view('product.create', compact('product', 'currencies','units', 'categories', 'attributes', 'brands', 'deliveryZones'));
+        return view('product.create', compact('product', 'currencies', 'units', 'categories', 'attributes', 'brands', 'deliveryZones'));
     }
 
     /**
@@ -87,8 +88,14 @@ class ProductController extends Controller
                 'unit_id', //ok
                 'enable_delivery', //ok
                 'is_activated', //ok
+                'code_currency_default',
+                'currencies_products',
+                'profit_margin_percentage',
+                'profit_amount',
+                'currency_id'
             ]
         );
+
         DB::beginTransaction();
         try {
 
@@ -134,7 +141,31 @@ class ProductController extends Controller
                 unset($data['expiry_period']);
             }
 
-            // Verificar las deliveryZones
+            // Obtenemos el array de monedas desde la request
+
+
+            if (isset($data['currency_id']) && !empty($data['expiration_date'])) {
+                $currency = CountryCurrency::where('currency_id', $data['currency_id'])->first();
+            } else {
+                $currency = CountryCurrency::where('code_currency_default', true)->first();
+            }
+
+            $data['code_currency_default'] = $currency->currency->code;
+
+            // Obtén la moneda default (por ejemplo, del request o de alguna lógica)
+            $codeCurrencyDefault = $currency->currency->code; // o de otra fuente
+
+            // Después, en la lógica de crear el producto:
+            $currencies = $request->input('currencies_products', []);
+
+            $filteredCurrencies = array_filter($currencies, function ($currency) use ($codeCurrencyDefault) {
+                return $currency !== $codeCurrencyDefault;
+            });
+
+            // Asignar en $data
+            $data['supported_currencies'] = $filteredCurrencies;
+
+
 
             // Crea el producto
             $product = Product::create($data);
@@ -182,6 +213,21 @@ class ProductController extends Controller
                 // Luego puedes adjuntarlos a la relación
                 $product->terms()->attach($termsIds);
             }
+
+
+
+            $price = new ProductCurrencyPrice();
+            $price->product()->associate($product); // O $price->product_id = $productId;
+            $price->currency_id = $currency->id; // O $price->currency_id = $currencyId;
+            $price->purchase_price = $data['purchase_price'];
+            $price->sale_price = $data['sale_price']; // Si lo usas
+            $price->discount_price = $data['discounted_price'] ?? null;
+            $price->profit_margin_percentage = $data['profit_margin_percentage'];
+            $price->profit_amount = $data['profit_amount'];
+
+            $price->save();
+
+
             DB::commit();
             return Redirect::route('products.index')
                 ->with('success', 'Producto ' . __('validation.attributes.successfully_created'));
@@ -232,9 +278,10 @@ class ProductController extends Controller
         }
         return $productsCollection;
         // Retornar la colección de productos junto con la moneda
-        return   ['products' => $productsCollection,
-                'currency' => $data['currency']
-            ];
+        return   [
+            'products' => $productsCollection,
+            'currency' => $data['currency']
+        ];
     }
 
 
@@ -244,6 +291,8 @@ class ProductController extends Controller
     public function show($id): View
     {
         $product = Product::find($id);
+
+
         $productCategories = Product::with('categories')->findOrFail($id);
         $productTerms = Product::with(['terms.attribute'])->findOrFail($id);
         // Obtener la cantidad de productos en la primera categoría del producto (si el producto tiene varias categorías)

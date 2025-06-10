@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Models;
+
 use Ramsey\Uuid\Uuid;
 
 use Illuminate\Database\Eloquent\Model;
@@ -62,13 +63,15 @@ class Product extends Model
 {
 
     protected $perPage = 20;
-
+    protected $casts = [
+        'supported_currencies' => 'array',
+    ];
     /**
      * The attributes that are mass assignable.
      *
      * @var array<int, string>
      */
-    protected $fillable = ['name', 'sku', 'description', 'description_small', 'outstanding_image', 'code_currency_default', 'expiration_date', 'expiry_period_type', 'expiry_period', 'purchase_price', 'sale_price', 'discounted_price', 'start_date_discounted_price', 'end_date_discounted_price', 'enable_delivery', 'enable_reservation', 'views', 'sales', 'weight', 'height', 'width', 'length', 'enable_stock', 'enable_variations', 'brand_id', 'model_id', 'unit_id', 'is_activated'];
+    protected $fillable = ['name', 'sku', 'description', 'description_small', 'outstanding_image', 'code_currency_default', 'expiration_date', 'expiry_period_type', 'expiry_period', 'purchase_price', 'sale_price', 'discounted_price', 'start_date_discounted_price', 'end_date_discounted_price', 'enable_delivery', 'enable_reservation', 'views', 'sales', 'weight', 'height', 'width', 'length', 'enable_stock', 'enable_variations', 'brand_id', 'model_id', 'unit_id', 'is_activated', 'supported_currencies'];
 
     public function categories()
     {
@@ -201,5 +204,4 @@ class Product extends Model
     {
         return $this->hasMany(\App\Models\Stock::class, 'product_id');
     }
-
 }

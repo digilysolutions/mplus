@@ -194,7 +194,7 @@
                                                                         class="control-label col-sm-4 align-self-center"
                                                                         for="brand">Selccionar Moneda</label>
                                                                     <div class="col-sm-8">
-                                                                        <select id="brand" name="brand_id"
+                                                                        <select id="currency_id" name="currency_id"
                                                                             class="form-control">
                                                                             <option value="" disabled selected>
                                                                                 Seleccionar la moneda </option>
@@ -224,7 +224,7 @@
                                                                             style="width: 100%">
                                                                             @foreach ($currencies as $currency)
                                                                                 <option
-                                                                                    value="{{ $currency->currency_id }}"
+                                                                                    value="{{ $currency->currency->code }}"
                                                                                     @if ($currency->currency->code == $product->code_currency_default) selected @endif>
                                                                                     {{ $currency->currency->code }}
                                                                                 </option>
@@ -254,7 +254,7 @@
                                                                         class="control-label col-sm-4 align-self-center"
                                                                         for="normal-price">Precio de venta ($)</label>
                                                                     <div class="col-sm-8">
-                                                                        <input type="number" class="form-control"
+                                                                        <input type="text" class="form-control"
                                                                             id="sale_price" name="sale_price"
                                                                             placeholder=""
                                                                             value="{{ old('sale_price', $product?->sale_price) }}">
@@ -268,7 +268,7 @@
                                                                         for="discount-price">Precio rebajado
                                                                         ($)</label>
                                                                     <div class="col-sm-8">
-                                                                        <input type="number" class="form-control"
+                                                                        <input type="text" class="form-control"
                                                                             id="discounted_price"
                                                                             name="discounted_price" placeholder=""
                                                                             value="{{ old('discounted_price', $product?->discounted_price) }}">
@@ -329,12 +329,11 @@
                                                                         for="discount-price">Porcentaje</label>
 
                                                                     <div class="col-sm-8 input-group mb-4">
-                                                                        <input type="number" class="form-control"
+                                                                        <input type="text" class="form-control"
                                                                             id="profit_margin_percentage"
                                                                             name="profit_margin_percentage"
                                                                             placeholder="Porcentaje de Ganancia"
-                                                                            aria-label="Recipient's username"
-                                                                            aria-describedby="basic-addon2">
+                                                                           >
                                                                         <div class="input-group-append">
                                                                             <span class="input-group-text"
                                                                                 id="basic-addon2">%</span>
@@ -356,7 +355,7 @@
                                                                         <div class="input-group-prepend">
                                                                             <span class="input-group-text">$</span>
                                                                         </div>
-                                                                        <input type="number" class="form-control"
+                                                                        <input type="text" class="form-control"
                                                                             id="profit_amount" name="profit_amount"
                                                                             placeholder="Cantidad de ganancia en dinero">
                                                                     </div>
@@ -416,7 +415,7 @@
                                                                             class="control-label col-sm-4 align-self-center"
                                                                             for="quantity">Cantidad</label>
                                                                         <div class="col-sm-8">
-                                                                            <input type="number" class="form-control"
+                                                                            <input type="text" class="form-control"
                                                                                 id="quantity_available"
                                                                                 name="quantity_available"
                                                                                 placeholder="" min="0"
@@ -887,121 +886,3 @@
     </div>
 
 </div>
-
-@section('js')
-    <script>
-        $(document).ready(function() {
-    const $purchase = $('#purchase_price');
-    const $sale = $('#sale_price');
-    const $discounted = $('#discounted_price');
-    const $profitPerc = $('#profit_margin_percentage');
-    const $profitAmt = $('#profit_amount');
-
-    // Función central que calcula según qué campo fue modificado
-    function calcularDesdeCampo(modificado) {
-        // Obtener valores
-        const purchase = parseFloat($purchase.val()) || 0;
-        const sale = parseFloat($sale.val()) || 0;
-        const discount = parseFloat($discounted.val()) || 0;
-        const perc = parseFloat($profitPerc.val()) || 0;
-        const amount = parseFloat($profitAmt.val()) || 0;
-
-        // Si todos en realidad están en cero, solo pone en cero los que corresponda
-        if (purchase > 0 && !sale && !discount && perc === 0 && amount === 0) {
-            // Solo hay precio de compra, dejamos todo en cero menos ese
-            $('#sale_price, #discounted_price, #profit_margin_percentage, #profit_amount').val('');
-            return;
-        }
-
-        // Función para limpiar campos que no corresponden a la acción
-        function limpiarOtros() {
-            if (modificado !== 'sale') $sale.val('');
-            if (modificado !== 'discounted') $discounted.val('');
-            if (modificado !== 'profit_margin_percentage') $profitPerc.val('');
-            if (modificado !== 'profit_amount') $profitAmt.val('');
-        }
-
-        // Prioridad: si hay precio rebajado, usar ese
-        if (discount > 0 && purchase > 0 && (modificado === 'discounted' || modificado === 'purchase')) {
-            // Calcula porcentaje y ganancia
-            const profitPerc = ((discount - purchase) / purchase) * 100;
-            const profitAmt = discount - purchase;
-            $profitPerc.val(profitPerc.toFixed(2));
-            $profitAmt.val(profitAmt.toFixed(2));
-            // Si hay precio de venta, también debe ajustarse
-            if (sale > 0 && modificado !== 'sale') {
-                // Actualizar precio de venta en base al descuento
-                $sale.val(discount.toFixed(2));
-            }
-            return;
-        }
-
-        // Si no, si hay precio de venta y no es cero
-        if (sale > 0 && purchase > 0 && (modificado === 'sale' || modificado === 'purchase')) {
-            // calcular porcentaje y ganancia
-            const profitPerc = ((sale - purchase) / purchase) * 100;
-            const profitAmt = sale - purchase;
-            $profitPerc.val(profitPerc.toFixed(2));
-            $profitAmt.val(profitAmt.toFixed(2));
-            // si hay rebaja, también ajustarla
-            if (discount > 0 && modificado !== 'discounted') {
-                $discounted.val(sale.toFixed(2));
-            }
-            return;
-        }
-
-        // Si modificaron el porcentaje de ganancia y hay precio de compra
-        if (purchase > 0 && perc > 0 && modificado === 'profit_margin_percentage') {
-            const profitAmt = (purchase * perc) / 100;
-            let nuevoPrecioVenta = purchase + profitAmt;
-            $sale.val(nuevoPrecioVenta.toFixed(2));
-            $profitAmt.val(profitAmt.toFixed(2));
-            // Si hay rebaja, también ajustarla
-            if (discount > 0) {
-                $discounted.val(nuevoPrecioVenta.toFixed(2));
-            }
-            return;
-        }
-
-        // Si modifican el valor en dinero y hay precio de compra
-        if (purchase > 0 && amount > 0 && modificado === 'profit_amount') {
-            const nuevoPrecioVenta = purchase + amount;
-            const nuevoPerc = (amount / purchase) * 100;
-            $sale.val(nuevoPrecioVenta.toFixed(2));
-            $profitPerc.val(nuevoPerc.toFixed(2));
-            $profitAmt.val(amount.toFixed(2));
-            // Si hay rebaja, también ajustarla
-            if (discount > 0) {
-                $discounted.val(nuevoPrecioVenta.toFixed(2));
-            }
-            return;
-        }
-
-        // Caso: si no hay precio rebajado, pero hay precio de venta
-        if (sale > 0 && !discount && purchase > 0 && (modificado === 'sale' || modificado === 'purchase')) {
-            const profitPerc = ((sale - purchase) / purchase) * 100;
-            const profitAmt = sale - purchase;
-            $profitPerc.val(profitPerc.toFixed(2));
-            $profitAmt.val(profitAmt.toFixed(2));
-            return;
-        }
-
-        // Caso: si borraste todo y nada más, limpiar todo menos precio de compra
-        if (purchase > 0 && sale === 0 && discount === 0 && perc === 0 && amount === 0) {
-            $('#sale_price, #discounted_price, #profit_margin_percentage, #profit_amount').val('');
-            return;
-        }
-    }
-
-    // Eventos
-    $purchase.on('input', () => { calcularDesdeCampo('purchase'); });
-    $sale.on('input', () => { calcularDesdeCampo('sale'); });
-    $discounted.on('input', () => { calcularDesdeCampo('discounted'); });
-    $profitPerc.on('input', () => { calcularDesdeCampo('profit_margin_percentage'); });
-    $profitAmt.on('input', () => { calcularDesdeCampo('profit_amount'); });
-
-    // Cálculos iniciales
-    calcularDesdeCampo('purchase');
-});
-    </script>
-@endsection

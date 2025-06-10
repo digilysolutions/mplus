@@ -131,6 +131,20 @@
                                     </div>
                                 </li>
                             @endif
+                            @if (isset($product->supported_currencies) && is_array($product->supported_currencies))
+    <li class="mb-2">
+        <div class="d-flex align-items-center">
+            <p class="mb-0">
+                <i class="ri-arrow-right-s-line"></i>
+                <strong>Otras Monedas:</strong>
+                @foreach ($product->supported_currencies as $currency)
+                    <span class="mt-2 badge badge-primary">{{ $currency }}</span>
+                @endforeach
+            </p>
+        </div>
+    </li>
+@endif
+                            
                             @if (isset($product->brand) && $product->brand !== null)
                                 <li class="mb-2">
                                     <div class="d-flex align-items-center">

@@ -28,7 +28,7 @@ class ProductRequest extends FormRequest
             'description_small' => 'string|nullable',
             'code_currency_default' => 'string|nullable',
             'views' => 'integer|nullable',
-            'sales' => 'integer|nullable',
+            'sale_price ' => 'double|nullable',
             'weight' => 'decimal|nullable',
             'height' => 'decimal|nullable',
             'width' => 'decimal|nullable',
@@ -38,11 +38,16 @@ class ProductRequest extends FormRequest
             'unit_id' => 'numeric|nullable',
             'created_at' => 'datetime|nullable',
             'updated_at' => 'datetime|nullable',
-            'category_id' => 'required|numeric'
+            'category_id' => 'required|numeric',
+            'profit_margin_percentage' => 'numeric|nullable',
+            'profit_amount' => 'numeric|nullable',
+            'supported_currencies' => 'array', // lista de monedas seleccionadas
+            'supported_currencies.*' => 'exists:country_currencies,id', // cada ID debe existir en la tabla
+
+
 
 
 
         ];
-
     }
 }

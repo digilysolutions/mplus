@@ -12,7 +12,6 @@
             object-fit: cover;
             display: block;
         }
-
     </style>
 @endsection
 @section('content')
@@ -54,16 +53,26 @@
                                 <button type="button" class="btn btn-sm btn-light dropdown-toggle" data-toggle="dropdown">
                                     <i class="fas fa-money-bill icon-header text-primary"></i>
                                     <span class="selectedCurrency"
-                                        data-product-id="{{ $product->id }}">{{ isset($product->categories) && count($product->categories) > 0 ? $product->categories[0]->code_currency_default : '' }}</span>
+                                        data-product-id="{{ $product->id }}">{{ $product->code_currency_default }}</span>
                                 </button>
-                                <div class="dropdown-menu dropdown-menu-right">
-                                    @foreach ($countryCurrencies as $countryCurrency)
+                                @if (is_array($product->supported_currencies))
+                                    <div class="dropdown-menu dropdown-menu-right">
                                         <button class="dropdown-item" type="button"
-                                            onclick="changeCurrency('{{ $countryCurrency->currency->code }}', {{ $product->id }})">
-                                            <strong class="">{{ $countryCurrency->currency->code }}</strong>
+                                            onclick="changeCurrency('{{ $product->code_currency_default }}', {{ $product->id }})">
+                                            <strong class="">{{ $product->code_currency_default }}</strong>
                                         </button>
-                                    @endforeach
-                                </div>
+
+                                        @foreach ($product->supported_currencies as $countryCurrency)
+                                            @if ($countryCurrency != $product->code_currency_default)
+                                                <button class="dropdown-item" type="button"
+                                                    onclick="changeCurrency('{{ $countryCurrency }}', {{ $product->id }})">
+                                                    <strong class="">{{ $countryCurrency }}</strong>
+                                                </button>
+                                            @endif
+                                        @endforeach
+
+                                    </div>
+                                @endif
                             </div>
                             <a href="{{ route('product.detailsproduct', ['id' => $product->id]) }}"
                                 class="btn btn-sm text-dark "><i class="fas fa-eye text-primary mr-1"></i>Ver
@@ -83,11 +92,7 @@
         </div>
     </div>
     <!-- Products End -->
-
-    
 @endsection
 @section('js')
-    <script>
-        
-    </script>
+    <script></script>
 @endsection

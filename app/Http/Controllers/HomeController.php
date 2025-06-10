@@ -796,7 +796,7 @@ class HomeController extends Controller
         $whatsappUrl = "https://wa.me/$whatsappNumber?text=" . $whatsappMessage;
         return  $whatsappUrl;
     }
-        public function filterProducts(Request $request)
+    public function filterProducts(Request $request)
     {
         $data = $this->getProducts($request);
         $countryCurrencies = $data['countryCurrencies'];
@@ -1006,19 +1006,32 @@ class HomeController extends Controller
     }
     public function convertPrice(Product $product, $currency)
     {
-        $exchangeRates = json_decode($product->categories[0]->exchange_rates, true);
-        if (isset($exchangeRates[$product->categories[0]->code_currency_default]) && isset($exchangeRates[$product->categories[0]->code_currency_default][$currency])) {
-            $conversionRate = $exchangeRates[$product->categories[0]->code_currency_default][$currency];
-            $convertedPrice = round($product->sale_price * $conversionRate, 2);
-            $convertedDiscountPrice = round($product->discounted_price * $conversionRate, 2);
-        } else {
-            $convertedPrice = $product->sale_price;
-            $convertedDiscountPrice = $product->discounted_price;
+       
+        if ($product->code_currency_default == $currency || $product->supported_currencies==null ) {
+            return [
+                'converted_price' => $product->sale_price,
+                'converted_discount_price' => $product->discounted_price,
+                'currency' => $currency,
+            ];
         }
 
+
+        //MOneda destino
+        $exchangeRates = CountryCurrency::where('code', $currency)->first();
+
+        //MOneda Base
+        $baseCurrency  = CountryCurrency::where('code', $product->code_currency_default)->first();
+
+        $rateFrom = $baseCurrency->exchange_rate;      // tasa de la moneda del producto
+        $rateTo = $exchangeRates->exchange_rate;       // tasa de la moneda destino
+        // La fórmula para convertir entre monedas sería:
+        $precioConvertido = ($product->sale_price) * ($rateFrom / $rateTo);
+
+        // Para el precio con descuento:
+        $discountedPrice = ($product->discounted_price) * ($rateFrom / $rateTo);
         return [
-            'converted_price' => $convertedPrice,
-            'converted_discount_price' => $convertedDiscountPrice,
+            'converted_price' => round($precioConvertido, 2),
+            'converted_discount_price' => round($discountedPrice, 2),
             'currency' => $currency,
         ];
     }

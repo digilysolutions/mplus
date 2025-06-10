@@ -41,6 +41,8 @@ class CountryCurrencyController extends Controller
     {
         $data = $request->validated();
         $data['is_activated'] = $request->has('is_activated') ? 1 : 0;
+        $currency =Currency::find( $data['currency_id']);
+        $data['code']= $currency->code;
         CountryCurrency::create($data);
 
         return Redirect::route('country-currencies.index')
@@ -76,6 +78,8 @@ class CountryCurrencyController extends Controller
     {
         $data = $request->all();
        $data['is_activated'] = $request->has('is_activated') ? 1 : 0;
+         $currency =Currency::find( $data['currency_id']);
+        $data['code']= $currency->code;
         $countryCurrency->update($data);
 
         return Redirect::route('country-currencies.index')

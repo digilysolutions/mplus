@@ -56,8 +56,9 @@ class ProductSeeder extends Seeder
                 'is_activated' => true,
                 'unit_id' => $units[array_rand($units)],
                 'enable_delivery' => true,
-                'enable_reservation'=>true,
-
+                'enable_reservation' => true,
+                'supported_currencies' => ["MN", "USD"],
+                'code_currency_default' => 'MN'
 
             ],
             [
@@ -82,7 +83,10 @@ class ProductSeeder extends Seeder
                 'is_activated' => true,
                 'unit_id' => $units[array_rand($units)],
                 'enable_delivery' => true,
-                'enable_reservation'=>false,
+                'enable_reservation' => false,
+                
+                'supported_currencies' => ["MN", "USD"],
+                'code_currency_default' => 'USD'
             ],
             [
                 'name' => 'Sopa Heinz de Tomate',
@@ -95,9 +99,9 @@ class ProductSeeder extends Seeder
                 'expiry_period' => 24, // 24 meses
                 'purchase_price' => 1.99,
                 'sale_price' => 3.60,
-                'discounted_price'=>2.0,
-                'start_date_discounted_price'=> '2025-12-25',
-                'end_date_discounted_price'=> '2025-12-31',
+                'discounted_price' => 2.0,
+                'start_date_discounted_price' => '2025-12-25',
+                'end_date_discounted_price' => '2025-12-31',
                 'weight' => 0.4,
                 'height' => 10.0,
                 'width' => 5.0,
@@ -109,7 +113,8 @@ class ProductSeeder extends Seeder
                 'is_activated' => true,
                 'unit_id' => $units[array_rand($units)],
                 'enable_delivery' => true,
-                'enable_reservation'=>false,
+                'enable_reservation' => false,
+                'code_currency_default' => 'USD'
             ],
             // Agrega más productos según necesites
         ];

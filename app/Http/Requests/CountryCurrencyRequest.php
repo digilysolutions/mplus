@@ -22,8 +22,9 @@ class CountryCurrencyRequest extends FormRequest
     public function rules(): array
     {
         return [
-			'currency_id' => 'required',
-			'country_id' => 'required',
+            'currency_id' => 'required',
+            'country_id' => 'required',
+            'code' => 'nullable',
         ];
     }
 }

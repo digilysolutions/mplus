@@ -17,14 +17,16 @@ class CountryCurrencySeeder extends Seeder
             'country_id' => 1,
             'currency_id' => 29,
             'exchange_rate' => 1,
-            'code_currency_default'=>true
+            'code_currency_default' => true,
+            'code' => 'MN'
         ]);
 
         CountryCurrency::create([
             'country_id' => 1,
             'currency_id' => 2,
             'exchange_rate' => 330,
-            'code_currency_default'=>false
+            'code_currency_default' => false,
+            'code' => 'USD'
         ]);
     }
 }

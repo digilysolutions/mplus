@@ -32,7 +32,7 @@ class CountryCurrency extends Model
      *
      * @var array<int, string>
      */
-    protected $fillable = ['currency_id', 'country_id', 'exchange_rate', 'code_currency_default', 'is_activated'];
+    protected $fillable = ['currency_id', 'country_id', 'exchange_rate', 'code_currency_default','code', 'is_activated'];
 
 
     /**
