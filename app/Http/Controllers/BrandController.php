@@ -84,4 +84,23 @@ class BrandController extends Controller
         return Redirect::route('brands.index')
             ->with('success',__('Brand').  __('validation.attributes.successfully_removed'));
     }
+
+    public function addBrand(Request $request)
+    {
+        // Validar los datos de entrada
+        $request->validate([
+            'name' => 'required|string|max:255'
+        ]);
+
+        // Crear un nuevo modelo usando los datos proporcionados
+        $brandProduct = Brand::create([
+            'name' => $request->name
+        ]);
+        // Retornar una respuesta JSON con los datos del modelo creado
+        return response()->json([
+            'brand' => [
+                'data' => $brandProduct
+            ]
+        ], 201);
+    }
 }
