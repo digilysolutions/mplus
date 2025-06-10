@@ -111,6 +111,54 @@
                                                                                 </option>
                                                                             @endforeach
                                                                         </select>
+                                                                        <div                                                                            >
+                                                                            <a href="#" id="addNewBrandModel"
+                                                                                data-toggle="modal"
+                                                                                data-target="#addBrandModal">+ Añadir
+                                                                                nueva Marca</a>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <!-- Modal para agregar nueva Marca -->
+                                                                <div class="modal fade" id="addBrandModal"
+                                                                    tabindex="-1" role="dialog"
+                                                                    aria-labelledby="addModelModalLabel"
+                                                                    aria-hidden="true">
+                                                                    <div class="modal-dialog" role="document">
+                                                                        <div class="modal-content">
+                                                                            <div class="modal-header">
+                                                                                <h5 class="modal-title"
+                                                                                    id="addModelModalLabel">Añadir
+                                                                                    Nueva marca</h5>
+                                                                                <button type="button" class="close"
+                                                                                    data-dismiss="modal"
+                                                                                    aria-label="Close">
+                                                                                    <span
+                                                                                        aria-hidden="true">&times;</span>
+                                                                                </button>
+                                                                            </div>
+
+                                                                            <div class="modal-body">
+                                                                                <div class="form-group">
+                                                                                    <label for="newBrand">Nombre
+                                                                                        de la Marca</label>
+                                                                                    <input type="text"
+                                                                                        class="form-control"
+                                                                                        id="newBrand"
+                                                                                        placeholder="Ingresa el nombre de la marca">
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="modal-footer">
+                                                                                <button type="button"
+                                                                                    class="btn btn-secondary"
+                                                                                    data-dismiss="modal">Cerrar</button>
+                                                                                <button id="addModelBrand"
+                                                                                    type="button"
+                                                                                    class="btn btn-primary">Guardar
+                                                                                    Modelo</button>
+                                                                            </div>
+
+                                                                        </div>
                                                                     </div>
                                                                 </div>
 
@@ -177,7 +225,7 @@
                                                                                 <button type="button"
                                                                                     class="btn btn-secondary"
                                                                                     data-dismiss="modal">Cerrar</button>
-                                                                                <button id="addModelBand"
+                                                                                <button id="addModel"
                                                                                     type="button"
                                                                                     class="btn btn-primary">Guardar
                                                                                     Modelo</button>
