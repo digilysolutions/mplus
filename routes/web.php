@@ -147,6 +147,7 @@ Route::middleware('auth')->group(function () {
         //modelo del producto
         Route::resource('admin/model-products', ModelProductController::class);
         Route::post('admin/model/add', [ModelProductController::class, 'addModel'])->name('model.add');
+        Route::post('admin/brand/add', [BrandController::class, 'addBrand'])->name('brand.add');
         //Product
         Route::resource('admin/products', ProductController::class);
         Route::get('admin/show-list/{id}', [ProductController::class, 'showList'])->name('products.show-list');
