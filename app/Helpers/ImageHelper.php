@@ -19,7 +19,7 @@ if (!function_exists('upload_image')) {
     function upload_image(?UploadedFile $image): string
     {
         // Definir la ruta de guardado
-        $path = public_path('img/upload');
+        $path = base_path('img/upload');
         // Establece el tamaño deseado
         $desiredWidth = 400; // Ancho deseado
         $desiredHeight = 300; // Alto deseado
