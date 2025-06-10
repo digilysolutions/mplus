@@ -793,7 +793,7 @@
             const addModelEndpoint = '/admin/model/add '; // Cambia por la URL correcta para agregar un modelo
             const addBrandEndpoint = '/admin/brand/add ';
 
-           function ShowModel() {
+            function ShowModel() {
                 $('#add-model-container').show();
                 // Obtiene los modelos de la opción seleccionada
                 const models = $(this).find(':selected').data('models');
@@ -997,20 +997,22 @@
                     return;
                 }
             }
-            // Función para validar que solo ingresen números
+            // Función para validar que solo ingresen números con coma o punto decimal
             function onlyNumber(e) {
                 const valor = e.target.value;
-                if (valor && !/^\d*\.?\d*$/.test(valor)) {
+                // Permitir números con coma o punto decimal
+                const regex = /^\d*(?:[.,]\d*)?$/;
+                if (valor && !regex.test(valor)) {
                     // Mostrar mensaje de advertencia
                     $('#warning_message').show();
-                    $('#warning_message_text').text('Por favor, ingresa solo números.');
+                    $('#warning_message_text').text(
+                        'Por favor, ingresa solo números (pueden incluir coma o punto decimal).');
                     // Opcional: revertir al valor válido anterior o limpiar
                     // e.target.value = ''; // para limpiar
                 } else {
                     $('#warning_message').hide();
                 }
             }
-
             // Eventos
             $purchase.on('input', () => {
                 onlyNumber(event);
