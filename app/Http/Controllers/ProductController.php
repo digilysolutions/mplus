@@ -425,6 +425,11 @@ class ProductController extends Controller
                 'unit_id', //ok
                 'enable_delivery', //ok
                 'is_activated', //ok
+                'code_currency_default',
+                'currencies_products',
+                'profit_margin_percentage',
+                'profit_amount',
+                'currency_id'
             ]
         );
         DB::beginTransaction();
@@ -475,6 +480,29 @@ class ProductController extends Controller
                 unset($data['expiry_period']);
             }
 
+            if (isset($data['currency_id']) && !empty($data['expiration_date'])) {
+                $currency = CountryCurrency::where('currency_id', $data['currency_id'])->first();
+            } else {
+                $currency = CountryCurrency::where('code_currency_default', true)->first();
+            }
+
+
+             $data['code_currency_default'] = $currency->currency->code;
+
+            // Obtén la moneda default (por ejemplo, del request o de alguna lógica)
+            $codeCurrencyDefault = $currency->currency->code; // o de otra fuente
+
+            // Después, en la lógica de crear el producto:
+            $currencies = $request->input('currencies_products', []);
+
+            $filteredCurrencies = array_filter($currencies, function ($currency) use ($codeCurrencyDefault) {
+                return $currency !== $codeCurrencyDefault;
+            });
+
+            // Asignar en $data
+            $data['supported_currencies'] = $filteredCurrencies;
+
+
             // Actualizar los datos en el modelo
             $product->update($data);
 
@@ -509,6 +537,18 @@ class ProductController extends Controller
                 // Luego puedes adjuntarlos a la relación
                 $product->terms()->sync($termsIds);
             }
+
+            $price =$product->currencyPrices[0];
+            $price->product()->associate($product); // O $price->product_id = $productId;
+            $price->currency_id = $currency->id; // O $price->currency_id = $currencyId;
+            $price->purchase_price = $data['purchase_price'];
+            $price->sale_price = $data['sale_price']; // Si lo usas
+            $price->discount_price = $data['discounted_price'] ?? null;
+            $price->profit_margin_percentage = $data['profit_margin_percentage'];
+            $price->profit_amount = $data['profit_amount'];
+
+            $price->update();
+
 
             DB::commit();
             return Redirect::route('products.index')->with('success', 'Producto ' . __('validation.attributes.successfully_updated'));
