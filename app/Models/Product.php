@@ -113,6 +113,10 @@ class Product extends Model
     {
         return $this->belongsTo(\App\Models\Unit::class, 'unit_id', 'id');
     }
+    public function currencyPrices()
+    {
+        return $this->hasMany(\App\Models\ProductCurrencyPrice::class, 'product_id', 'id');
+    }
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany

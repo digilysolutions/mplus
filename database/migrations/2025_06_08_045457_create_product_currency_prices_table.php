@@ -32,8 +32,8 @@ return new class extends Migration
 
             // Margen de ganancia y ganancias
             $table->decimal('profit_margin_percentage', 5, 2)->nullable()->comment('Porcentaje de ganancia sobre costo');
-            $table->decimal('profit_amount', 15, 4)->nullable()->comment('Cantidad de ganancia en dinero');
-            $table->decimal('profit_value', 15, 4)->nullable()->comment('Valor total de ganancia por venta');
+            $table->decimal('profit_amount', 15, 2)->nullable()->comment('Cantidad de ganancia en dinero');
+            $table->decimal('profit_value', 15, 2)->nullable()->comment('Valor total de ganancia por venta');
 
             // Conceptos contables (cuentas)
             $table->string('account_income')->nullable()->comment('Cuenta contable de ingreso');
