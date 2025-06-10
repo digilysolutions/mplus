@@ -51,4 +51,5 @@ if (!function_exists('upload_image')) {
         // Si no hay una imagen, devuelve la imagen por defecto
         return    '/img/upload/no-picture.jpg';
     }
+
 }
