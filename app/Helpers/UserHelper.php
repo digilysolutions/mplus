@@ -49,4 +49,5 @@ class UserHelper
         // Generar una contraseña segura que cumpla los requisitos
         return Str::random(8) . 'A@1'; // Ejemplo simple, modifica según tus necesidades
     }
+
 }
