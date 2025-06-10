@@ -381,7 +381,7 @@
                                                                             id="profit_margin_percentage"
                                                                             name="profit_margin_percentage"
                                                                             placeholder="Porcentaje de Ganancia"
-                                                                            value="{{ old('profit_margin_percentage', $product?->currencyPrices[0]->profit_margin_percentage) }}"
+                                                                            value="{{ old('profit_margin_percentage', optional($product->currencyPrices->first())->profit_margin_percentage)  }}"
                                                                            >
                                                                         <div class="input-group-append">
                                                                             <span class="input-group-text"
@@ -407,7 +407,7 @@
                                                                         <input type="text" class="form-control"
                                                                             id="profit_amount" name="profit_amount"
                                                                             placeholder="Cantidad de ganancia en dinero"
-                                                                               value="{{ old('profit_margin_percentage', $product?->currencyPrices[0]->profit_amount) }}"
+                                                                               value="{{ old('profit_margin_percentage', optional($product->currencyPrices->first())->profit_amount) }}"
                                                                             >
                                                                     </div>
                                                                 </div>
