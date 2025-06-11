@@ -16,6 +16,7 @@ use App\Models\Stock;
 use App\Models\Tag;
 use App\Models\Unit;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
 
@@ -389,12 +390,12 @@ class ProductController extends Controller
         $deliveryZones = DeliveryZone::allActivated();
         $units = Unit::allActivated();
         $currencies = CountryCurrency::allActivated();
-         // Agrupar categorías por su padre
+        // Agrupar categorías por su padre
         $groupedCategories = $categories->groupBy('category_parent_name');
         // Obtener categorías principales (sin padre)
         $mainCategories = $categories->whereNull('category_parent_name');
 
-        return view('product.edit', compact('currencies','groupedCategories','mainCategories', 'product', 'units', 'categories', 'attributes', 'brands', 'deliveryZones'));
+        return view('product.edit', compact('currencies', 'groupedCategories', 'mainCategories', 'product', 'units', 'categories', 'attributes', 'brands', 'deliveryZones'));
     }
 
     /**
@@ -402,179 +403,174 @@ class ProductController extends Controller
      */
     public function update(ProductRequest $request, Product $product): RedirectResponse
     {
-        // Validación de los datos de entrada
         $request->validate([
-            'outstanding_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048', // Tamaño máximo 2MB
-            // Agrega aquí las demás reglas de validación según sea necesario
+            'outstanding_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
+            // más reglas si necesitas
         ]);
 
-        // Cargar el producto que se va a actualizar
-        $product = Product::findOrFail($product->id);
+        $data = $request->only([
+            'name',
+            'sku',
+            'sale_price',
+            'discounted_price',
+            'start_date_discounted_price',
+            'end_date_discounted_price',
+            'quantity_available',
+            'minimum_quantity',
+            'maximum_quantity',
+            'purchase_price',
+            'expiration_date',
+            'expiry_period_type',
+            'expiry_period',
+            'outstanding_image',
+            'description',
+            'description_small',
+            'enable_stock',
+            'brand_id',
+            'terms_id',
+            'enable_reservation',
+            'deliveryZones',
+            'tag_id',
+            'weight',
+            'category_id',
+            'height',
+            'width',
+            'length',
+            'enable_variations',
+            'unit_id',
+            'enable_delivery',
+            'is_activated',
+            'code_currency_default',
+            'currencies_products',
+            'profit_margin_percentage',
+            'profit_amount',
+            'currency_id'
+        ]);
 
-        $data = $request->only(
-            [
-                'name', //OK
-                'sku', //OK
-                'sale_price', //OK
-                'discounted_price', //OK
-                'start_date_discounted_price', //OK
-                'end_date_discounted_price', //OK
-                'quantity_available', //OK
-                'minimum_quantity', //OK
-                'maximum_quantity',
-                'purchase_price', //OK
-                'expiration_date', //OK
-                'expiry_period_type', //ok
-                'expiry_period', //ok
-                'outstanding_image',
-                'description', //OK
-                'description_small', //OK
-                'purchase_price',      //OK
-                'enable_stock', //OK
-                'brand_id', //ok
-                'terms_id', //ok
-                'enable_reservation', //ok
-                'deliveryZones', //ok
-                'tag_id', //OK
-                'weight',
-                'category_id',
-                'height',
-                'width',
-                'length',
-                'enable_variations',
-                'unit_id', //ok
-                'enable_delivery', //ok
-                'is_activated', //ok
-                'code_currency_default',
-                'currencies_products',
-                'profit_margin_percentage',
-                'profit_amount',
-                'currency_id'
-            ]
-        );
         DB::beginTransaction();
+
         try {
-
-            $data['enable_delivery'] = (isset($data['deliveryZones']) && count($data['deliveryZones']) > 0);
-            $data['model_id'] = $request->input('model_id', null);
-            $request->validate([
-                'outstanding_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp' // tamaño máximo 2MB
-            ]);
-
-
-            if ($request->outstanding_image != null) { // Usar el helper para subir la imagen y obtener la ruta
-                $imagePath = upload_image($request->file('outstanding_image'));
-                $data['outstanding_image'] =  $imagePath;
+            // Imagen
+            if ($request->hasFile('outstanding_image')) {
+                $data['outstanding_image'] = upload_image($request->file('outstanding_image'));
             }
 
-
-            // Convertir is_activated a un valor entero (1 o 0)
+            // Flags
             $data['is_activated'] = $request->has('is_activated') ? 1 : 0;
             $data['enable_stock'] = isset($data['enable_stock']) && $data['enable_stock'] == 'on' ? 1 : 0;
             $data['enable_reservation'] = isset($data['enable_reservation']) && $data['enable_reservation'] == 'on' ? 1 : 0;
-            if ($data['sale_price'] === '') {
-                unset($data['sale_price']); // Esto hará que el valor sea nulo en la base de datos
-            }
-            if ($data['discounted_price'] === '') {
-                unset($data['discounted_price']); // Esto hará que el valor sea nulo en la base de datos
-            }
-            if ($data['model_id'] === '') {
-                unset($data['model_id']); // Esto hará que el valor sea nulo en la base de datos
-            }
-            if ($data['start_date_discounted_price'] === '') {
-                unset($data['start_date_discounted_price    ']); // Esto hará que el valor sea nulo en la base de datos
-            }
-            if (empty($data['start_date_discounted_price'])) {
-                unset($data['start_date_discounted_price']);
-            }
-            if (empty($data['end_date_discounted_price'])) {
-                unset($data['end_date_discounted_price']);
-            }
-            if ($data['purchase_price'] === '') {
-                unset($data['purchase_price']); // Esto hará que el valor sea nulo en la base de datos
-            }
-            if (empty($data['expiration_date'])) {
-                unset($data['expiration_date']);
-            }
-            if ($data['expiry_period'] === '') {
-                unset($data['expiry_period']);
+
+            // Convertir vacíos a null
+            foreach (
+                [
+                    'sale_price',
+                    'discounted_price',
+                    'model_id',
+                    'start_date_discounted_price',
+                    'end_date_discounted_price',
+                    'purchase_price',
+                    'expiration_date',
+                    'expiry_period'
+                ] as $field
+            ) {
+                if (isset($data[$field]) && ($data[$field] === '' || $data[$field] === null)) {
+                    $data[$field] = null;
+                }
             }
 
+            // Fechas opcionales
+            if (empty($data['start_date_discounted_price'])) unset($data['start_date_discounted_price']);
+            if (empty($data['end_date_discounted_price'])) unset($data['end_date_discounted_price']);
+            if (empty($data['expiration_date'])) unset($data['expiration_date']);
+
+            // Moneda
             if (isset($data['currency_id'])) {
                 $currency = CountryCurrency::where('currency_id', $data['currency_id'])->first();
             } else {
                 $currency = CountryCurrency::where('code_currency_default', true)->first();
             }
-
-
             $data['code_currency_default'] = $currency->currency->code;
 
-            // Obtén la moneda default (por ejemplo, del request o de alguna lógica)
-            $codeCurrencyDefault = $currency->currency->code; // o de otra fuente
-
-            // Después, en la lógica de crear el producto:
+            // Cargar y filtrar monedas soportadas
             $currencies = $request->input('currencies_products', []);
-
-            $filteredCurrencies = array_filter($currencies, function ($currency) use ($codeCurrencyDefault) {
-                return $currency !== $codeCurrencyDefault;
-            });
-
-            // Asignar en $data
+            $filteredCurrencies = array_filter($currencies, fn($c) => $c !== $data['code_currency_default']);
             $data['supported_currencies'] = $filteredCurrencies;
 
-
-            // Actualizar los datos en el modelo
+            // Actualizar producto
             $product->update($data);
 
-            // Manejo de categorías
-            $product->categories()->sync([$data['category_id']]);
 
+            // **Gestionar categorías**: eliminar las existentes y poner las nuevas
+            if (isset($data['category_id'])) {
+                $product->categories()->sync($data['category_id']);
+            }
+
+            // **Gestionar tags**: eliminar existentes y agregar las nuevas
             if (!empty($request->tag_id)) {
                 $product->tags()->detach();
                 $tags = explode(',', $request->tag_id);
-                // Crear las etiquetas en un solo paso
                 $tagIds = [];
                 foreach ($tags as $tag) {
                     $tagCreated = Tag::firstOrCreate(['name' => trim($tag)]);
-                    $tagIds[] = $tagCreated->id; // Guardar el ID de la etiqueta creada o existente
-                }                // Asociar las etiquetas al producto
+                    $tagIds[] = $tagCreated->id;
+                }
                 $product->tags()->attach($tagIds);
             }
-            $stock = $product->stocks->first();
 
-            $stock->quantity_available = $data["quantity_available"];
-            $stock->minimum_quantity = $data["minimum_quantity"];
-            $stock->maximum_quantity = $data["maximum_quantity"];
-            $stock->save();
+            // **Gestionar deliveryZones**: sincronizar (eliminar y agregar)
+            if ($request->has('deliveryZones')) {
+                $product->deliveryZones()->sync($request->input('deliveryZones'));
+            } else {
+                $product->deliveryZones()->detach();
+            }
 
+            // **Gestionar stock**: actualizar si existe, crear si no
+            $stock = $product->stocks()->first();
+            if ($stock) {
+                $stock->update([
+                    'quantity_available' => $data['quantity_available'],
+                    'minimum_quantity' => $data['minimum_quantity'],
+                    'maximum_quantity' => $data['maximum_quantity'],
+                ]);
+            } else {
+                Stock::create([
+                    'warehouse_id' => null,
+                    'quantity_available' => $data['quantity_available'],
+                    'minimum_quantity' => $data['minimum_quantity'],
+                    'maximum_quantity' => $data['maximum_quantity'],
+                    'product_id' => $product->id,
+                ]);
+            }
+
+            // **Gestionar términos**
             if (isset($data['terms_id'])) {
-                // Convertimos la cadena en un array (por ejemplo, "5,6,7" a [5, 6, 7])
-                $termsIds = explode(',', $data['terms_id']);
-
-                // Asegúrate de que los IDs son enteros y eliminar valores vacíos
-                $termsIds = array_filter(array_map('intval', $termsIds));
-
-                // Luego puedes adjuntarlos a la relación
+                $termsIds = array_filter(array_map('intval', explode(',', $data['terms_id'])));
                 $product->terms()->sync($termsIds);
             }
 
-            $price = $product->currencyPrices[0];
-            $price->product()->associate($product); // O $price->product_id = $productId;
-            $price->currency_id = $currency->id; // O $price->currency_id = $currencyId;
-            $price->purchase_price = $data['purchase_price'];
-            $price->sale_price = $data['sale_price']; // Si lo usas
-            $price->discount_price = $data['discounted_price'] ?? null;
-            $price->profit_margin_percentage = $data['profit_margin_percentage'];
-            $price->profit_amount = $data['profit_amount'];
+            // **Gestionar precio**
+            $price = $product->currencyPrices()->first();
+            if (!$price) {
+                $price = new ProductCurrencyPrice();
+                $price->product()->associate($product);
+            }
 
-            $price->update();
-
+            $price->currency_id = $currency->id;
+            $price->sale_price = $data['sale_price'];
+            $price->purchase_price = is_numeric($data['purchase_price'] ?? 0) ? $data['purchase_price'] : 0;
+            $price->discount_price = isset($data['discounted_price']) ? $data['discounted_price'] : null;
+            $price->profit_margin_percentage = is_numeric($data['profit_margin_percentage'] ?? 0) ? $data['profit_margin_percentage'] : 0;
+            $price->profit_amount = is_numeric($data['profit_amount'] ?? 0) ? $data['profit_amount'] : 0;
+            $price->save();
 
             DB::commit();
-            return Redirect::route('products.index')->with('success', 'Producto ' . __('validation.attributes.successfully_updated'));
+            return redirect()->route('products.index')->with('success', __('Producto actualizado correctamente.'));
         } catch (\Exception $e) {
             DB::rollBack();
-            return Redirect::route('products.index')->with('error', 'Producto ' . __('Error al actualizar el producto'));
+            // Opcional: loguear error
+            Log::error('Error al actualizar producto: ', [$e->getMessage()]);
+
+            return redirect()->route('products.edit', $product->id)->withErrors(['error' => 'Error al editar el producto.' . $e]);
         }
     }
 

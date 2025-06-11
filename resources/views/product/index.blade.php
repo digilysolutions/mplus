@@ -16,11 +16,12 @@
                                 {{ __('Products') }}
                             </span>
 
-                             <div class="float-right">
-                                <a href="{{ route('products.create') }}" class="btn btn-primary btn-sm float-right"  data-placement="left">
-                                  {{ __('Create') }}
+                            <div class="float-right">
+                                <a href="{{ route('products.create') }}" class="btn btn-primary btn-sm float-right"
+                                    data-placement="left">
+                                    {{ __('Create') }}
                                 </a>
-                              </div>
+                            </div>
                         </div>
                     </div>
                     @if ($message = Session::get('success'))
@@ -28,32 +29,42 @@
                             <p>{{ $message }}</p>
                         </div>
                     @endif
+                    @if ($errors->any())
+                        <div class="alert alert-danger">
+                            <ul>
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
 
                     <div class="card-body">
                         <div class="table-responsive">
-                           <table id="datatable" class="table data-tables table-striped">
-                              <thead>
-                                 <tr class="ligth">
+                            <table id="datatable" class="table data-tables table-striped">
+                                <thead>
+                                    <tr class="ligth">
                                         <th>No</th>
 
-									<th >Producto</th>
-									<th >Categoría</th>
-									<th >Costo</th>
-									<th >Precio</th>
-									<th >Marca</th>
-									<th >Creado</th>
+                                        <th>Producto</th>
+                                        <th>Categoría</th>
+                                        <th>Costo</th>
+                                        <th>Precio</th>
+                                        <th>Marca</th>
+                                        <th>Creado</th>
 
 
                                         <th></th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                 @php
-                                     $i=0;
-                                 @endphp
+                                    @php
+                                        $i = 0;
+                                    @endphp
 
                                     @foreach ($products as $product)
-                                        <tr><tr class="odd">
+                                        <tr>
+                                        <tr class="odd">
                                             <td class="sorting_1">
                                                 <div class="checkbox d-inline-block">
                                                     <input type="checkbox" class="checkbox-input" id="checkbox2">
@@ -62,8 +73,8 @@
                                             </td>
                                             <td>
                                                 <div class="d-flex align-items-center">
-                                                    <img src="{{ $product['outstanding_image'] }}" class="img-fluid rounded avatar-50 mr-3"
-                                                        alt="image">
+                                                    <img src="{{ $product['outstanding_image'] }}"
+                                                        class="img-fluid rounded avatar-50 mr-3" alt="image">
                                                     <div>
                                                         {{ $product['name'] }}
                                                         <p class="mb-0"><small>
@@ -77,7 +88,7 @@
 
                                             <td>
                                                 @foreach ($product->categories as $category)
-                                                    <span class="mt-2 badge badge-primary">{{ $category->name}} </span>
+                                                    <span class="mt-2 badge badge-primary">{{ $category->name }} </span>
                                                 @endforeach
 
                                             </td>
@@ -91,34 +102,44 @@
 
                                             <td>{{ $product['created_at'] }}</td>
                                             <td>
-                                                <form action="{{ route('products.destroy', $product->id) }}" method="POST">
-                                                    <a class="badge badge-info mr-2 " data-toggle="tooltip" data-placement="top"
-                                        title="" data-original-title="{{ __('Show') }}" href="{{ route('products.show', $product->id) }}"><i class="fa fa-fw fa-eye"></i> </a>
-                                                    <a class="badge bg-success mr-2" data-toggle="tooltip" data-placement="top"
-                                        title="" data-original-title="{{ __('Edit') }}" href="{{ route('products.edit', $product->id) }}"><i class="fa fa-fw fa-edit"></i> </a>
+                                                <form action="{{ route('products.destroy', $product->id) }}"
+                                                    method="POST">
+                                                    <a class="badge badge-info mr-2 " data-toggle="tooltip"
+                                                        data-placement="top" title=""
+                                                        data-original-title="{{ __('Show') }}"
+                                                        href="{{ route('products.show', $product->id) }}"><i
+                                                            class="fa fa-fw fa-eye"></i> </a>
+                                                    <a class="badge bg-success mr-2" data-toggle="tooltip"
+                                                        data-placement="top" title=""
+                                                        data-original-title="{{ __('Edit') }}"
+                                                        href="{{ route('products.edit', $product->id) }}"><i
+                                                            class="fa fa-fw fa-edit"></i> </a>
                                                     @csrf
                                                     @method('DELETE')
-                                                    <a type="submit" class="badge bg-warning mr-2 " data-toggle="tooltip" data-placement="top"
-                                        title="" data-original-title="{{ __('Delete') }}"  onclick="event.preventDefault(); confirm('¿Estás seguro que quieres eliminar?') ? this.closest('form').submit() : false;"><i class="fa fa-fw fa-trash"></i> </a>
+                                                    <a type="submit" class="badge bg-warning mr-2 " data-toggle="tooltip"
+                                                        data-placement="top" title=""
+                                                        data-original-title="{{ __('Delete') }}"
+                                                        onclick="event.preventDefault(); confirm('¿Estás seguro que quieres eliminar?') ? this.closest('form').submit() : false;"><i
+                                                            class="fa fa-fw fa-trash"></i> </a>
                                                 </form>
                                             </td>
                                         </tr>
                                     @endforeach
                                 </tbody>
-                                  <tfoot>
-                                 <tr>
-                                 <th>No</th>
+                                <tfoot>
+                                    <tr>
+                                        <th>No</th>
 
-                                 <th >Producto</th>
-                                 <th >Categoría</th>
-                                 <th >Costo</th>
-                                 <th >Precio</th>
-                                 <th >Marca</th>
-                                 <th >Creado</th>
+                                        <th>Producto</th>
+                                        <th>Categoría</th>
+                                        <th>Costo</th>
+                                        <th>Precio</th>
+                                        <th>Marca</th>
+                                        <th>Creado</th>
 
-                                   <th></th>
-                                 </tr>
-                              </tfoot>
+                                        <th></th>
+                                    </tr>
+                                </tfoot>
                             </table>
                         </div>
                     </div>
@@ -129,5 +150,5 @@
     </div>
 @endsection
 @section('js')
-<script src="{{ asset('js/bootstrap-table.js') }}"></script>
+    <script src="{{ asset('js/bootstrap-table.js') }}"></script>
 @endsection

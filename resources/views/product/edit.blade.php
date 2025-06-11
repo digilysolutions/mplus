@@ -122,7 +122,8 @@
             background-color: #e0e0e0;
             /* Fondo diferente para etiquetas existentes */
         }
-          /* Agrupa cada categoría padre y sus subcategorías */
+
+        /* Agrupa cada categoría padre y sus subcategorías */
         .category-group {
             margin-bottom: 3px;
         }
@@ -162,22 +163,24 @@
                             <a class="btn btn-primary btn-sm" href="{{ route('products.index') }}"> {{ __('Back') }}</a>
                         </div>
                     </div>
+                    @if ($message = Session::get('success'))
+                        <div class="alert alert-success m-4">
+                            <p>{{ $message }}</p>
+                        </div>
+                    @endif
+                    @if ($errors->any())
+                        <div class="alert alert-danger">
+                            <ul>
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
 
-                     @if ($message = Session::get('success'))
-                    <div class="alert alert-success m-4">
-                        <p>{{ $message }}</p>
-                    </div>
-                @endif
-                @if ($errors->any())
-                    <div class="alert alert-danger">
-                        <ul>
-                            @foreach ($errors->all() as $error)
-                                <li>{{ $error }}</li>
-                            @endforeach
-                        </ul>
-                    </div>
-                @endif<div class="card-body bg-white">
-                        <form method="POST" action="{{ route('products.update', $product->id) }}"  role="form" enctype="multipart/form-data" data-toggle="validator">
+                    <div class="card-body bg-white">
+                        <form method="POST" action="{{ route('products.update', $product->id) }}" role="form"
+                            enctype="multipart/form-data" data-toggle="validator">
                             {{ method_field('PATCH') }}
                             @csrf
 
@@ -949,9 +952,9 @@
 
 
 
-             /*   if (modificado !== 'sale') $sale.val('');
-                if (modificado !== 'profit_margin_percentage') $profitPerc.val('');
-                if (modificado !== 'profit_amount') $profitAmt.val('');*/
+                /*   if (modificado !== 'sale') $sale.val('');
+                   if (modificado !== 'profit_margin_percentage') $profitPerc.val('');
+                   if (modificado !== 'profit_amount') $profitAmt.val('');*/
 
 
                 // Prioridad: si hay precio rebajado, usar ese
@@ -1070,4 +1073,3 @@
 
     <script src="{{ asset('includes/admin/script.js') }}"></script>
 @endsection
-
