@@ -40,12 +40,16 @@ class ProductController extends Controller
         $product = new Product();
         $attributes =  AttributesModel::allActivated();
         $categories = ProductCategory::allActivated();
+        // Agrupar categorías por su padre
+        $groupedCategories = $categories->groupBy('category_parent_name');
+        // Obtener categorías principales (sin padre)
+        $mainCategories = $categories->whereNull('category_parent_name');
         $brands = Brand::allActivated();
         $deliveryZones = DeliveryZone::allActivated();
         $units = Unit::allActivated();
         $currencies = CountryCurrency::allActivated();
 
-        return view('product.create', compact('product', 'currencies', 'units', 'categories', 'attributes', 'brands', 'deliveryZones'));
+        return view('product.create', compact('product', 'groupedCategories', 'mainCategories', 'currencies', 'units', 'categories', 'attributes', 'brands', 'deliveryZones'));
     }
 
     /**
@@ -222,12 +226,24 @@ class ProductController extends Controller
             $price = new ProductCurrencyPrice();
             $price->product()->associate($product); // O $price->product_id = $productId;
             $price->currency_id = $currency->id; // O $price->currency_id = $currencyId;
-            $price->purchase_price = $data['purchase_price'];
-            $price->sale_price = $data['sale_price']; // Si lo usas
-            $price->discount_price = $data['discounted_price'] ?? null;
-            $price->profit_margin_percentage = $data['profit_margin_percentage'];
-            $price->profit_amount = $data['profit_amount'];
 
+            $price->sale_price = $data['sale_price']; // Si lo usas
+
+            $purchasePrice = $data['purchase_price'] ?? 0;
+            $purchasePrice = is_numeric($purchasePrice) ? $purchasePrice : 0;
+            $price->purchase_price = $purchasePrice;
+
+            $discountedPrice = $data['discount_price'] ?? 0;
+            $discountedPrice = is_numeric($discountedPrice) ? $discountedPrice : 0;
+            $price->discount_price = $discountedPrice;
+
+            $profitMargin = $data['profit_margin_percentage'] ?? 0;
+            $profitMargin = is_numeric($profitMargin) ? $profitMargin : 0;
+            $price->profit_margin_percentage = $profitMargin;
+
+            $profitAmount = $data['profit_amount'] ?? 0;
+            $profitAmount = is_numeric($profitAmount) ? $profitAmount : 0;
+            $price->profit_amount = $profitAmount;
             $price->save();
 
 
@@ -374,7 +390,7 @@ class ProductController extends Controller
         $units = Unit::allActivated();
         $currencies = CountryCurrency::allActivated();
 
-        return view('product.edit', compact('currencies','product', 'units', 'categories', 'attributes', 'brands', 'deliveryZones'));
+        return view('product.edit', compact('currencies', 'product', 'units', 'categories', 'attributes', 'brands', 'deliveryZones'));
     }
 
     /**
@@ -480,14 +496,14 @@ class ProductController extends Controller
                 unset($data['expiry_period']);
             }
 
-            if (isset($data['currency_id']) ) {
+            if (isset($data['currency_id'])) {
                 $currency = CountryCurrency::where('currency_id', $data['currency_id'])->first();
             } else {
                 $currency = CountryCurrency::where('code_currency_default', true)->first();
             }
 
 
-             $data['code_currency_default'] = $currency->currency->code;
+            $data['code_currency_default'] = $currency->currency->code;
 
             // Obtén la moneda default (por ejemplo, del request o de alguna lógica)
             $codeCurrencyDefault = $currency->currency->code; // o de otra fuente
@@ -538,7 +554,7 @@ class ProductController extends Controller
                 $product->terms()->sync($termsIds);
             }
 
-            $price =$product->currencyPrices[0];
+            $price = $product->currencyPrices[0];
             $price->product()->associate($product); // O $price->product_id = $productId;
             $price->currency_id = $currency->id; // O $price->currency_id = $currencyId;
             $price->purchase_price = $data['purchase_price'];

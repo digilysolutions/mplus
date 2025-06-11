@@ -111,7 +111,7 @@
                                                                                 </option>
                                                                             @endforeach
                                                                         </select>
-                                                                        <div                                                                            >
+                                                                        <div>
                                                                             <a href="#" id="addNewBrandModel"
                                                                                 data-toggle="modal"
                                                                                 data-target="#addBrandModal">+ Añadir
@@ -225,8 +225,7 @@
                                                                                 <button type="button"
                                                                                     class="btn btn-secondary"
                                                                                     data-dismiss="modal">Cerrar</button>
-                                                                                <button id="addModel"
-                                                                                    type="button"
+                                                                                <button id="addModel" type="button"
                                                                                     class="btn btn-primary">Guardar
                                                                                     Modelo</button>
                                                                             </div>
@@ -305,7 +304,8 @@
                                                                         <input type="text" class="form-control"
                                                                             id="sale_price" name="sale_price"
                                                                             placeholder=""
-                                                                            value="{{ old('sale_price', $product?->sale_price) }}">
+                                                                            value="{{ old('sale_price', $product?->sale_price) }}"
+                                                                            required>
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -381,8 +381,7 @@
                                                                             id="profit_margin_percentage"
                                                                             name="profit_margin_percentage"
                                                                             placeholder="Porcentaje de Ganancia"
-                                                                            value="{{ old('profit_margin_percentage', optional($product->currencyPrices->first())->profit_margin_percentage)  }}"
-                                                                           >
+                                                                            value="{{ old('profit_margin_percentage', optional($product->currencyPrices->first())->profit_margin_percentage) }}">
                                                                         <div class="input-group-append">
                                                                             <span class="input-group-text"
                                                                                 id="basic-addon2">%</span>
@@ -407,8 +406,7 @@
                                                                         <input type="text" class="form-control"
                                                                             id="profit_amount" name="profit_amount"
                                                                             placeholder="Cantidad de ganancia en dinero"
-                                                                               value="{{ old('profit_margin_percentage', optional($product->currencyPrices->first())->profit_amount) }}"
-                                                                            >
+                                                                            value="{{ old('profit_margin_percentage', optional($product->currencyPrices->first())->profit_amount) }}">
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -889,39 +887,52 @@
                                     </table>
                                 </div>
                                 <div class="table-responsive">
-                                    <table id="tree-table-4"
-                                        class="table table-hover table-bordered iq-bg-white tree">
-
-                                        <tbody>
-                                            <tr data-id="1" data-parent="0" data-level="1">
-                                                <td data-column="name" class="glyphicon-chevron-right">
-                                                    <strong>Categorías del
-                                                        producto *</strong>
-                                                </td>
-                                            </tr>
-                                            <tr data-id="2" data-parent="1" data-level="2" style="">
-                                                <td>
-                                                    @foreach ($categories as $category)
-                                                        <div class="radio">
-                                                            <input type="radio" class="radio-input"
-                                                                id="category_{{ $category->id }}" name="category_id"
-                                                                value="{{ $category->id }}" required
-                                                                @if ($product && $product->categories->contains($category->id)) checked @endif>
-                                                            <label
-                                                                for="category_{{ $category->id }}">{{ $category->name }}</label>
-                                                        </div>
-                                                    @endforeach
-                                                    <div id="categories-list"></div>
-
-                                                    <a href="#" data-toggle="modal"
-                                                        data-target="#new-category-product">+ Añadir nueva
-                                                        categoría</a>
-                                                </td>
-                                            </tr>
-
-                                        </tbody>
-                                    </table>
+    <table id="tree-table-4" class="table table-hover table-bordered iq-bg-white tree">
+        <tbody>
+            <tr data-id="1" data-parent="0" data-level="1">
+                <td data-column="name" class="glyphicon-chevron-right">
+                    <strong>Categorías del producto *</strong>
+                </td>
+            </tr>
+            <tr data-id="2" data-parent="1" data-level="2" style="">
+                <td>
+                    {{-- Agrupar cada categoría padre con sus subcategorías --}}
+                    @foreach ($mainCategories as $mainCategory)
+                        <div class="category-group">
+                            {{-- Categoría padre --}}
+                            <div class="category-parent">
+                                <input type="checkbox"
+                                    id="category_{{ $mainCategory->id }}"
+                                    name="category_id[]"
+                                    value="{{ $mainCategory->id }}"
+                                    @if ($product && $product->categories->contains($mainCategory->id)) checked @endif>
+                                <label for="category_{{ $mainCategory->id }}">{{ $mainCategory->name }}</label>
+                            </div>
+                            {{-- Subcategorías --}}
+                            @if (isset($groupedCategories[$mainCategory->name]))
+                                <div class="subcategories">
+                                    @foreach ($groupedCategories[$mainCategory->name] as $subCategory)
+                                        <div class="sub-category">
+                                            <input type="checkbox"
+                                                id="category_{{ $subCategory->id }}"
+                                                name="category_id[]"
+                                                value="{{ $subCategory->id }}"
+                                                @if ($product && $product->categories->contains($subCategory->id)) checked @endif>
+                                            <label for="category_{{ $subCategory->id }}">{{ $subCategory->name }}</label>
+                                        </div>
+                                    @endforeach
                                 </div>
+                            @endif
+                        </div>
+                    @endforeach
+
+                    <div id="categories-list"></div>
+                    <a href="#" data-toggle="modal" data-target="#new-category-product">+ Añadir nueva categoría</a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
 
 
 

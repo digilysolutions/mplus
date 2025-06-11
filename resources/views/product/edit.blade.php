@@ -122,6 +122,32 @@
             background-color: #e0e0e0;
             /* Fondo diferente para etiquetas existentes */
         }
+          /* Agrupa cada categoría padre y sus subcategorías */
+        .category-group {
+            margin-bottom: 3px;
+        }
+
+        /* Categoría padre en línea, arriba */
+        .category-parent {
+            display: inline-block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        /* Subcategorías debajo, alineadas a la derecha del padre */
+        .subcategories {
+            display: flex;
+            justify-content: flex-start;
+            /* o 'flex-end' si quieres a la derecha */
+            margin-left: 20px;
+            /* separación respecto a la categoría padre */
+            flex-wrap: wrap;
+            /* si quieres que las subcategorías envuelvan */
+        }
+
+        .sub-category {
+            margin-right: 15px;
+        }
     </style>
 @endsection
 @section('content-admin')

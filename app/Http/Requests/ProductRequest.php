@@ -29,7 +29,7 @@ class ProductRequest extends FormRequest
             'code_currency_default' => 'string|nullable',
             'views' => 'integer|nullable',
             'sale_price ' => 'double|nullable',
-            'weight' => 'decimal|nullable',
+            'weight' => 'decimal',
             'height' => 'decimal|nullable',
             'width' => 'decimal|nullable',
             'length' => 'numeric|nullable',
@@ -38,7 +38,7 @@ class ProductRequest extends FormRequest
             'unit_id' => 'numeric|nullable',
             'created_at' => 'datetime|nullable',
             'updated_at' => 'datetime|nullable',
-            'category_id' => 'required|numeric',
+            'category_id' => 'required',
             'profit_margin_percentage' => 'numeric|nullable',
             'profit_amount' => 'numeric|nullable',
             'supported_currencies' => 'array', // lista de monedas seleccionadas
