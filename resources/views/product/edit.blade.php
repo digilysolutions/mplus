@@ -923,9 +923,9 @@
 
 
 
-                if (modificado !== 'sale') $sale.val('');
+             /*   if (modificado !== 'sale') $sale.val('');
                 if (modificado !== 'profit_margin_percentage') $profitPerc.val('');
-                if (modificado !== 'profit_amount') $profitAmt.val('');
+                if (modificado !== 'profit_amount') $profitAmt.val('');*/
 
 
                 // Prioridad: si hay precio rebajado, usar ese
