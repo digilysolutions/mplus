@@ -389,8 +389,12 @@ class ProductController extends Controller
         $deliveryZones = DeliveryZone::allActivated();
         $units = Unit::allActivated();
         $currencies = CountryCurrency::allActivated();
+         // Agrupar categorías por su padre
+        $groupedCategories = $categories->groupBy('category_parent_name');
+        // Obtener categorías principales (sin padre)
+        $mainCategories = $categories->whereNull('category_parent_name');
 
-        return view('product.edit', compact('currencies', 'product', 'units', 'categories', 'attributes', 'brands', 'deliveryZones'));
+        return view('product.edit', compact('currencies','groupedCategories','mainCategories', 'product', 'units', 'categories', 'attributes', 'brands', 'deliveryZones'));
     }
 
     /**
