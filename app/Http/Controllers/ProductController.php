@@ -149,7 +149,7 @@ class ProductController extends Controller
             // Obtenemos el array de monedas desde la request
 
 
-            if (isset($data['currency_id']) && !empty($data['expiration_date'])) {
+            if (isset($data['currency_id'])) {
                 $currency = CountryCurrency::where('currency_id', $data['currency_id'])->first();
             } else {
                 $currency = CountryCurrency::where('code_currency_default', true)->first();
@@ -480,7 +480,7 @@ class ProductController extends Controller
                 unset($data['expiry_period']);
             }
 
-            if (isset($data['currency_id']) && !empty($data['expiration_date'])) {
+            if (isset($data['currency_id']) ) {
                 $currency = CountryCurrency::where('currency_id', $data['currency_id'])->first();
             } else {
                 $currency = CountryCurrency::where('code_currency_default', true)->first();
