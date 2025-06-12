@@ -170,7 +170,7 @@
         @endif
         <div class="card-body bg-white">
             <form method="POST" action="{{ route('products.store') }}" role="form" enctype="multipart/form-data"
-                data-toggle="validator">
+                data-toggle="validator" id="product-form">
                 @csrf
 
                 @include('product.form')
@@ -539,73 +539,85 @@
         //Galeria de imagenes
         $(document).ready(function() {
             let imageUrls = [];
+            let dataTransfer = new DataTransfer();
 
-            // Mostrar el selector de archivos al hacer clic en el enlace
+            // Mostrar selector de archivos
             $('#add-images-link').on('click', function(e) {
                 e.preventDefault();
                 $('#image-input').click();
             });
 
-            // Al cambiar el input (cuando se seleccionan archivos)
+            // Cuando se seleccionan archivos
             $('#image-input').on('change', function() {
+                console.log('Entre');
                 const files = this.files;
-
-                // Iterar sobre los archivos seleccionados
                 for (let i = 0; i < files.length; i++) {
                     const file = files[i];
-
-                    // Comprobar que sea un archivo de imagen
                     if (file.type.startsWith('image/')) {
+                        // Agregar al DataTransfer
+                        dataTransfer.items.add(file);
+                        // Crear URL de vista previa
                         const imgUrl = URL.createObjectURL(file);
-                        const fileName = file.name; // Obtener el nombre del archivo
+                        const fileName = file.name;
 
-                        // Verificar si la imagen ya está en la lista comparando los nombres de archivo
-                        if (!imageUrls.some(url => url.fileName === fileName)) {
+                        // Verificar duplicados
+                        if (!imageUrls.some(obj => obj.fileName === fileName)) {
                             imageUrls.push({
                                 url: imgUrl,
                                 fileName
-                            }); // Guardar la imagen con el nombre del archivo
-
-                            // Añadir la miniatura de la imagen a la galería
+                            });
                             $('#image-gallery').append(`
-                                <div class="image-container">
-                                    <span class="remove-image" title="Eliminar Imagen">&times;</span>
-                                    <img src="${imgUrl}" alt="Imagen de Producto">
-                                </div>
-                            `);
+                        <div class="image-container" style="display:inline-block; position:relative; margin:5px;">
+                            <span class="remove-image" title="Eliminar Imagen" style="position:absolute; top:0; right:0; cursor:pointer; background:#fff; padding:2px 5px; border-radius:50%;">×</span>
+                            <img src="${imgUrl}" alt="Imagen" style="width:100px; height:auto; border:1px solid #ccc;">
+                        </div>
+                    `);
                         } else {
                             alert('Esta imagen ya está en la galería.');
                         }
                     }
                 }
 
-                // Ocultar el enlace para añadir imágenes y mostrar "Añadir más imágenes"
+                // Actualizar input con archivos
+                $('#image-input')[0].files = dataTransfer.files;
+                console.log('Archivos en input antes del submit:', $('#image-input')[0].files);
+                // Mostrar enlaces
                 $('#add-images-link').hide();
                 $('#add-more-images').removeClass('hidden');
                 $('#remove-all-images').removeClass('hidden');
 
-                // Limpiar el input
+                // Limpiar input file
                 $(this).val('');
             });
 
-            // Al hacer clic en "Añadir más imágenes"
+            // Añadir más imágenes
             $('#add-more-images').on('click', function(e) {
                 e.preventDefault();
                 $('#image-input').click();
             });
 
-            // Eliminar una imagen específica
+            // Eliminar imagen individual
             $('#image-gallery').on('click', '.remove-image', function() {
                 const imgElement = $(this).siblings('img');
                 const imgUrl = imgElement.attr('src');
 
-                // Eliminar la URL de la lista
-                imageUrls = imageUrls.filter(obj => obj.url !== imgUrl);
-
-                // Eliminar la imagen del DOM
+                // Remover de vista
                 $(this).parent('.image-container').remove();
 
-                // Si no hay imágenes, mostrar el enlace de "Añadir imágenes a la galería"
+                // Crear nuevo DataTransfer sin la imagen eliminada
+                let newDataTransfer = new DataTransfer();
+                for (let i = 0; i < $('#image-input')[0].files.length; i++) {
+                    const file = $('#image-input')[0].files[i];
+                    if (URL.createObjectURL(file) !== imgUrl) {
+                        newDataTransfer.items.add(file);
+                    }
+                }
+                $('#image-input')[0].files = newDataTransfer.files;
+                console.log('Eliminar Imagen Individual:', $('#image-input')[0].files);
+                // Remover de lista interna
+                imageUrls = imageUrls.filter(obj => obj.url !== imgUrl);
+
+                // Si no hay imágenes, ocultar enlaces
                 if (imageUrls.length === 0) {
                     $('#add-images-link').show();
                     $('#add-more-images').addClass('hidden');
@@ -617,12 +629,24 @@
             $('#remove-all-images').on('click', function() {
                 imageUrls = [];
                 $('#image-gallery').empty();
-
-                // Mostrar el enlace para añadir imágenes
+                $('#image-input')[0].files = new DataTransfer().files;
+                console.log('Eliminar Todas las Imagenes:', $('#image-input')[0].files);
                 $('#add-images-link').show();
                 $('#add-more-images').addClass('hidden');
                 $(this).addClass('hidden');
             });
+
+            // Opcional: Verificación antes de enviar formulario
+            /*  $('#product-form').on('submit', function(e) {
+
+                  $('#image-input')[0].files = dataTransfer.files;
+                  console.log('Submit:', $('#image-input')[0].files);
+                  // ahora verifica si hay archivos
+                  if ($('#image-input')[0].files.length === 0) {
+                      alert('Por favor, selecciona al menos una imagen.');
+                      e.preventDefault();
+                  }
+              });*/
         });
 
 
@@ -765,7 +789,21 @@
         });
 
 
+        //Categoria
         $(document).ready(function() {
+
+            $('#product-form').on('submit', function(e) {
+                // Seleccionar todos los checkboxes con name="category_id[]"
+                const checkboxes = $('input[name="category_id[]"]');
+                // Ver si hay al menos uno marcado
+                const checked = checkboxes.filter(':checked');
+
+                if (checked.length === 0) {
+                    e.preventDefault(); // Evitar envío
+                    alert('Por favor, selecciona al menos una categoría.');
+                }
+            });
+
             $('#new-category-product form').on('submit', function(e) {
                 e.preventDefault(); // Evitar la acción de envío del formulario
 

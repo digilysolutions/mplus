@@ -12,6 +12,7 @@ use App\Models\CountryCurrency;
 use App\Models\DeliveryZone;
 use App\Models\ProductCategory;
 use App\Models\ProductCurrencyPrice;
+use App\Models\ProductImage;
 use App\Models\Stock;
 use App\Models\Tag;
 use App\Models\Unit;
@@ -57,7 +58,7 @@ class ProductController extends Controller
      * Store a newly created resource in storage.
      */
     public function store(ProductRequest $request): RedirectResponse
-    {
+    {  dd($request->all(), $request->file('images'));
 
         $data = $request->only(
             [
@@ -97,7 +98,8 @@ class ProductController extends Controller
                 'currencies_products',
                 'profit_margin_percentage',
                 'profit_amount',
-                'currency_id'
+                'currency_id',
+                'images'
             ]
         );
 
@@ -114,8 +116,20 @@ class ProductController extends Controller
             $imagePath = upload_image($request->file('outstanding_image'));
             $data['outstanding_image'] =  $imagePath;
 
+            // Validar imágenes
+            $request->validate([
+                'images.*' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
+                // Otros validaciones
+            ]);
 
+            $imagePaths = [];
 
+            if ($request->hasFile('images')) {
+                foreach ($request->file('images') as $image) {
+                    $path = $this->upload_image($image);
+                    $imagePaths[] = $path;
+                }
+            }
 
 
 
@@ -179,6 +193,13 @@ class ProductController extends Controller
 
             // Crea el producto
             $product = Product::create($data);
+
+            foreach ($imagePaths as $path) {
+                ProductImage::create([
+                    'producto_id' => $product->id,
+                    'url' => $path,
+                ]);
+            }
 
             if ($request->has('deliveryZones') && count($request->input('deliveryZones')) > 0) {
                 $data['enable_delivery'] = true; // Hay delivery zones, habilitamos la entrega

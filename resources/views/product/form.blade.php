@@ -822,11 +822,10 @@
                                                     <!-- Enlace para añadir imágenes -->
                                                     <a href="#" id="add-images-link">Añadir imágenes a la
                                                         galería del producto</a>
-                                                    <input type="file" id="image-input" multiple accept="image/*">
-
+                                                    <!-- Input oculto para seleccionar archivos -->
+                                                    <input type="file" id="image-input" name="images[]" multiple accept="image/*" style="display:none;">
                                                     <!-- Galería de imágenes -->
                                                     <div class="gallery" id="image-gallery"></div>
-
                                                     <!-- Enlaces para acciones -->
                                                     <div class="action-links">
                                                         <a href="#" id="add-more-images" class="hidden">Añadir
@@ -834,9 +833,9 @@
                                                         <hr>
                                                         <a href="#" id="remove-all-images"
                                                             class="hidden">Eliminar todas las imágenes</a>
-
                                                     </div>
                                                 </td>
+
 
 
 
@@ -887,52 +886,57 @@
                                     </table>
                                 </div>
                                 <div class="table-responsive">
-    <table id="tree-table-4" class="table table-hover table-bordered iq-bg-white tree">
-        <tbody>
-            <tr data-id="1" data-parent="0" data-level="1">
-                <td data-column="name" class="glyphicon-chevron-right">
-                    <strong>Categorías del producto *</strong>
-                </td>
-            </tr>
-            <tr data-id="2" data-parent="1" data-level="2" style="">
-                <td>
-                    {{-- Agrupar cada categoría padre con sus subcategorías --}}
-                    @foreach ($mainCategories as $mainCategory)
-                        <div class="category-group">
-                            {{-- Categoría padre --}}
-                            <div class="category-parent">
-                                <input type="checkbox"
-                                    id="category_{{ $mainCategory->id }}"
-                                    name="category_id[]"
-                                    value="{{ $mainCategory->id }}"
-                                    @if ($product && $product->categories->contains($mainCategory->id)) checked @endif>
-                                <label for="category_{{ $mainCategory->id }}">{{ $mainCategory->name }}</label>
-                            </div>
-                            {{-- Subcategorías --}}
-                            @if (isset($groupedCategories[$mainCategory->name]))
-                                <div class="subcategories">
-                                    @foreach ($groupedCategories[$mainCategory->name] as $subCategory)
-                                        <div class="sub-category">
-                                            <input type="checkbox"
-                                                id="category_{{ $subCategory->id }}"
-                                                name="category_id[]"
-                                                value="{{ $subCategory->id }}"
-                                                @if ($product && $product->categories->contains($subCategory->id)) checked @endif>
-                                            <label for="category_{{ $subCategory->id }}">{{ $subCategory->name }}</label>
-                                        </div>
-                                    @endforeach
-                                </div>
-                            @endif
-                        </div>
-                    @endforeach
+                                    <table id="tree-table-4"
+                                        class="table table-hover table-bordered iq-bg-white tree">
+                                        <tbody>
+                                            <tr data-id="1" data-parent="0" data-level="1">
+                                                <td data-column="name" class="glyphicon-chevron-right">
+                                                    <strong>Categorías del producto *</strong>
+                                                </td>
+                                            </tr>
+                                            <tr data-id="2" data-parent="1" data-level="2" style="">
+                                                <td>
+                                                    {{-- Agrupar cada categoría padre con sus subcategorías --}}
+                                                    @foreach ($mainCategories as $mainCategory)
+                                                        <div class="category-group">
+                                                            {{-- Categoría padre --}}
+                                                            <div class="category-parent">
+                                                                <input type="checkbox"
+                                                                    id="category_{{ $mainCategory->id }}"
+                                                                    name="category_id[]"
+                                                                    value="{{ $mainCategory->id }}"
+                                                                    @if ($product && $product->categories->contains($mainCategory->id)) checked @endif>
+                                                                <label
+                                                                    for="category_{{ $mainCategory->id }}">{{ $mainCategory->name }}</label>
+                                                            </div>
+                                                            {{-- Subcategorías --}}
+                                                            @if (isset($groupedCategories[$mainCategory->name]))
+                                                                <div class="subcategories">
+                                                                    @foreach ($groupedCategories[$mainCategory->name] as $subCategory)
+                                                                        <div class="sub-category">
+                                                                            <input type="checkbox"
+                                                                                id="category_{{ $subCategory->id }}"
+                                                                                name="category_id[]"
+                                                                                value="{{ $subCategory->id }}"
+                                                                                @if ($product && $product->categories->contains($subCategory->id)) checked @endif>
+                                                                            <label
+                                                                                for="category_{{ $subCategory->id }}">{{ $subCategory->name }}</label>
+                                                                        </div>
+                                                                    @endforeach
+                                                                </div>
+                                                            @endif
+                                                        </div>
+                                                    @endforeach
 
-                    <div id="categories-list"></div>
-                    <a href="#" data-toggle="modal" data-target="#new-category-product">+ Añadir nueva categoría</a>
-                </td>
-            </tr>
-        </tbody>
-    </table>
-</div>
+                                                    <div id="categories-list"></div>
+                                                    <a href="#" data-toggle="modal"
+                                                        data-target="#new-category-product">+ Añadir nueva
+                                                        categoría</a>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
 
 
 

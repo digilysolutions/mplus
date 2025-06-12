@@ -180,7 +180,7 @@
 
                     <div class="card-body bg-white">
                         <form method="POST" action="{{ route('products.update', $product->id) }}" role="form"
-                            enctype="multipart/form-data" data-toggle="validator">
+                            enctype="multipart/form-data" data-toggle="validator" id="product-form" >
                             {{ method_field('PATCH') }}
                             @csrf
 
@@ -777,7 +777,19 @@
         });
 
 
+        //Categoria
         $(document).ready(function() {
+             $('#product-form').on('submit', function(e) {
+                // Seleccionar todos los checkboxes con name="category_id[]"
+                const checkboxes = $('input[name="category_id[]"]');
+                // Ver si hay al menos uno marcado
+                const checked = checkboxes.filter(':checked');
+
+                if (checked.length === 0) {
+                    e.preventDefault(); // Evitar envío
+                    alert('Por favor, selecciona al menos una categoría.');
+                }
+            });
             $('#new-category-product form').on('submit', function(e) {
                 e.preventDefault(); // Evitar la acción de envío del formulario
 

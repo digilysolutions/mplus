@@ -32,6 +32,7 @@ class ProductRequest extends FormRequest
             'weight' => 'decimal',
             'height' => 'decimal|nullable',
             'width' => 'decimal|nullable',
+            'images'=>'nullable',
             'length' => 'numeric|nullable',
             'brand_id' => 'numeric|nullable',
             'model_id' => 'numeric|nullable',

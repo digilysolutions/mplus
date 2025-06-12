@@ -145,9 +145,9 @@ class Product extends Model
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function productImages()
+     public function images()
     {
-        return $this->hasMany(\App\Models\ProductImage::class, 'id', 'product_id');
+        return $this->hasMany(ProductImage::class);
     }
     public function deliveryZones()
     {
