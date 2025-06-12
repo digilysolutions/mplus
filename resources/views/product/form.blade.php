@@ -306,6 +306,7 @@
                                                                             placeholder=""
                                                                             value="{{ old('sale_price', $product?->sale_price) }}"
                                                                             required>
+
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -823,7 +824,8 @@
                                                     <a href="#" id="add-images-link">Añadir imágenes a la
                                                         galería del producto</a>
                                                     <!-- Input oculto para seleccionar archivos -->
-                                                    <input type="file" id="image-input" name="images[]" multiple accept="image/*" style="display:none;">
+                                                    <input type="file" id="image-input" name="images[]" multiple
+                                                        accept="image/*" style="display:none;">
                                                     <!-- Galería de imágenes -->
                                                     <div class="gallery" id="image-gallery"></div>
                                                     <!-- Enlaces para acciones -->
@@ -929,10 +931,49 @@
                                                     @endforeach
 
                                                     <div id="categories-list"></div>
-                                                    <a href="#" data-toggle="modal"
+                                                    <a href="#" data-toggle="modal" id="new-category-product"
                                                         data-target="#new-category-product">+ Añadir nueva
                                                         categoría</a>
                                                 </td>
+                                                <!-- Modal para agregar nueva Marca -->
+                                                <div class="modal fade" id="new-category-product" tabindex="-1"
+                                                    role="dialog" aria-labelledby="new-category-product"
+                                                    aria-hidden="true">
+                                                    <div class="modal-dialog" role="document">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <h5 class="modal-title" id="addModelModalLabel">Añadir
+                                                                    Nueva Ctegoría</h5>
+                                                                <button type="button" class="close"
+                                                                    data-dismiss="modal" aria-label="Close">
+                                                                    <span aria-hidden="true">&times;</span>
+                                                                </button>
+                                                            </div>
+
+
+                                                                <div class="col-md-12">
+                                                                    <div class="form-group">
+                                                                        <label>Nombre <span
+                                                                                style="color: #FF9770 !important;">*</span></label>
+                                                                        <input id="name_category" name="name_category"
+                                                                            type="text" class="form-control"
+                                                                            placeholder="El nombre de la categoría obligatorio"
+                                                                            required                                                                           >
+                                                                        <div class="help-block with-errors"></div>
+                                                                    </div>
+                                                                </div>
+
+                                                            <div class="modal-footer">
+                                                                <button type="button" class="btn btn-secondary"
+                                                                    data-dismiss="modal">Cerrar</button>
+                                                                <button id="addModelCategory" type="button"
+                                                                    class="btn btn-primary">Guardar
+                                                                    Modelo</button>
+                                                            </div>
+
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </tr>
                                         </tbody>
                                     </table>
