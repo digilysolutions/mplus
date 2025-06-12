@@ -58,7 +58,7 @@ class ProductController extends Controller
      * Store a newly created resource in storage.
      */
     public function store(ProductRequest $request): RedirectResponse
-    {  dd($request->all(), $request->file('images'));
+    {
 
         $data = $request->only(
             [
@@ -469,7 +469,7 @@ class ProductController extends Controller
         ]);
 
         DB::beginTransaction();
-dd($product);
+
         try {
             // Imagen
             if ($request->hasFile('outstanding_image')) {
