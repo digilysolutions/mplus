@@ -520,7 +520,7 @@ class ProductController extends Controller
             // Actualizar producto
             $product->update($data);
 
-
+dd($product);
             // **Gestionar categorías**: eliminar las existentes y poner las nuevas
             if (isset($data['category_id'])) {
                 $product->categories()->sync($data['category_id']);
