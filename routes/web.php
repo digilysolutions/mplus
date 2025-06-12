@@ -122,6 +122,7 @@ Route::get('/user/register', [RegisteredUserController::class, 'thankYou'])->nam
 Route::post('/verify-email', [RegisteredUserController::class, 'verifyEmail'])->name('verifyEmail');
 Route::middleware('auth')->group(function () {
 
+    Route::post('/json/addCategory/product/add', [ProductCategoryController::class,'storeCategoryJson'])->name('storeCategoryJson');
         Route::resource('admin/countries', CountryController::class);
         Route::resource('admin/contacts', ContactController::class);
         Route::resource('admin/provinces', ProvinceController::class);
@@ -140,6 +141,7 @@ Route::middleware('auth')->group(function () {
         Route::resource('product-currency-prices', ProductCurrencyPriceController::class);
 
         Route::resource('admin/product-categories', ProductCategoryController::class);
+
         Route::resource('admin/warehouses', WarehouseController::class);
         Route::resource('admin/unit-bases', UnitBaseController::class);
         Route::resource('admin/units', UnitController::class);
