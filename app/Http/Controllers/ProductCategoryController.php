@@ -60,6 +60,27 @@ class ProductCategoryController extends Controller
         return redirect()->route('product-categories.index')
             ->with('success', 'Categoría ' . __('validation.attributes.successfully_created'));
     }
+    public function storeCategoryJson(Request $request)
+    {
+        // Obtener datos validados
+
+          $request->validate([
+            'name' => 'required|string|max:255'
+        ]);
+
+        $category = ProductCategory::create([
+            'name' => $request->name,
+            'category_parent_name' => $request->category_parent_name,
+            'is_activated' => 1
+        ]);
+        // Redireccionar
+        // Retornar una respuesta JSON con los datos del modelo creado
+        return response()->json([
+            'category' => [
+                'data' => $category
+            ]
+        ], 201);
+    }
 
     /**
      * Display the specified resource.
