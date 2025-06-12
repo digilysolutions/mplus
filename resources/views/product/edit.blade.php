@@ -1049,7 +1049,7 @@
                     $('#warning_message_text').text(
                         'Por favor, ingresa solo números (pueden incluir coma o punto decimal).');
                     // Opcional: revertir al valor válido anterior o limpiar
-                    // e.target.value = ''; // para limpiar
+                     e.target.value = ''; // para limpiar
                 } else {
                     $('#warning_message').hide();
                 }
