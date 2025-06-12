@@ -790,24 +790,28 @@
                     alert('Por favor, selecciona al menos una categoría.');
                 }
             });
-            $('#new-category-product form').on('submit', function(e) {
+            $('#addModelCategory').on('click', function(e) {
                 e.preventDefault(); // Evitar la acción de envío del formulario
 
                 // Obtener datos del formulario
-                const formData = $(this).serialize(); // Serializa los datos del formulario
+                const newCategoryName = $('#name_category').val();
+
+
 
                 $.ajax({
-                    url: '/admin/storeCategoryName/productcategories', // La URL de la acción del formulario
+                    url: '/json/addCategory/product/add', // La URL de la acción del formulario
                     type: 'POST',
-                    data: formData,
-                    success: function(response) {
-                        // Si la categoría se guarda correctamente
-                        if (response.success) {
+                    data: {
+                        name: newCategoryName,
+                        _token: $('meta[name="csrf-token"]').attr(
+                            'content') // Asegúrate de tener el token CSRF
+                    },
+                    success: function(data) {
 
                             // Inserta la nueva categoría en la lista
                             const newCategory = `<div class="checkbox">
-                            <input type="checkbox" class="checkbox-input" id="category-${response.category.data.id}" name="categories[]" value="${response.category['id']}" checked>
-                            <label for="category-${response.category.data.id}">${response.category.data.name}</label>
+                            <input type="checkbox" class="checkbox-input" id="category-${data.category.data.id}" name="categories[]" value="${data.category['id']}" checked>
+                            <label for="category-${data.category.data.id}">${data.category.data.name}</label>
                         </div>`;
                             $('#categories-list').append(
                                 newCategory
@@ -815,13 +819,7 @@
                             // Cerrar el modal
                             $('#new-category-product').modal('hide');
                             // Limpiar el campo de entrada
-                            $('#nameCategory').val('');
-
-
-                        } else {
-                            // Manejar el error aquí
-                            alert('Error al guardar la categoría: ' + response.message);
-                        }
+                            $('#name_category').val('');
                     },
                     error: function(xhr) {
                         // Manejar el error de AJAX aquí
