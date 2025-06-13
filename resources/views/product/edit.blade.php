@@ -149,6 +149,17 @@
         .sub-category {
             margin-right: 15px;
         }
+
+        .categories-container {
+            max-height: 300px;
+            /* ajusta la altura según tus necesidades */
+            overflow-y: auto;
+            /* habilita el scroll vertical */
+            border: 1px solid #ccc;
+            /* opcional, para visualizar el límite */
+            padding: 10px;
+            /* opcional, para un poco de margen interno */
+        }
     </style>
 @endsection
 @section('content-admin')
@@ -180,7 +191,7 @@
 
                     <div class="card-body bg-white">
                         <form method="POST" action="{{ route('products.update', $product->id) }}" role="form"
-                            enctype="multipart/form-data" data-toggle="validator" id="product-form" >
+                            enctype="multipart/form-data" data-toggle="validator" id="product-form">
                             {{ method_field('PATCH') }}
                             @csrf
 
@@ -779,7 +790,7 @@
 
         //Categoria
         $(document).ready(function() {
-             $('#product-form').on('submit', function(e) {
+            $('#product-form').on('submit', function(e) {
                 // Seleccionar todos los checkboxes con name="category_id[]"
                 const checkboxes = $('input[name="category_id[]"]');
                 // Ver si hay al menos uno marcado
@@ -808,22 +819,35 @@
                     },
                     success: function(data) {
 
-                            // Inserta la nueva categoría en la lista
-                            const newCategory = `<div class="checkbox">
+                        // Inserta la nueva categoría en la lista
+                        const newCategory = `<div class="checkbox">
                             <input type="checkbox" class="checkbox-input" id="category-${data.category.data.id}" name="categories[]" value="${data.category['id']}" checked>
                             <label for="category-${data.category.data.id}">${data.category.data.name}</label>
                         </div>`;
-                            $('#categories-list').append(
-                                newCategory
-                            ); // Asumiendo que tienes un contenedor con este ID para la lista de categorías
-                            // Cerrar el modal
-                            $('#new-category-product').modal('hide');
-                            // Limpiar el campo de entrada
-                            $('#name_category').val('');
+                        $('#categories-list').append(
+                            newCategory
+                        ); // Asumiendo que tienes un contenedor con este ID para la lista de categorías
+                        // Cerrar el modal
+                        $('#new-category-product').modal('hide');
+                        $('#alert-error-message').hide(); // Ocultar mensaje si existía
+                        $('#error-message').hide(); // Ocultar mensaje si existía
+                        // Limpiar el campo de entrada
+                        $('#name_category').val('');
                     },
                     error: function(xhr) {
-                        // Manejar el error de AJAX aquí
-                        alert('Hubo un error en la solicitud: ' + xhr.responseText);
+                        if (xhr.status === 422) {
+                            // Validación fallida
+                            const errors = xhr.responseJSON.errors;
+                            if (errors && errors.name) {
+                                // Mostrar mensaje de error específico
+                                $('#alert-error-message').show();
+                                $('#error-message').text(errors.name[0]).show();
+                            }
+                        } else {
+                            // Otro error
+                            $('#error-message').text(
+                                'Hubo un error en la solicitud. Intenta nuevamente.').show();
+                        }
                     }
                 });
             });
@@ -1049,7 +1073,7 @@
                     $('#warning_message_text').text(
                         'Por favor, ingresa solo números (pueden incluir coma o punto decimal).');
                     // Opcional: revertir al valor válido anterior o limpiar
-                     e.target.value = ''; // para limpiar
+                    e.target.value = ''; // para limpiar
                 } else {
                     $('#warning_message').hide();
                 }

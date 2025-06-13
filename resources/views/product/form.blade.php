@@ -124,7 +124,8 @@
                                                                     tabindex="-1" role="dialog"
                                                                     aria-labelledby="addModelModalLabel"
                                                                     aria-hidden="true">
-                                                                    <div class="modal-dialog modal-dialog-centered" role="document">
+                                                                    <div class="modal-dialog modal-dialog-centered"
+                                                                        role="document">
                                                                         <div class="modal-content">
                                                                             <div class="modal-header">
                                                                                 <h5 class="modal-title"
@@ -197,7 +198,8 @@
                                                                     tabindex="-1" role="dialog"
                                                                     aria-labelledby="addModelModalLabel"
                                                                     aria-hidden="true">
-                                                                    <div class="modal-dialog modal-dialog-centered" role="document">
+                                                                    <div class="modal-dialog modal-dialog-centered"
+                                                                        role="document">
                                                                         <div class="modal-content">
                                                                             <div class="modal-header">
                                                                                 <h5 class="modal-title"
@@ -898,39 +900,41 @@
                                             </tr>
                                             <tr data-id="2" data-parent="1" data-level="2" style="">
                                                 <td>
-                                                    {{-- Agrupar cada categoría padre con sus subcategorías --}}
-                                                    @foreach ($mainCategories as $mainCategory)
-                                                        <div class="category-group">
-                                                            {{-- Categoría padre --}}
-                                                            <div class="category-parent">
-                                                                <input type="checkbox"
-                                                                    id="category_{{ $mainCategory->id }}"
-                                                                    name="category_id[]"
-                                                                    value="{{ $mainCategory->id }}"
-                                                                    @if ($product && $product->categories->contains($mainCategory->id)) checked @endif>
-                                                                <label
-                                                                    for="category_{{ $mainCategory->id }}">{{ $mainCategory->name }}</label>
-                                                            </div>
-                                                            {{-- Subcategorías --}}
-                                                            @if (isset($groupedCategories[$mainCategory->name]))
-                                                                <div class="subcategories">
-                                                                    @foreach ($groupedCategories[$mainCategory->name] as $subCategory)
-                                                                        <div class="sub-category">
-                                                                            <input type="checkbox"
-                                                                                id="category_{{ $subCategory->id }}"
-                                                                                name="category_id[]"
-                                                                                value="{{ $subCategory->id }}"
-                                                                                @if ($product && $product->categories->contains($subCategory->id)) checked @endif>
-                                                                            <label
-                                                                                for="category_{{ $subCategory->id }}">{{ $subCategory->name }}</label>
-                                                                        </div>
-                                                                    @endforeach
+                                                    <div class="categories-container">
+                                                        {{-- Agrupar cada categoría padre con sus subcategorías --}}
+                                                        @foreach ($mainCategories as $mainCategory)
+                                                            <div class="category-group">
+                                                                {{-- Categoría padre --}}
+                                                                <div class="category-parent">
+                                                                    <input type="checkbox"
+                                                                        id="category_{{ $mainCategory->id }}"
+                                                                        name="category_id[]"
+                                                                        value="{{ $mainCategory->id }}"
+                                                                        @if ($product && $product->categories->contains($mainCategory->id)) checked @endif>
+                                                                    <label
+                                                                        for="category_{{ $mainCategory->id }}">{{ $mainCategory->name }}</label>
                                                                 </div>
-                                                            @endif
-                                                        </div>
-                                                    @endforeach
+                                                                {{-- Subcategorías --}}
+                                                                @if (isset($groupedCategories[$mainCategory->name]))
+                                                                    <div class="subcategories">
+                                                                        @foreach ($groupedCategories[$mainCategory->name] as $subCategory)
+                                                                            <div class="sub-category">
+                                                                                <input type="checkbox"
+                                                                                    id="category_{{ $subCategory->id }}"
+                                                                                    name="category_id[]"
+                                                                                    value="{{ $subCategory->id }}"
+                                                                                    @if ($product && $product->categories->contains($subCategory->id)) checked @endif>
+                                                                                <label
+                                                                                    for="category_{{ $subCategory->id }}">{{ $subCategory->name }}</label>
+                                                                            </div>
+                                                                        @endforeach
+                                                                    </div>
+                                                                @endif
+                                                            </div>
+                                                        @endforeach
 
-                                                    <div id="categories-list"></div>
+                                                        <div id="categories-list"></div>
+                                                    </div>
                                                     <a href="#" data-toggle="modal" id="new-category-product"
                                                         data-target="#new-category-product">+ Añadir nueva
                                                         categoría</a>
@@ -943,25 +947,33 @@
                                                         <div class="modal-content">
                                                             <div class="modal-header">
                                                                 <h5 class="modal-title" id="addModelModalLabel">Añadir
-                                                                    Nueva Ctegoría</h5>
+                                                                    Nueva Categoría</h5>
                                                                 <button type="button" class="close"
                                                                     data-dismiss="modal" aria-label="Close">
                                                                     <span aria-hidden="true">&times;</span>
                                                                 </button>
                                                             </div>
+                                                            <!-- Div para mostrar errores -->
 
 
-                                                                <div class="col-md-12">
-                                                                    <div class="form-group">
-                                                                        <label>Nombre <span
-                                                                                style="color: #FF9770 !important;">*</span></label>
-                                                                        <input id="name_category" name="name_category"
-                                                                            type="text" class="form-control"
-                                                                            placeholder="El nombre de la categoría obligatorio"
-                                                                            required                                                                           >
-                                                                        <div class="help-block with-errors"></div>
-                                                                    </div>
+                                                            <div id="alert-error-message" class="alert alert-warning" role="alert" style="display: none;">
+                                                                <div class="iq-alert-icon">
+                                                                    <i class="ri-alert-line"></i>
                                                                 </div>
+                                                                <div class="iq-alert-text" id="error-message"></div>
+                                                            </div>
+
+                                                            <div class="col-md-12">
+                                                                <div class="form-group">
+                                                                    <label>Nombre <span
+                                                                            style="color: #FF9770 !important;">*</span></label>
+                                                                    <input id="name_category" name="name_category"
+                                                                        type="text" class="form-control"
+                                                                        placeholder="El nombre de la categoría obligatorio"
+                                                                        required>
+                                                                    <div class="help-block with-errors"></div>
+                                                                </div>
+                                                            </div>
 
                                                             <div class="modal-footer">
                                                                 <button type="button" class="btn btn-secondary"

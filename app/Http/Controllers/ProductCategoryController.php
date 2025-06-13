@@ -62,19 +62,22 @@ class ProductCategoryController extends Controller
     }
     public function storeCategoryJson(Request $request)
     {
-        // Obtener datos validados
-
-          $request->validate([
-            'name' => 'required|string|max:255'
+        // Validación con mensaje personalizado
+        $request->validate([
+            'name' => 'required|string|max:255|unique:product_categories,name'
+        ], [
+            'name.unique' => 'La categoría ya existe, por favor elige otro nombre.',
+            'name.required' => 'El nombre de la categoría es obligatorio.',
+            'name.max' => 'El nombre no puede tener más de 255 caracteres.',
+            // otros mensajes si lo deseas
         ]);
 
         $category = ProductCategory::create([
             'name' => $request->name,
-            'category_parent_name' => $request->category_parent_name,
+            'category_parent_name' => $request->category_parent_name ?? null,
             'is_activated' => 1
         ]);
-        // Redireccionar
-        // Retornar una respuesta JSON con los datos del modelo creado
+
         return response()->json([
             'category' => [
                 'data' => $category

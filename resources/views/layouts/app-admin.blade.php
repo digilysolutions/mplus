@@ -3,6 +3,11 @@
 
 <head>
     @include('layouts.partials-backend.header-admin')
+    <style>
+        .content-page {
+            background: #f7f7f777;
+        }
+    </style>
 
 <body class=" color-light ">
     @php
