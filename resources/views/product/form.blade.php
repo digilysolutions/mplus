@@ -124,7 +124,7 @@
                                                                     tabindex="-1" role="dialog"
                                                                     aria-labelledby="addModelModalLabel"
                                                                     aria-hidden="true">
-                                                                    <div class="modal-dialog" role="document">
+                                                                    <div class="modal-dialog modal-dialog-centered" role="document">
                                                                         <div class="modal-content">
                                                                             <div class="modal-header">
                                                                                 <h5 class="modal-title"
@@ -197,7 +197,7 @@
                                                                     tabindex="-1" role="dialog"
                                                                     aria-labelledby="addModelModalLabel"
                                                                     aria-hidden="true">
-                                                                    <div class="modal-dialog" role="document">
+                                                                    <div class="modal-dialog modal-dialog-centered" role="document">
                                                                         <div class="modal-content">
                                                                             <div class="modal-header">
                                                                                 <h5 class="modal-title"
@@ -939,7 +939,7 @@
                                                 <div class="modal fade" id="new-category-product" tabindex="-1"
                                                     role="dialog" aria-labelledby="new-category-product"
                                                     aria-hidden="true">
-                                                    <div class="modal-dialog" role="document">
+                                                    <div class="modal-dialog modal-dialog-centered" role="document">
                                                         <div class="modal-content">
                                                             <div class="modal-header">
                                                                 <h5 class="modal-title" id="addModelModalLabel">Añadir
