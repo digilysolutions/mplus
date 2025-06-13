@@ -16,74 +16,44 @@
 
 </head>
 
-<body>
+<body >
 
     <div class="wrapper">
         <section class="login-content">
             <div class="container">
+
+
+
                 <div class="row align-items-center justify-content-center height-self-center">
 
+
                     <div class="col-lg-7 ">
-                        <div class="card auth-card text-center">
-                            @if (session('status'))
-                                <div class="alert alert-success mt-2">
-                                    {{ session('status') }}
-                                </div>
-                            @endif
-                            @if (session('error'))
-                                <div class="alert alert-danger">
-                                    {{ session('error') }}
-                                </div>
-                            @endif
-                            @if (session('errors'))
-                                <div class="alert alert-danger">
-                                    <x-input-error :messages="$errors->get('password')" class="mt-2" />
-                                </div>
-                            @endif
-                            @if ($errors->has('error'))
-                                <div class="alert alert-danger mt-2">
-                                    {{ $errors->first('error') }} <!-- Cambia "email" por el campo correcto -->
-                                </div>
-                            @endif
 
-
-
-                            <div class="card-body p-0">
-                                <div class="d-flex align-items-center auth-content">
+                        <div class="basic-drop-shadow p-4 shadow-showcase text-center">
+                             <div class="d-flex align-items-center auth-content">
                                     <div class="col-lg-7 align-self-center">
 
                                         <div class="p-3">
                                             <h2 class="mb-5">Iniciar Sesión</h2>
-                                            <form method="POST" action="{{ route('login') }}">
-                                                @csrf
-
+                                            <form method="POST" action="http://127.0.0.1:8000/login">
+                                                <input type="hidden" name="_token" value="xcDQwgai5jjmhO8P5ZGzQRxzv8f1uVuEnoOwhbqh" autocomplete="off">
                                                 <div class="row">
                                                     <div class="col-lg-12">
                                                         <div class="floating-label form-group">
-                                                            <input class="floating-input form-control" type="text"
-                                                                name="credential" placeholder=" " required autofocus
-                                                                autocomplete="username" />
+                                                            <input class="floating-input form-control" type="text" name="credential" placeholder=" " required="" autofocus="" autocomplete="username">
                                                             <label>No. Celular o Usuario </label>
-                                                            <x-input-error :messages="$errors->get('credential')" class="mt-2" />
-                                                        </div>
+                                                                                                                    </div>
                                                     </div>
                                                     <div class="col-lg-12">
                                                         <div class="floating-label form-group">
-                                                            <input class="floating-input form-control" id="password" name="password" type="password" placeholder=" " required autocomplete="current-password" />
+                                                            <input class="floating-input form-control" id="password" name="password" type="password" placeholder=" " required="" autocomplete="current-password">
                                                             <label>Contraseña</label>
-                                                            <x-input-error :messages="$errors->get('password')" class="mt-2" />
 
                                                             <!-- Ojo para mostrar/ocultar contraseña -->
-                                                            <span toggle="#password" class="toggle-password"
-                                                                style="cursor: pointer; position: absolute; right: 10px; top: 50%; transform: translateY(-50%);">
+                                                            <span toggle="#password" class="toggle-password" style="cursor: pointer; position: absolute; right: 10px; top: 50%; transform: translateY(-50%);">
                                                                 <!-- SVG por defecto -->
-                                                                <svg class="svg-icon eye-icon" width="20"
-                                                                    height="20" xmlns="http://www.w3.org/2000/svg"
-                                                                    viewBox="0 0 24 24" fill="none"
-                                                                    stroke="currentColor" stroke-width="2"
-                                                                    stroke-linecap="round" stroke-linejoin="round">
-                                                                    <path
-                                                                        d="M1 12c0 0 3.1 7 11 7s11-7 11-7-3.1-7-11-7-11 7-11 7z">
+                                                                <svg class="svg-icon eye-icon" width="20" height="20" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                                    <path d="M1 12c0 0 3.1 7 11 7s11-7 11-7-3.1-7-11-7-11 7-11 7z">
                                                                     </path>
                                                                     <circle cx="12" cy="12" r="3">
                                                                     </circle>
@@ -96,14 +66,11 @@
 
                                                     <div class="col-lg-6">
                                                         <div class="custom-control custom-checkbox mb-3 float-left">
-                                                            <input type="checkbox" class="custom-control-input"
-                                                                name="remember" id="customCheck1">
-                                                            <label class="custom-control-label control-label-1"
-                                                                for="customCheck1">Recuérdame</label>
+                                                            <input type="checkbox" class="custom-control-input" name="remember" id="customCheck1">
+                                                            <label class="custom-control-label control-label-1" for="customCheck1">Recuérdame</label>
                                                         </div>
                                                     </div>
-                                                    <div class="col-lg-6"> <button type="submit"
-                                                            class="btn btn-primary float-right">Iniciar Sesión</button>
+                                                    <div class="col-lg-6"> <button type="submit" class="btn btn-primary float-right">Iniciar Sesión</button>
                                                     </div>
                                                 </div>
 
@@ -111,22 +78,18 @@
                                         </div>
                                     </div>
                                     <div class="col-lg-5 content-right">
-                                        <img src="{{ asset('img/RPGsolutions.png') }}" class="img-fluid image-right"
-                                            alt="">
+                                        <img src="http://127.0.0.1:8000/img/RPGsolutions.png" class="img-fluid image-right" alt="">
                                     </div>
 
                                 </div>
-                            </div>
-                        </div>
+                           </div>
+
 
 
                     </div>
 
                 </div>
-                <div class="row">
 
-
-                </div>
 
             </div>
         </section>
