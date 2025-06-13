@@ -78,7 +78,7 @@ class AuthenticatedSessionController extends Controller
 
                 // El usuario no existe con las credenciales proporcionadas (email y/o código incorrectos)
                 return back()->withErrors([
-                    'email' => 'Las credenciales (usuario, No. Celular y/o código de seguimiento) proporcionadas no coinciden con nuestros registros.',
+                    'email' => 'Las credenciale o (Usuario, No Celular ):  no coinciden con nuestros registros.',
                 ]);
             }
         }
@@ -95,6 +95,6 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerateToken();
 
-        return redirect('/admin/login');
+        return redirect('/login');
     }
 }
