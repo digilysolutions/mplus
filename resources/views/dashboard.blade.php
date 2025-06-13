@@ -8,9 +8,9 @@
         <div class="col-lg-12">
             <div class="card card-transparent card-block card-stretch card-height border-none">
                 <div class="card-body p-0 mt-lg-2 mt-0">
-                    <h3 class="mb-3">¡Bienvenido al Dashboard de Administración!</h3>
-                    <p class="mb-0 mr-4">Aquí podrás visualizar el rendimiento clave de nuestros procesos y tomar decisiones. ¡Explora y optimiza!</p>
-                </div>
+    <h3 class="mb-3">¡Bienvenido al Panel de Administración de tu Tienda!</h3>
+    <p class="mb-0 mr-4">Desde aquí puedes gestionar tus productos, monitorear ventas y analizar el rendimiento de tu tienda.</p>
+</div>
             </div>
         </div>
         <div class="col-lg-12">
