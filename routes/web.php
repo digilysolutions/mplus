@@ -70,7 +70,7 @@ Route::get('/admin/dashboard', [AuthController::class, 'dashboard'])->name('dash
 Route::get('/shop', [HomeController::class, 'shop'])->name('product.shop');
 Route::get('/filter-products', [HomeController::class, 'filterProducts'])->name('filterProducts');
 Route::get('/products/detailsproduct/{id}', [HomeController::class,  'detailsProduct'])->name('product.detailsproduct');
-Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])->middleware('auth');
+
 Route::get('/error404', function () {
     return view('error404'); // Asegúrate de tener este view creado
 });
