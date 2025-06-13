@@ -5,6 +5,17 @@
 @section('content-admin')
     <div class="container-fluid">
         <div class="row">
+            <div class="col-lg-12">
+                <div class="card card-transparent card-block card-stretch card-height border-none">
+                    <div class="card-body p-0 mt-lg-2 mt-0">
+
+                        <h3 class="mb-3">¡Panel de Administración de tu Tienda!</h3>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
 
             <div class="col-lg-4">
                 <div class="card card-transparent card-block card-stretch card-height border-none">
@@ -14,12 +25,16 @@
                             $fechaHoy = \Carbon\Carbon::now()->translatedFormat('l, F j, Y');
                         @endphp
 
-                        <section>
-                            <p>La fecha de hoy es: {{ $fechaHoy }}</p>
-                        </section>
-                        <h3 class="mb-3">¡Bienvenido al Panel de Administración de tu Tienda!</h3>
-                        <p class="mb-0 mr-4">Desde aquí puedes gestionar tus productos, monitorear ventas y analizar el
-                            rendimiento de tu tienda.</p>
+
+                        <div class="card border-success">
+                            <div class="card-body text-success">
+                                <h6 class="card-title text-success">La fecha de hoy es: {{ $fechaHoy }}</h6>
+                                <p class="card-text">Desde aquí puedes gestionar tus productos, monitorear ventas y analizar
+                                    el
+                                    rendimiento de tu tienda.</p>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
             </div>
@@ -30,7 +45,8 @@
                             <div class="card-body">
                                 <div class="d-flex align-items-center mb-4 card-total-sale">
                                     <div class="icon iq-icon-box-2 bg-info-light">
-                                        <img src="{{ asset('/admin/images/product/1.png') }}" class="img-fluid" alt="image">
+                                        <img src="{{ asset('/admin/images/product/1.png') }}" class="img-fluid"
+                                            alt="image">
                                     </div>
                                     <div>
                                         <p class="mb-2">Total ventas</p>
@@ -49,7 +65,8 @@
                             <div class="card-body">
                                 <div class="d-flex align-items-center mb-4 card-total-sale">
                                     <div class="icon iq-icon-box-2 bg-danger-light">
-                                        <img src="{{ asset('/admin/images/product/2.png') }}" class="img-fluid" alt="image">
+                                        <img src="{{ asset('/admin/images/product/2.png') }}" class="img-fluid"
+                                            alt="image">
                                     </div>
                                     <div>
                                         <p class="mb-2">Total Productos</p>
@@ -68,7 +85,8 @@
                             <div class="card-body">
                                 <div class="d-flex align-items-center mb-4 card-total-sale">
                                     <div class="icon iq-icon-box-2 bg-success-light">
-                                        <img src="{{ asset('/admin/images/product/3.png') }}" class="img-fluid" alt="image">
+                                        <img src="{{ asset('/admin/images/product/3.png') }}" class="img-fluid"
+                                            alt="image">
                                     </div>
                                     <div>
                                         <p class="mb-2">Ganancias</p>
@@ -92,8 +110,9 @@
             <div class="col-lg-12">
                 <div class="card card-transparent card-block card-stretch card-height border-none">
                     <div class="card-body p-0 mt-lg-2 mt-0">
-                        <h3 class="mb-3"><h3 class="mb-3">Indicadores Clave de Desempeño (KPI) del Negocio</h3>
-                        <p class="mb-0 mr-4"></p>
+                        <h3 class="mb-3">
+                            <h3 class="mb-3">Indicadores Clave de Desempeño (KPI) del Negocio</h3>
+                            <p class="mb-0 mr-4"></p>
                     </div>
                 </div>
             </div>
@@ -104,7 +123,8 @@
                             <div class="card-body">
                                 <div class="d-flex align-items-center mb-4 card-total-sale">
                                     <div class="icon iq-icon-box-2 bg-info-light">
-                                        <img src="{{ asset('admin/product/7.jpg') }}" class="img-fluid" alt="image">
+                                        <img src="{{ asset('/admin/images/product/1.png') }}" class="img-fluid"
+                                            alt="image">
                                     </div>
                                     <div>
                                         <p class="mb-2">Ventas</p>
@@ -123,7 +143,8 @@
                             <div class="card-body">
                                 <div class="d-flex align-items-center mb-4 card-total-sale">
                                     <div class="icon iq-icon-box-2 bg-danger-light">
-                                        <img src="{{ asset('admin/product/4.png') }}" class="img-fluid" alt="image">
+                                        <img src="{{ asset('/admin/images/product/2.png') }}" class="img-fluid"
+                                            alt="image">
                                     </div>
                                     <div>
                                         <p class="mb-2">Productos</p>
@@ -142,7 +163,7 @@
                             <div class="card-body">
                                 <div class="d-flex align-items-center mb-4 card-total-sale">
                                     <div class="icon iq-icon-box-2 bg-success-light">
-                                        <img src="{{ asset('admin/product/3.png') }}" class="img-fluid" alt="image">
+                                        <img src="{{ asset('admin/images/user/a4.png') }}" class="img-fluid" alt="image">
                                     </div>
                                     <div>
                                         <p class="mb-2">Clientes</p>
@@ -161,7 +182,8 @@
                             <div class="card-body">
                                 <div class="d-flex align-items-center mb-4 card-total-sale">
                                     <div class="icon iq-icon-box-2 bg-success-light">
-                                        <img src="{{ asset('admin/product/2.png') }}" class="img-fluid" alt="image">
+                                        <img src="{{ asset('admin/images/product/01.png') }}" class="img-fluid"
+                                            alt="image">
                                     </div>
                                     <div>
                                         <p class="mb-2">Pedidos</p>
@@ -180,7 +202,8 @@
                             <div class="card-body">
                                 <div class="d-flex align-items-center mb-4 card-total-sale">
                                     <div class="icon iq-icon-box-2 bg-info">
-                                        <img src="{{ asset('admin/product/1.png') }}" class="img-fluid" alt="image">
+                                        <img src="{{ asset('/admin/images/product/2.png') }}" class="img-fluid"
+                                            alt="image">
                                     </div>
                                     <div>
                                         <p class="mb-2">Inventario</p>
@@ -199,11 +222,12 @@
                             <div class="card-body">
                                 <div class="d-flex align-items-center mb-4 card-total-sale">
                                     <div class="icon iq-icon-box-2 bg-info">
-                                        <img src="{{ asset('admin/product/01.png') }}" class="img-fluid" alt="image">
+                                        <img src="{{ asset('/admin/images/product/1.png') }}" class="img-fluid"
+                                            alt="image">
                                     </div>
                                     <div>
                                         <p class="mb-2">Ganancias</p>
-                                        <h4>3</h4>
+                                        <h4>$3</h4>
                                     </div>
                                 </div>
                                 <div class="iq-progress-bar mt-2">
@@ -216,7 +240,7 @@
 
                 </div>
             </div>
-<div class="col-lg-8">
+            <div class="col-lg-8">
                 <div class="card card-block card-stretch card-height">
                     <div class="card-header d-flex align-items-center justify-content-between">
                         <div class="header-title">
@@ -244,7 +268,8 @@
                                 <div class="card card-block card-stretch card-height mb-0">
                                     <div class="card-body">
                                         <div class="bg-warning-light rounded">
-                                            <img src="../assets/images/product/01.png" class="style-img img-fluid m-auto p-3" alt="image">
+                                            <img src="../assets/images/product/01.png"
+                                                class="style-img img-fluid m-auto p-3" alt="image">
                                         </div>
                                         <div class="style-text text-left mt-3">
                                             <h5 class="mb-1">Organic Cream</h5>
@@ -257,7 +282,8 @@
                                 <div class="card card-block card-stretch card-height mb-0">
                                     <div class="card-body">
                                         <div class="bg-danger-light rounded">
-                                            <img src="../assets/images/product/02.png" class="style-img img-fluid m-auto p-3" alt="image">
+                                            <img src="../assets/images/product/02.png"
+                                                class="style-img img-fluid m-auto p-3" alt="image">
                                         </div>
                                         <div class="style-text text-left mt-3">
                                             <h5 class="mb-1">Rain Umbrella</h5>
@@ -270,7 +296,8 @@
                                 <div class="card card-block card-stretch card-height mb-0">
                                     <div class="card-body">
                                         <div class="bg-info-light rounded">
-                                            <img src="../assets/images/product/03.png" class="style-img img-fluid m-auto p-3" alt="image">
+                                            <img src="../assets/images/product/03.png"
+                                                class="style-img img-fluid m-auto p-3" alt="image">
                                         </div>
                                         <div class="style-text text-left mt-3">
                                             <h5 class="mb-1">Serum Bottle</h5>
@@ -283,7 +310,8 @@
                                 <div class="card card-block card-stretch card-height mb-0">
                                     <div class="card-body">
                                         <div class="bg-success-light rounded">
-                                            <img src="../assets/images/product/02.png" class="style-img img-fluid m-auto p-3" alt="image">
+                                            <img src="../assets/images/product/02.png"
+                                                class="style-img img-fluid m-auto p-3" alt="image">
                                         </div>
                                         <div class="style-text text-left mt-3">
                                             <h5 class="mb-1">Organic Cream</h5>
@@ -311,7 +339,8 @@
                     <div class="card-body card-item-right">
                         <div class="d-flex align-items-top">
                             <div class="bg-warning-light rounded">
-                                <img src="../assets/images/product/04.png" class="style-img img-fluid m-auto" alt="image">
+                                <img src="../assets/images/product/04.png" class="style-img img-fluid m-auto"
+                                    alt="image">
                             </div>
                             <div class="style-text text-left">
                                 <h5 class="mb-2">Coffee Beans Packet</h5>
@@ -325,7 +354,8 @@
                     <div class="card-body card-item-right">
                         <div class="d-flex align-items-top">
                             <div class="bg-danger-light rounded">
-                                <img src="../assets/images/product/05.png" class="style-img img-fluid m-auto" alt="image">
+                                <img src="../assets/images/product/05.png" class="style-img img-fluid m-auto"
+                                    alt="image">
                             </div>
                             <div class="style-text text-left">
                                 <h5 class="mb-2">Bottle Cup Set</h5>
@@ -337,7 +367,130 @@
                 </div>
             </div>
 
+            <div class="col-lg-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Órdenes</h5>
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="mb-4">
+                                    <p class="card-text text-muted mb-2">Pendiente </p>
+                                    <div class="progress progress-slim">
+                                        <div class="progress-bar bg-light" role="progressbar" style="width: 25%"
+                                            aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                                    </div>
+                                </div>
+                                <div class="mb-4">
+                                    <p class="card-text text-muted mb-2">Procesando</p>
+                                    <div class="progress progress-slim">
+                                        <div class="progress-bar bg-success" role="progressbar" style="width: 55%"
+                                            aria-valuenow="55" aria-valuemin="0" aria-valuemax="100"></div>
+                                    </div>
+                                </div>
+                                <div class="mb-4">
+                                    <p class="card-text text-muted mb-2">Enviado</p>
+                                    <div class="progress progress-slim">
+                                        <div class="progress-bar bg-warning" role="progressbar" style="width: 35%"
+                                            aria-valuenow="35" aria-valuemin="0" aria-valuemax="100"></div>
+                                    </div>
+                                </div>
+                                <div class="mb-4">
+                                    <p class="card-text text-muted mb-2">Completada</p>
+                                    <div class="progress progress-slim">
+                                        <div class="progress-bar bg-primary" role="progressbar" style="width: 85%"
+                                            aria-valuenow="85" aria-valuemin="0" aria-valuemax="100"></div>
+                                    </div>
+                                </div>
+                                <div class="mb-4">
+                                    <p class="card-text text-muted mb-2">Cancelada</p>
+                                    <div class="progress progress-slim">
+                                        <div class="progress-bar bg-danger" role="progressbar" style="width: 85%"
+                                            aria-valuenow="85" aria-valuemin="0" aria-valuemax="100"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <p class="text-muted mb-0">
+                                    Nota: Cada 10 minutos se actualizará
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <div class="col-lg-8">
+                <div class="card-deck">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Últimas órdenes modificadas   </h5>
+                            <div class="table-responsive">
+                                <table class="table center-aligned-table">
+                                    <thead>
+                                        <tr class="text-primary">
+                                            <th>No. Orden</th>
+                                            <th class="d-none d-sm-table-cell">Comprador</th>
+                                            <th class="d-none d-sm-table-cell">Método de Pago</th>
+                                            <th>Estado</th>
+                                            <th>Total</th>
+                                            <th class="d-none d-sm-table-cell"></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr class="">
+                                            <td>034</td>
+                                            <td class="d-none d-sm-table-cell">Yasniel 7</td>
+                                            <td class="d-none d-sm-table-cell">Transferencia</td>
+                                            <td><label class="badge badge-success">Procesando</label></td>
+                                            <td>$250</td>
+                                            <td class="d-none d-sm-table-cell"><a href="#" class="btn btn-outline-success btn-sm">Ver Orden</a>
+                                            </td>
+                                        </tr>
+                                        <tr class="">
+                                            <td>035</td>
+                                            <td class="d-none d-sm-table-cell">Roberto</td>
+                                            <td class="d-none d-sm-table-cell">Efectivo</td>
+                                            <td><label class="badge badge-warning">Enviando</label></td>
+                                            <td>$150</td>
+                                            <td class="d-none d-sm-table-cell"><a href="#" class="btn btn-outline-success btn-sm">Ver Orden</a>
+                                            </td>
+                                        </tr>
+                                         <tr class="">
+                                            <td>034</td>
+                                            <td class="d-none d-sm-table-cell">Pedro</td>
+                                            <td class="d-none d-sm-table-cell">Transferencia</td>
+                                            <td><label class="badge badge-success">Procesando</label></td>
+                                            <td>$345</td>
+                                            <td class="d-none d-sm-table-cell"><a href="#" class="btn btn-outline-success btn-sm">Ver Orden</a>
+                                            </td>
+                                        </tr>
+                                         <tr class="">
+                                            <td>034</td>
+                                            <td class="d-none d-sm-table-cell">Anastasia</td>
+                                            <td class="d-none d-sm-table-cell">Exterior</td>
+                                            <td><label class="badge badge-primary">Completada</label></td>
+                                            <td>$2150</td>
+                                            <td class="d-none d-sm-table-cell"><a href="#" class="btn btn-outline-success btn-sm">Ver Orden</a>
+                                            </td>
+                                        </tr>
+                                        <tr class="">
+                                            <td>034</td>
+                                            <td class="d-none d-sm-table-cell">Anastasia</td>
+                                            <td class="d-none d-sm-table-cell">Exterior</td>
+                                            <td><label class="badge badge-light">Cancelada</label></td>
+                                            <td>$2150</td>
+                                            <td class="d-none d-sm-table-cell"><a href="#" class="btn btn-outline-success btn-sm">Ver Orden</a>
+                                            </td>
+                                        </tr>
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="col-lg-4">
                 <div class="card card-block card-stretch card-height">
                     <div class="card-header d-flex align-items-center justify-content-between">
                         <div class="header-title">
@@ -351,52 +504,29 @@
                 </div>
             </div>
             <div class="col-lg-4">
-                <div class="card card-transparent card-block card-stretch mb-4">
-                    <div class="card-header d-flex align-items-center justify-content-between p-0">
+                <div class="card card-block card-stretch card-height">
+                    <div class="card-header d-flex align-items-center justify-content-between">
                         <div class="header-title">
-                            <h4 class="card-title mb-0">Conectados</h4>
+                            <h4 class="card-title">Notificaciones</h4>
                         </div>
-                        <div class="card-header-toolbar d-flex align-items-center">
-                            <div><a href="#" class="btn btn-primary view-btn font-size-14">Ver todos</a></div>
-                        </div>
+
+                    </div>
+                    <div class="card-body">
+
                     </div>
                 </div>
-                <div class="card card-block card-stretch card-height-hel ">
-                    <a href="#" class="iq-sub-card">
-                        <div class="media align-items-center cust-card py-3 border-bottom">
-
-                            <div class="media-body ml-3">
-                                <h4 class="mb-2">Yasniel Reyes</h4>
-                                <div class="d-flex align-items-center justify-content-between style-text">
-
-
-                                    <small class="text-dark mr-5"><b>11 : 30 pm</b></small>
-
-                                </div>
-                                <small class="mb-0"> Tiempo: 25 min </small>
-                            </div>
-
+            </div>
+            <div class="col-lg-4">
+                <div class="card card-block card-stretch card-height">
+                    <div class="card-header d-flex align-items-center justify-content-between">
+                        <div class="header-title">
+                            <h4 class="card-title">Notificaciones</h4>
                         </div>
 
-                    </a>
+                    </div>
+                    <div class="card-body">
 
-                </div>
-                <div class="card card-block card-stretch card-height-helf">
-                    <a href="#" class="iq-sub-card">
-                        <div class="media align-items-center cust-card py-3 border-bottom">
-
-                            <div class="media-body ml-3">
-                                <h4 class="mb-2">Jorge Barrameda</h4>
-                                <div class="d-flex align-items-center justify-content-between style-text">
-
-                                    <small class="text-dark mr-5"><b>2:45 am</b></small>
-                                </div>
-                                <small class="mb-0"> Tiempo: 60 min </small>
-                            </div>
-
-                        </div>
-
-                    </a>
+                    </div>
                 </div>
             </div>
 
