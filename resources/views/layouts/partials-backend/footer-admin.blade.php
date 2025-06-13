@@ -1,21 +1,24 @@
+
+
 <footer class="iq-footer">
-    <div class="container-fluid">
-        <div class="card">
-            <div class="card-body">
-                <div class="row">
-
-                    <div class="col-lg-6 text-right">
-                        <p class="mb-md-0 text-center text-md-left text-secondary">
-                            © <a class="text-primary" href="#">RPG Solutions.</a> Todos los derechos reservados.
+            <div class="container-fluid">
+            <div class="card">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <ul class="list-inline mb-0">
+                                <li class="list-inline-item"> © <a class="text-primary" href="#">RPG Solutions.</a></li>
+                                <li class="list-inline-item text-secondary">Todos los derechos reservados.</li>
+                            </ul>
+                        </div>
+                        <div class="col-lg-6 text-right">
                             <a class="text-primary" href="https://digilysolutions.com">LY Digi-Solutions</a>
-                        </p>
-
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-</footer>
+    </footer>
 
 <!-- Backend Bundle JavaScript -->
 <script src="{{ asset('admin/js/backend-bundle.min.js') }}"></script>
