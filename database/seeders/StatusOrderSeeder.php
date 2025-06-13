@@ -13,7 +13,7 @@ class StatusOrderSeeder extends Seeder
      */
     public function run(): void
     {
-       
+
         StatusOrder::create([
             'status' => "Pendiente",
             'description' => "Este es el estado inicial después de que una orden es creada. La orden ha sido recibida, pero aún no se ha procesado.",
