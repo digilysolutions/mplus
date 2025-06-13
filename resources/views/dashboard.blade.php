@@ -68,7 +68,7 @@
                             <div class="card-body">
                                 <div class="d-flex align-items-center mb-4 card-total-sale">
                                     <div class="icon iq-icon-box-2 bg-success-light">
-                                        <img src="{{ asset('admin/images/product/3.png') }}" class="img-fluid" alt="image">
+                                        <img src="{{ asset('/admin/images/product/3.png') }}" class="img-fluid" alt="image">
                                     </div>
                                     <div>
                                         <p class="mb-2">Ganancias</p>
