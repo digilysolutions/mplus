@@ -33,7 +33,7 @@
                                         <img src="{{ asset('/admin/images/product/1.png') }}" class="img-fluid" alt="image">
                                     </div>
                                     <div>
-                                        <p class="mb-2">Total de ventas</p>
+                                        <p class="mb-2">Total ventas</p>
                                         <h4>$31.50</h4>
                                     </div>
                                 </div>
